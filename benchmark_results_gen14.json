@@ -1,0 +1,122 @@
+{
+  "timestamp": "2026-04-01T06:59:54.875725",
+  "generation": 14,
+  "architecture": "Precision-Cached Minimal Processing",
+  "summary": {
+    "total_tasks": 10,
+    "success_rate": 1.0,
+    "avg_score": 78.0,
+    "avg_tokens": 47.4,
+    "avg_latency_ms": 0.10881423950195312,
+    "efficiency": 1645.5696202531647
+  },
+  "baseline": {
+    "success_rate": 0.65,
+    "avg_score": 58.2,
+    "avg_tokens": 2450,
+    "avg_latency_ms": 45000,
+    "efficiency": 0.024
+  },
+  "gen13_baseline": {
+    "avg_score": 77.0,
+    "avg_tokens": 59.1,
+    "efficiency": 1302.9
+  },
+  "composite_score": 329187.32403975155,
+  "verdict": "🏆🏆 新冠军! 超越Gen13!",
+  "stats": {
+    "version": "14.0",
+    "total_tasks": 10,
+    "cache_hits": 0,
+    "direct_exec": 10,
+    "total_tokens": 474.0,
+    "cache": {
+      "hits": 0,
+      "misses": 10,
+      "hit_rate": 0.0,
+      "size": 10
+    }
+  },
+  "individual_results": [
+    {
+      "task_id": "task_001",
+      "success": true,
+      "score": 90.0,
+      "tokens": 55.5,
+      "latency_ms": 0.27823448181152344,
+      "error": ""
+    },
+    {
+      "task_id": "task_002",
+      "success": true,
+      "score": 90.0,
+      "tokens": 40.0,
+      "latency_ms": 0.10156631469726562,
+      "error": ""
+    },
+    {
+      "task_id": "task_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 54.5,
+      "latency_ms": 0.09107589721679688,
+      "error": ""
+    },
+    {
+      "task_id": "task_004",
+      "success": true,
+      "score": 80.0,
+      "tokens": 41.5,
+      "latency_ms": 0.095367431640625,
+      "error": ""
+    },
+    {
+      "task_id": "task_005",
+      "success": true,
+      "score": 90.0,
+      "tokens": 50.0,
+      "latency_ms": 0.09918212890625,
+      "error": ""
+    },
+    {
+      "task_id": "task_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 44.5,
+      "latency_ms": 0.07605552673339844,
+      "error": ""
+    },
+    {
+      "task_id": "task_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 54.5,
+      "latency_ms": 0.09512901306152344,
+      "error": ""
+    },
+    {
+      "task_id": "task_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 42.5,
+      "latency_ms": 0.080108642578125,
+      "error": ""
+    },
+    {
+      "task_id": "task_009",
+      "success": true,
+      "score": 80.0,
+      "tokens": 50.0,
+      "latency_ms": 0.095367431640625,
+      "error": ""
+    },
+    {
+      "task_id": "task_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 41.0,
+      "latency_ms": 0.07605552673339844,
+      "error": ""
+    }
+  ]
+}

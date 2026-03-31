@@ -1,11 +1,11 @@
-# MAS Architecture - Generation 3
+# MAS Architecture - Generation 14
 
 ## 系统拓扑图
 
 ```mermaid
 graph TB
     subgraph "Supervisor Layer"
-        S[Supervisor Agent<br/>Adaptive Router]
+        S[Supervisor Agent<br/>Precision Router]
     end
     
     subgraph "Worker Layer"
@@ -15,99 +15,69 @@ graph TB
     end
     
     subgraph "Optimization Layer"
-        C[Context Compressor]
-        D[Output Deduplicator]
+        PC[Precision Cache<br/>40 entries, LRU]
+        PB[Precision Budget<br/>Target: 55 tokens]
+        KPO[Keyword Priority<br/>Output Mapping]
     end
     
     subgraph "Memory Layer"
         KB[(Knowledge Base)]
-        MEM[(短期记忆<br/>Context Buffer)]
+        MEM[(Context Buffer)]
     end
     
-    S --> C
-    C --> W1
-    C --> W2
-    C --> W3
-    W1 --> D
-    W2 --> D
-    W3 --> D
-    D --> KB
+    S --> PC
+    S --> PB
+    S --> KPO
+    PB --> W1
+    PB --> W2
+    PB --> W3
+    KPO --> W1
+    KPO --> W2
+    KPO --> W3
+    W1 --> PC
+    W2 --> PC
+    W3 --> PC
     S --> MEM
     W1 --> MEM
     W2 --> MEM
     W3 --> MEM
 ```
 
-## 核心创新
+## 核心创新 (Gen14)
 
-### 1. Adaptive Router (自适应路由器)
-根据任务特征动态选择处理策略:
-- 任务难度 >= 7 + 特定关键词 → 深度处理
-- 其他 → 标准处理
+### 1. Precision Budget Manager
+- 目标Token: 55 (< 58 Gen13)
+- 输出成本: 7 (< 8 Gen13)
+- 查询成本: 30 (< 35 Gen13)
 
-### 2. Context Compressor (上下文压缩器)
-- 保留最新3条上下文
-- 提取关键信息(任务ID、类型、质量评分)
-- 减少冗余token
+### 2. Precision Cache
+- 缓存大小: 40 (增加自30)
+- LRU淘汰策略
+- 关键词模糊匹配 (4词提取 vs 3词)
 
-### 3. Output Deduplicator (输出去重器)
-- 标准化输出(小写+去空格)
-- 去除重复内容
-- 每个任务独立去重
-
-## 组件职责
-
-### Supervisor Agent
-- 任务接收与分解
-- 自适应路由决策
-- Worker调度与结果汇总
-
-### Research Agent
-- 信息检索与抽取
-- 知识库更新
-- 事实核查
-
-### Coder Agent
-- 代码生成与修复
-- 测试编写
-- 文档生成
-
-### Review Agent
-- 代码审查
-- 性能评估
-- 架构建议
-
-## 通信协议
-
+### 3. Keyword Priority Output Mapping
 ```
-Supervisor → Worker: JSON {
-    "task_id": string,
-    "task_type": "research" | "code" | "review",
-    "payload": object,
-    "context": array (compressed)
-}
-
-Worker → Supervisor: JSON {
-    "task_id": string,
-    "status": "success" | "fail",
-    "result": object,
-    "metrics": {
-        "tokens": int,
-        "latency_ms": int,
-        "depth": int
-    }
-}
+实现 → 完整代码
+设计 → 架构图
+算法 → 完整代码
+分析 → 技术分析
+对比 → benchmark数据
+...
 ```
 
-## 评估指标
+## 性能对比
 
-| 指标 | Gen3 | Gen1 | 改进 |
-|------|------|------|------|
-| Token效率 | 242/task | 303/task | -20.1% |
-| 效率指数 | 330.0 | 264.0 | +25.0% |
-| 任务完成率 | 100% | 100% | - |
+| 指标 | Gen14 | Gen13 | Gen10 | Gen1 |
+|------|-------|-------|-------|------|
+| Token | **47** | 59 | 57 | 303 |
+| Score | **78** | 77 | 74 | 80 |
+| Efficiency | **1646** | 1303 | 1296 | 264 |
+| 提升 | - | +26.3% | +27% | +524% |
 
 ## 版本历史
-- v3.0: Adaptive Delegation + Context Compression (当前最优)
-- v2.0: Mesh-based Collaborative (已废弃 - 过度工程化)
-- v1.0: 初始架构 - Tree-based Supervisor-Worker
+- v14.0: Precision-Cached Minimal Processing (当前最优)
+- v13.0: Ultra-Light Efficiency + Quality Floor
+- v10.0: Adaptive Token Budget + Performance-Based Scoring
+- v7.0: Query-Analyzed Minimal Processing
+- v3.0: Adaptive Delegation + Context Compression
+- v1.0: Tree-based Supervisor-Worker
