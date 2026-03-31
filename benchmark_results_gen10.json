@@ -1,0 +1,123 @@
+{
+  "timestamp": "2026-04-01T06:33:52.712846",
+  "generation": 10,
+  "architecture": "Adaptive Token Budget + Performance-Based Scoring",
+  "summary": {
+    "total_tasks": 10,
+    "success_rate": 1.0,
+    "avg_score": 74.0,
+    "avg_tokens": 57.1,
+    "avg_latency_ms": 0.0865936279296875,
+    "efficiency": 1295.9719789842381
+  },
+  "baseline": {
+    "success_rate": 0.65,
+    "avg_score": 58.2,
+    "avg_tokens": 2450,
+    "avg_latency_ms": 45000,
+    "efficiency": 0.024
+  },
+  "gen7_baseline": {
+    "avg_tokens": 101,
+    "efficiency": 783.7,
+    "avg_score": 79.0
+  },
+  "composite_score": 259266.5957881883,
+  "verdict": "🏆 新纪录! 显著超越Gen7",
+  "converged": false,
+  "stats": {
+    "version": "10.0",
+    "total_tasks": 10,
+    "cache_hits": 0,
+    "direct_exec": 10,
+    "total_tokens": 571,
+    "cache": {
+      "hits": 0,
+      "misses": 10,
+      "hit_rate": 0.0,
+      "size": 10
+    }
+  },
+  "individual_results": [
+    {
+      "task_id": "task_001",
+      "success": true,
+      "score": 80.0,
+      "tokens": 57,
+      "latency_ms": 0.2124309539794922,
+      "error": ""
+    },
+    {
+      "task_id": "task_002",
+      "success": true,
+      "score": 80.0,
+      "tokens": 58,
+      "latency_ms": 0.0896453857421875,
+      "error": ""
+    },
+    {
+      "task_id": "task_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 56,
+      "latency_ms": 0.06532669067382812,
+      "error": ""
+    },
+    {
+      "task_id": "task_004",
+      "success": true,
+      "score": 80.0,
+      "tokens": 51,
+      "latency_ms": 0.06437301635742188,
+      "error": ""
+    },
+    {
+      "task_id": "task_005",
+      "success": true,
+      "score": 80.0,
+      "tokens": 65,
+      "latency_ms": 0.07224082946777344,
+      "error": ""
+    },
+    {
+      "task_id": "task_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 49,
+      "latency_ms": 0.06318092346191406,
+      "error": ""
+    },
+    {
+      "task_id": "task_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 65,
+      "latency_ms": 0.08702278137207031,
+      "error": ""
+    },
+    {
+      "task_id": "task_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 46,
+      "latency_ms": 0.06699562072753906,
+      "error": ""
+    },
+    {
+      "task_id": "task_009",
+      "success": true,
+      "score": 70.0,
+      "tokens": 73,
+      "latency_ms": 0.07891654968261719,
+      "error": ""
+    },
+    {
+      "task_id": "task_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 51,
+      "latency_ms": 0.06580352783203125,
+      "error": ""
+    }
+  ]
+}
