@@ -1,0 +1,109 @@
+{
+  "timestamp": "2026-04-02T04:33:03.229394",
+  "generation": 81,
+  "architecture": "Multi-Objective v4: Balanced Pareto Optimization",
+  "summary": {
+    "total_tasks": 10,
+    "success_rate": 1.0,
+    "avg_score": 81.0,
+    "avg_tokens": 13.1,
+    "avg_latency_ms": 0.34384727478027344,
+    "efficiency": 6183.20610687023
+  },
+  "baseline": {
+    "success_rate": 0.65,
+    "avg_score": 58.2,
+    "avg_tokens": 2450,
+    "avg_latency_ms": 45000,
+    "efficiency": 0.024
+  },
+  "gen79_baseline": {
+    "avg_score": 81.0,
+    "avg_tokens": 9.5,
+    "efficiency": 8526.0
+  },
+  "composite_score": 76.7729385954733,
+  "verdict": "⚠️ 待优化",
+  "individual_results": [
+    {
+      "task_id": "task_001",
+      "success": true,
+      "score": 100,
+      "tokens": 16,
+      "latency_ms": 0.7607936859130859,
+      "error": ""
+    },
+    {
+      "task_id": "task_002",
+      "success": true,
+      "score": 100,
+      "tokens": 14,
+      "latency_ms": 0.7748603820800781,
+      "error": ""
+    },
+    {
+      "task_id": "task_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 11,
+      "latency_ms": 0.47659873962402344,
+      "error": ""
+    },
+    {
+      "task_id": "task_004",
+      "success": true,
+      "score": 80.0,
+      "tokens": 18,
+      "latency_ms": 0.09703636169433594,
+      "error": ""
+    },
+    {
+      "task_id": "task_005",
+      "success": true,
+      "score": 100,
+      "tokens": 8,
+      "latency_ms": 0.2129077911376953,
+      "error": ""
+    },
+    {
+      "task_id": "task_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 11,
+      "latency_ms": 0.11229515075683594,
+      "error": ""
+    },
+    {
+      "task_id": "task_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 19,
+      "latency_ms": 0.10657310485839844,
+      "error": ""
+    },
+    {
+      "task_id": "task_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 11,
+      "latency_ms": 0.10728836059570312,
+      "error": ""
+    },
+    {
+      "task_id": "task_009",
+      "success": true,
+      "score": 80.0,
+      "tokens": 19,
+      "latency_ms": 0.08988380432128906,
+      "error": ""
+    },
+    {
+      "task_id": "task_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 4,
+      "latency_ms": 0.7002353668212891,
+      "error": ""
+    }
+  ]
+}
