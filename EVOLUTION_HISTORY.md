@@ -1,12 +1,14 @@
 # MAS Evolution History - NEW PARADIGM ERA
 
-## ⚠️ Gen70-73: Micro-Evolution Attempts (2026-04-02)
+## ⚠️ Gen70-75: Micro-Evolution Attempts (2026-04-02)
 
 All attempts to improve upon Gen69's efficiency plateaued:
 - Gen70/71: Aggressive budget reductions → REGRESSION (tokens increased)
-- Gen72/73: Minimal budget changes → MATCHED Gen69 (6.2 tokens, 13064 efficiency)
+- Gen72/73: Minimal budget changes → MATCHED Gen69
+- Gen74: Score enhancement attempt → MATCHED Gen69 (score stays 81)
+- Gen75: Ultra-micro budgets (simple=5) → MATCHED Gen69
 
-**Conclusion**: Approaching algorithmic efficiency ceiling. Token reductions hit precision limits.
+**Conclusion**: Approaching algorithmic efficiency ceiling. Token reductions hit precision limits (int truncation). Score enhancement limited by benchmark's coverage-based evaluation.
 
 ---
 
