@@ -1,0 +1,50 @@
+============================================================
+MAS Evolution Engine - Gen16 Benchmark
+Semantic-Gradient Cache + Precision Output Budgeting
+============================================================
+
+[基线] 单Agent系统:
+  - 任务完成率: 65.0%
+  - 平均得分: 58.2
+  - Token效率: 2450/task
+
+[Gen15 基准]
+  - Token: 46
+  - Score: 79
+  - Efficiency: 1703
+
+[测试] 开始运行 10 个任务...
+
+[结果汇总]
+  - 任务完成率: 100.0%
+  - 平均得分: 79.0/100
+  - Token开销: 41/task
+  - 平均延迟: 0ms
+  - 效率指数: 1945.8128
+
+[Gen16 统计]
+  - 总任务数: 10
+  - 缓存命中: 0
+  - 直接执行: 10
+  - 复杂度分布: {'complex': 4, 'medium': 4, 'simple': 2}
+
+[缓存统计]
+  - L1命中: 0
+  - L2命中: 0
+  - L3命中: 0
+  - 缓存命中率: 0.0%
+
+[目标检查]
+  - Token < 45: 40.6 ✅
+  - Score >= 80: 79.0 ❌
+  - Efficiency > 1703: 1945.8 ✅
+
+[对比Gen15]
+  - Token变化: -11.7%
+  - Score变化: +0.0
+  - Efficiency变化: +14.3%
+
+[综合评分] 389236.26/100
+[判定] ✅ 超越Gen15综合评分
+
+结果已保存至: /root/.openclaw/workspace/mas_repo/benchmark_results_gen16.json
