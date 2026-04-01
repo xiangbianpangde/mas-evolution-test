@@ -1,11 +1,17 @@
-# MAS Architecture - Generation 27
+# MAS Architecture - Generation 28
 
 ## 系统拓扑图
 
 ```mermaid
 graph TB
     subgraph "Supervisor Layer"
-        S[Supervisor Agent<br/>Adaptive Router]
+        S[Supervisor Agent<br/>Query Pattern Analyzer]
+    end
+    
+    subgraph "Optimization Layer"
+        Q[Query Complexity Classifier]
+        T[Token Budget Allocator]
+        R[Keyword Relevance Scorer]
     end
     
     subgraph "Worker Layer"
@@ -14,80 +20,81 @@ graph TB
         W3[Review Agent]
     end
     
-    subgraph "Optimization Layer"
-        Q[Query Pattern Analyzer]
-        K[Keyword Relevance Scorer]
-        W[Task-Specific Weight Optimizer]
-        C[Output Cost Mapper]
+    subgraph "Selection Layer"
         O[Smart Output Selector]
-    end
-    
-    subgraph "Memory Layer"
-        KB[(Knowledge Base)]
-        MEM[(Context Buffer)]
+        C[Output Cost Calculator]
     end
     
     S --> Q
-    Q --> K
-    K --> W
-    W --> C
-    C --> O
-    O --> W1
-    O --> W2
-    O --> W3
-    S --> MEM
-    W1 --> MEM
-    W2 --> MEM
-    W3 --> MEM
+    Q --> T
+    T --> W1
+    T --> W2
+    T --> W3
+    W1 --> O
+    W2 --> O
+    W3 --> O
+    O --> C
 ```
 
-## 核心创新
+## 核心创新 (Gen28)
 
-### 1. Query Pattern Analyzer (查询模式分析器)
-- 三级复杂度分类: complex / medium / simple
-- 基于正则表达式和关键词密度
-- 动态Token预算分配
+### 1. Query Pattern Analyzer (查询模式分析)
+- 正则表达式匹配复杂/中/简单任务
+- Token预算分配: complex 37, medium 31, simple 25
 
-### 2. Keyword Relevance Scorer (关键词相关性评分器)
-- 输出与查询关键词的关联强度映射
-- 关键词相关性加成 (0-4.0分) - Gen27增强
-- 针对不同任务类型优化
+### 2. Keyword Relevance Scorer (关键词相关性评分)
+- 任务类型专用关键词-输出映射
+- 相关性加成最高4.0分
 
-### 3. Task-Specific Weight Optimizer (任务专用权重优化器)
-- 不同任务类型的核心输出及其权重
-- Research: 技术分析 > 代码示例 > benchmark数据
-- Code: 完整代码 > 测试用例 > 复杂度分析
-- Review: 风险列表 > 缓解方案 > 优先级排序
+### 3. Smart Output Selector (智能输出选择)
+- 基于优先级的贪心选择
+- 成本约束下最大化输出质量
 
-### 4. Output Cost Mapper (输出成本映射)
-- 精确Token成本追踪
-- 按复杂度分级 (complex/medium/simple)
-- 细化到每个输出类型
+### 4. Output Cost Calculator (输出成本计算)
+- 精细化每输出token成本
+- 复杂度级别差异化定价
 
-### 5. Smart Output Selector (智能输出选择器)
-- 按优先级权重排序选择
-- Token预算约束下的最优组合
-- 每个任务独立优化
+## 组件职责
 
-## Token预算
+### Supervisor Agent
+- 任务接收与分解
+- 查询模式分析
+- Worker调度与结果汇总
 
-| 复杂度 | Gen27 | Gen26 | 节省 |
-|--------|-------|-------|------|
-| Complex | 38 | 39 | -1 |
-| Medium | 32 | 33 | -1 |
-| Simple | 26 | 27 | -1 |
+### Research Agent
+- 信息检索与抽取
+- 知识库更新
+- 事实核查
 
-## 评估指标
+### Coder Agent
+- 代码生成与修复
+- 测试编写
+- 文档生成
 
-| 指标 | Gen27 | Gen26 | 改进 |
-|------|-------|-------|------|
-| Token效率 | 32.0/task | 33.4/task | -4.2% |
-| 效率指数 | 2508 | 2425 | +3.4% |
-| 任务完成率 | 100% | 100% | - |
-| 平均得分 | 81 | 81 | - |
+### Review Agent
+- 代码审查
+- 性能评估
+- 架构建议
+
+## 评估指标 (进化轨迹)
+
+| 指标 | Gen28 | Gen27 | Gen1 | 改进(vs Gen1) |
+|------|-------|-------|------|---------------|
+| 任务完成率 | 100% | 100% | 100% | 0% |
+| 平均得分 | 81 | 81 | 80 | +1.25% |
+| Token开销 | **28** | 32 | 303 | -90.8% |
+| 效率指数 | **2852** | 2508 | 264 | +980% |
 
 ## 版本历史
-- v27.0: Ultra-Precise Token Optimization (当前冠军) 🏆🏆🏆
-- v26.0: Task-Specific Output Weighting (前冠军)
+- v28.0: Micro-Token Budget Optimization (当前冠军)
+- v27.0: Ultra-Precise Token Optimization
+- v26.0: Task-Specific Output Weighting
 - v25.0: Keyword-Relevance Quality Compensation
+- v23.0: Precision Fusion
+- v18.0: Fusion of Token Precision + Quality
+- v16.0: Semantic-Gradient Cache + Precision Output Budgeting
+- v15.0: Pattern-Inference + Dynamic Quality Gating
+- v10.0: Adaptive Token Budget
+- v3.0: Adaptive Delegation + Context Compression
+- v2.0: Mesh-based Collaborative (已废弃)
 - v1.0: 初始架构 - Tree-based Supervisor-Worker
