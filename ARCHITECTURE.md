@@ -1,101 +1,85 @@
-# MAS Architecture - Generation 23
+# MAS Architecture - Generation 25
 
 ## 系统拓扑图
 
 ```mermaid
 graph TB
     subgraph "Supervisor Layer"
-        S[Supervisor Agent<br/>Query Analyzer]
+        S[Supervisor Agent<br/>QueryPatternAnalyzer]
+    end
+    
+    subgraph "Selection Layer"
+        SS[Smart Output Selector]
+        KRS[Keyword Relevance Scorer]
     end
     
     subgraph "Worker Layer"
-        W1[Research Worker]
-        W2[Code Worker]
-        W3[Review Worker]
+        W1[Research Agent]
+        W2[Coder Agent]
+        W3[Review Agent]
     end
     
-    subgraph "Optimization Layer"
-        P[Priority Output Selector]
-        Q[Quality Enhancement Layer]
+    subgraph "Calculation Layer"
+        OC[Output Cost Map]
+        QC[Quality Calculator]
     end
     
-    subgraph "Memory Layer"
-        KB[(Knowledge Base)]
-        MEM[(短期记忆)]
-    end
-    
-    S --> P
-    P --> W1
-    P --> W2
-    P --> W3
-    W1 --> Q
-    W2 --> Q
-    W3 --> Q
-    Q --> KB
-    S --> MEM
-    W1 --> MEM
-    W2 --> MEM
-    W3 --> MEM
+    S --> SS
+    S --> KRS
+    KRS --> QC
+    SS --> W1
+    SS --> W2
+    SS --> W3
+    W1 --> OC
+    W2 --> OC
+    W3 --> OC
+    OC --> QC
 ```
 
-## 核心创新 (Gen23)
+## 核心创新
 
-### 1. Precision Fusion (精确融合)
-- 融合Gen18的质量增强机制
-- 融合Gen20的效率优化
-- 更严格的Token预算 (44/38/32)
+### 1. Keyword-Relevance Quality Compensation (关键词相关性得分补偿)
+根据查询中的技术术语，为相关输出提供额外的得分加成:
+- 算法→技术分析/代码示例 (高相关性)
+- 架构→技术分析/架构图
+- 分布式→技术分析/代码示例/benchmark数据
 
-### 2. Priority Output Selector (优先级输出选择器)
-- 根据复杂度确定优先级输出
-- 贪心选择最低成本输出
-- 成本感知的Token分配
+### 2. Smart Output Selector (智能输出选择)
+- 基于Token预算的精确选择
+- 优先保留标准高质量输出
+- 4输出上限控制
 
-### 3. Quality Enhancement Layer (质量增强层)
-- 确保必需输出都在
-- 高复杂度任务确保4个输出
-- 质量提升加成
+### 3. Token Budget Optimization (Token预算优化)
+| 复杂度 | Token预算 |
+|--------|----------|
+| Complex | 40 |
+| Medium | 34 |
+| Simple | 28 |
 
 ## 组件职责
 
-### Supervisor Agent
-- 任务接收与分解
-- Query模式分析
+### QueryPatternAnalyzer
+- 查询复杂度分类
+- 关键词提取
 - Token预算分配
 
-### Research Worker
-- 信息检索与抽取
-- 知识库更新
-- 优先级: 技术分析 > 代码示例 > benchmark数据
+### SmartOutputSelector
+- 智能输出选择
+- Token成本计算
+- 预算感知选择
 
-### Code Worker
-- 代码生成与修复
-- 测试编写
-- 优先级: 完整代码 > 测试用例
+### KeywordRelevanceScorer
+- 关键词-输出相关性评分
+- 质量加成计算
 
-### Review Worker
-- 代码审查
-- 风险评估
-- 优先级: 风险列表 > 缓解方案
-
-## Token预算 (Gen23)
-
-| 复杂度 | 预算 | vs Gen18 | vs Gen20 |
-|--------|------|----------|----------|
-| Complex | 44 | -4 | -2 |
-| Medium | 38 | -4 | -1 |
-| Simple | 32 | -4 | -2 |
-
-## 评估指标
-
-| 指标 | Gen23 | Gen18 | Gen20 | 目标 |
-|------|-------|-------|-------|------|
-| Score | 81 | 81 | 79 | >=81 ✅ |
-| Token | 39.7 | 41 | 39 | <40 ✅ |
-| Efficiency | 2040 | 1961 | 2005 | >2000 ✅ |
-| 综合评分 | 408134 | 392326 | 401088 | MAX ✅ |
+### QualityCalculator
+- 最终得分计算
+- 基础分 + 输出加成 + 相关性加成
 
 ## 版本历史
-- v1.1: Gen23 - Precision Fusion (当前冠军)
-- v1.0: Gen18 - Fusion: Token Precision + Quality (前冠军)
-- v0.9: Gen16 - Semantic-Gradient Cache + Precision Budgeting
-- v0.8: Gen1 - Tree-based Supervisor-Worker (基准)
+- v25.0: Keyword-Relevance Quality Compensation (当前冠军)
+  - Score: 81, Token: 35.6, Efficiency: 2275
+- v24.0: Ultra-Precision Token Optimization
+  - Score: 80, Token: 35.9, Efficiency: 2228
+- v23.0: Precision Fusion (被v25超越)
+  - Score: 81, Token: 39.7, Efficiency: 2040
