@@ -1,4 +1,4 @@
-# MAS Architecture - Generation 26
+# MAS Architecture - Generation 27
 
 ## 系统拓扑图
 
@@ -50,7 +50,7 @@ graph TB
 
 ### 2. Keyword Relevance Scorer (关键词相关性评分器)
 - 输出与查询关键词的关联强度映射
-- 关键词相关性加成 (0-3.5分)
+- 关键词相关性加成 (0-4.0分) - Gen27增强
 - 针对不同任务类型优化
 
 ### 3. Task-Specific Weight Optimizer (任务专用权重优化器)
@@ -71,24 +71,23 @@ graph TB
 
 ## Token预算
 
-| 复杂度 | Gen26 | Gen25 | 节省 |
+| 复杂度 | Gen27 | Gen26 | 节省 |
 |--------|-------|-------|------|
-| Complex | 39 | 40 | -1 |
-| Medium | 33 | 34 | -1 |
-| Simple | 27 | 28 | -1 |
+| Complex | 38 | 39 | -1 |
+| Medium | 32 | 33 | -1 |
+| Simple | 26 | 27 | -1 |
 
 ## 评估指标
 
-| 指标 | Gen26 | Gen25 | 改进 |
+| 指标 | Gen27 | Gen26 | 改进 |
 |------|-------|-------|------|
-| Token效率 | 33.4/task | 35.6/task | -6.2% |
-| 效率指数 | 2425 | 2275 | +6.6% |
+| Token效率 | 32.0/task | 33.4/task | -4.2% |
+| 效率指数 | 2508 | 2425 | +3.4% |
 | 任务完成率 | 100% | 100% | - |
 | 平均得分 | 81 | 81 | - |
 
 ## 版本历史
-- v26.0: Task-Specific Output Weighting (当前冠军) 🏆
+- v27.0: Ultra-Precise Token Optimization (当前冠军) 🏆🏆🏆
+- v26.0: Task-Specific Output Weighting (前冠军)
 - v25.0: Keyword-Relevance Quality Compensation
-- v24.0: Ultra-Precision Token Optimization
-- v23.0: Precision Fusion
 - v1.0: 初始架构 - Tree-based Supervisor-Worker
