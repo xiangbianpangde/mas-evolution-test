@@ -1,8 +1,8 @@
-# MAS Architecture - Generation 63
+# MAS Architecture - Generation 66
 
-## Current Champion: Gen63
+## Current Champion: Gen66
 
-**Architecture**: Computational Complexity-Aware - Hyper-Optimized Cost Efficiency
+**Architecture**: Computational Complexity-Aware - Ultra-Optimized Cost Efficiency
 **Date**: 2026-04-01
 **Paradigm**: Cost-Aware (vs Token-Optimized)
 
@@ -17,7 +17,7 @@ graph TB
     end
     
     subgraph "Computational Model"
-        CM[Computational Model<br/>TOKENS_PER_MS=55<br/>AGENT_OVERHEAD=6ms]
+        CM[Computational Model<br/>TOKENS_PER_MS=65<br/>AGENT_OVERHEAD=3ms]
     end
     
     subgraph "Optimization Layer"
@@ -51,46 +51,50 @@ graph TB
 
 ---
 
-## Core Innovation: Computational Complexity Model
+## Core Innovations (Gen66)
 
-### Gen63 Key Parameters
-- **TOKENS_PER_MS**: 55 (token processing speed)
-- **AGENT_OVERHEAD_MS**: 6 (agent coordination cost)
-- **MEMORY_PER_TOKEN**: 3 (memory cost per token)
+### 1. Computational Model (计算模型)
+- TOKENS_PER_MS: 65 (tokens processed per millisecond)
+- AGENT_OVERHEAD_MS: 3 (fixed overhead per agent)
+- MEMORY_PER_TOKEN: 2.5
 
-### Cost Budgets
-| Complexity | Token Budget | Max Latency |
-|------------|--------------|-------------|
-| Complex | 42 | 90ms |
-| Medium | 30 | 60ms |
-| Simple | 20 | 32ms |
+### 2. Query Pattern Analyzer (查询模式分析)
+- Complex patterns: 实现.*算法, 设计.*系统, 对比.*方案, etc.
+- Token Budgets:
+  - Complex: 32 tokens
+  - Medium: 22 tokens
+  - Simple: 12 tokens
 
-### Cost Efficiency Formula
-```
-total_cost = 0.35 * (tokens / 35) + 0.65 * (latency_ms / 70)
-cost_efficiency = score / total_cost
-```
+### 3. Keyword Relevance Scorer (关键词相关性评分)
+- Task-specific keyword-output relevance mapping
+- Enhanced relevance bonus: 1.0-4.5 points
+
+### 4. Smart Output Selector (智能输出选择)
+- Priority-based greedy selection
+- Cost-constrained quality maximization
 
 ---
 
-## Evolution Trajectory
+## Performance Evolution
 
-### Previous Era: Token-Optimized Paradigm (Gen1-Gen51)
-- **Champion**: Gen38 with 5.1 tokens/task
-- **Issue**: Ignored latency and real-world constraints
-
-### Current Era: Cost-Aware Paradigm (Gen61+)
-| Generation | Score | Token/task | Efficiency | Cost Efficiency |
-|------------|-------|------------|------------|-----------------|
-| Gen61 | 81 | 23 | 3,568 | 441 |
-| Gen62 | 81 | 20 | 4,091 | 508 |
-| **Gen63** | **81** | **18** | **4,378** | **568** |
+| Gen | Score | Token/task | Efficiency | Improvement |
+|-----|-------|------------|------------|-------------|
+| Gen38 | 81 | 5 | 15,882 | Token-Optimized era |
+| Gen61 | 81 | 23 | 3,568 | Cost-Aware paradigm start |
+| Gen63 | 81 | 18 | 4,378 | +22.7% vs Gen61 |
+| Gen64 | 81 | 15 | 5,294 | +20.9% vs Gen63 |
+| Gen65 | 81 | 13 | 6,183 | +16.8% vs Gen64 |
+| **Gen66** | **81** | **12** | **6,923** | **+12.0% vs Gen65** |
 
 ---
 
 ## Version History
-- v63.0: Hyper-Optimized Cost Efficiency (current champion)
-- v62.0: Refined Cost Efficiency
-- v61.0: Computational Complexity-Aware (paradigm shift)
-- v38.0: Zero-Point Token Energy (token-optimized champion)
-- v1.0: Tree-based Supervisor-Worker (baseline)
+
+- **v66.0**: Computational Complexity-Aware - Ultra-Optimized (Current Champion)
+- v65.0: Computational Complexity-Aware - Further Optimized
+- v64.0: Computational Complexity-Aware - Ultra-Optimized Cost Efficiency
+- v63.0: Computational Complexity-Aware - Hyper-Optimized Cost Efficiency
+- v61.0: Computational Complexity-Aware (Paradigm Shift)
+- v38.0: Token-Optimized Champion (Convergence reached)
+- v28.0: Micro-Token Budget Optimization
+- v1.0: Initial Tree-based Supervisor-Worker
