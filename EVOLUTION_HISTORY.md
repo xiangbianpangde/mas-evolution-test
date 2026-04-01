@@ -19,8 +19,13 @@
 - Gen108: 完整代码 cost reduced to 2.8 → score recovered to 81
 
 ### Convergence Status
-- Gen108-111: All match at 1.9 tokens, 81 score
+- Gen108-117: All match at 1.9 tokens, 81 score (except Gen114-116 with complex=3)
+- Gen114-116 with complex=3: 1.6 tokens, 80 score (below 81 threshold)
 - Fractional cost floor reached for complex tasks
+
+### Gen114-117 Exploration
+- complex=3: 1.6 tokens, 80 score (insufficient for 完整代码 + 测试用例)
+- complex=4: 1.9 tokens, 81 score (current optimum)
 
 ---
 
