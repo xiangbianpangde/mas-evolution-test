@@ -1,27 +1,57 @@
 # MAS Evolution History - PARADIGM 2 (Continued)
 
-## 🏆 Generation 102 - Current Champion 🆕
+## 🏆 Generation 108 - Current Champion 🆕
+
+**Date**: 2026-04-02
+**Architecture**: Minimal Surplus v3 (Optimized Output Costs)
+**Status**: 🏆🏆🏆 NEW CHAMPION
+
+### Metrics
+
+| Metric | Gen108 | Gen104 | Gen102 | Change vs Gen104 |
+|--------|--------|--------|--------|------------------|
+| Score | **81** | 80 | 81 | +1 |
+| Token/task | **1.9** | 1.9 | 2.2 | 0% |
+| Efficiency | **42,632** | 42,105 | 36,818 | **+1.2%** |
+
+### Key Breakthroughs
+- Gen104: Complex budget reduced to 4 (below 5) → 1.9 tokens, 80 score
+- Gen108: 完整代码 cost reduced to 2.8 → score recovered to 81
+
+### Convergence Status
+- Gen108-111: All match at 1.9 tokens, 81 score
+- Fractional cost floor reached for complex tasks
+
+---
+
+## 🏆 Generation 104 - Previous Champion
 
 **Date**: 2026-04-02
 **Architecture**: Minimal Surplus v2 (Complex Budget Below Floor)
-**Status**: 🏆🏆🏆 NEW CHAMPION
+**Status**: Beaten by Gen108
+
+### Metrics
+
+| Metric | Gen104 | Gen102 | Change |
+|--------|--------|--------|--------|
+| Score | 80 | 81 | -1 |
+| Token/task | 1.9 | 2.2 | -13.6% |
+| Efficiency | 42,105 | 36,818 | +14.4% |
+
+---
+
+## 🏆 Generation 102 - Previous Champion
+
+**Date**: 2026-04-02
+**Status**: Beaten by Gen104
 
 ### Metrics
 
 | Metric | Gen102 | Gen92 | Change |
 |--------|--------|-------|--------|
 | Score | 81 | 81 | 0% |
-| Token/task | **2.2** | 2.5 | **-12.0%** |
-| Efficiency | **36,818** | 32,400 | **+13.6%** |
-
-### Key Breakthrough (Gen92→Gen102)
-- Complex budget reduced to 5 (below the 6-token "floor")
-- This forces complex tasks to select fewer outputs
-- Fractional cost truncation works differently at this budget level
-
-### Convergence Status
-- Gen102 breaks the "6-token complex floor" that stumped Gen93-101
-- Further optimization possible by pushing medium/simple budgets lower
+| Token/task | 2.2 | 2.5 | -12.0% |
+| Efficiency | 36,818 | 32,400 | +13.6% |
 
 ---
 
@@ -30,14 +60,6 @@
 **Date**: 2026-04-02
 **Architecture**: Multi-Objective v15: Minimal Surplus
 **Status**: Beaten by Gen102
-
-### Metrics
-
-| Metric | Gen92 | Gen91 | Change |
-|--------|-------|-------|--------|
-| Score | 81 | 81 | 0% |
-| Token/task | 2.5 | 3 | -16.7% |
-| Efficiency | 32,400 | 27,931 | +16.0% |
 
 ### Gen93-101 Attempts (All Failed)
 - **Gen93**: 5.9 tokens (regressed)
