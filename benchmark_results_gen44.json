@@ -1,0 +1,95 @@
+{
+  "timestamp": "2026-04-01T15:10:42.045673",
+  "generation": 44,
+  "summary": {
+    "total_tasks": 10,
+    "success_rate": 1.0,
+    "avg_score": 81.0,
+    "avg_tokens": 5.1,
+    "avg_latency_ms": 0.2783775329589844,
+    "efficiency": 15882.352941176472
+  },
+  "verdict": "✅✅ 新冠军! Efficiency提升",
+  "individual_results": [
+    {
+      "task_id": "task_001",
+      "success": true,
+      "score": 100,
+      "tokens": 6,
+      "latency_ms": 0.6206035614013672,
+      "error": ""
+    },
+    {
+      "task_id": "task_002",
+      "success": true,
+      "score": 100,
+      "tokens": 5,
+      "latency_ms": 0.6697177886962891,
+      "error": ""
+    },
+    {
+      "task_id": "task_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 4,
+      "latency_ms": 0.3600120544433594,
+      "error": ""
+    },
+    {
+      "task_id": "task_004",
+      "success": true,
+      "score": 80.0,
+      "tokens": 7,
+      "latency_ms": 0.09179115295410156,
+      "error": ""
+    },
+    {
+      "task_id": "task_005",
+      "success": true,
+      "score": 100,
+      "tokens": 4,
+      "latency_ms": 0.16498565673828125,
+      "error": ""
+    },
+    {
+      "task_id": "task_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 4,
+      "latency_ms": 0.08821487426757812,
+      "error": ""
+    },
+    {
+      "task_id": "task_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 7,
+      "latency_ms": 0.08440017700195312,
+      "error": ""
+    },
+    {
+      "task_id": "task_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 4,
+      "latency_ms": 0.08559226989746094,
+      "error": ""
+    },
+    {
+      "task_id": "task_009",
+      "success": true,
+      "score": 80.0,
+      "tokens": 7,
+      "latency_ms": 0.07081031799316406,
+      "error": ""
+    },
+    {
+      "task_id": "task_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 3,
+      "latency_ms": 0.5476474761962891,
+      "error": ""
+    }
+  ]
+}
