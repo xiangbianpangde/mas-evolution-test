@@ -1,0 +1,125 @@
+{
+  "timestamp": "2026-04-01T10:02:43.057164",
+  "generation": 20,
+  "architecture": "Optimized Hierarchical Teams v2",
+  "summary": {
+    "total_tasks": 10,
+    "success_rate": 1.0,
+    "avg_score": 79.0,
+    "avg_tokens": 39.4,
+    "avg_latency_ms": 0.20933151245117188,
+    "efficiency": 2005.0761421319799
+  },
+  "baseline": {
+    "success_rate": 0.65,
+    "avg_score": 58.2,
+    "avg_tokens": 2450,
+    "avg_latency_ms": 45000,
+    "efficiency": 0.024
+  },
+  "gen18_baseline": {
+    "avg_score": 81,
+    "avg_tokens": 41,
+    "efficiency": 1961
+  },
+  "gen19_baseline": {
+    "avg_score": 80,
+    "avg_tokens": 43,
+    "efficiency": 1852
+  },
+  "composite_score": 401088.9284054628,
+  "verdict": "⚠️ 待优化",
+  "stats": {
+    "version": "20.0",
+    "total_tasks": 10,
+    "specialized_tasks": 9,
+    "collaboration_tasks": 1,
+    "team_usage": {
+      "research": 5,
+      "code": 4,
+      "review": 2
+    }
+  },
+  "individual_results": [
+    {
+      "task_id": "task_001",
+      "success": true,
+      "score": 100,
+      "tokens": 44,
+      "latency_ms": 0.8533000946044922,
+      "error": ""
+    },
+    {
+      "task_id": "task_002",
+      "success": true,
+      "score": 100,
+      "tokens": 38,
+      "latency_ms": 0.60272216796875,
+      "error": ""
+    },
+    {
+      "task_id": "task_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 38,
+      "latency_ms": 0.08630752563476562,
+      "error": ""
+    },
+    {
+      "task_id": "task_004",
+      "success": true,
+      "score": 70.0,
+      "tokens": 44,
+      "latency_ms": 0.05698204040527344,
+      "error": ""
+    },
+    {
+      "task_id": "task_005",
+      "success": true,
+      "score": 90.0,
+      "tokens": 32,
+      "latency_ms": 0.13184547424316406,
+      "error": ""
+    },
+    {
+      "task_id": "task_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 38,
+      "latency_ms": 0.06985664367675781,
+      "error": ""
+    },
+    {
+      "task_id": "task_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 44,
+      "latency_ms": 0.06747245788574219,
+      "error": ""
+    },
+    {
+      "task_id": "task_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 38,
+      "latency_ms": 0.06461143493652344,
+      "error": ""
+    },
+    {
+      "task_id": "task_009",
+      "success": true,
+      "score": 80.0,
+      "tokens": 44,
+      "latency_ms": 0.056743621826171875,
+      "error": ""
+    },
+    {
+      "task_id": "task_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 34,
+      "latency_ms": 0.10347366333007812,
+      "error": ""
+    }
+  ]
+}
