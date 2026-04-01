@@ -1,96 +1,101 @@
-# MAS Architecture - Generation 15
+# MAS Architecture - Generation 23
 
 ## 系统拓扑图
 
 ```mermaid
 graph TB
     subgraph "Supervisor Layer"
-        S[Supervisor Agent<br/>Gen15 Supervisor]
-    end
-    
-    subgraph "Analysis Layer"
-        PA[Query Pattern Analyzer]
-        QG[Dynamic Quality Gate]
-    end
-    
-    subgraph "Cache Layer"
-        PC[Pattern Inference Cache<br/>50% hit rate]
-        TC[Task Chaining Memory]
+        S[Supervisor Agent<br/>Query Analyzer]
     end
     
     subgraph "Worker Layer"
-        W1[Research Agent]
-        W2[Coder Agent]
-        W3[Review Agent]
+        W1[Research Worker]
+        W2[Code Worker]
+        W3[Review Worker]
     end
     
-    S --> PA
-    S --> QG
-    PA --> PC
-    PA --> TC
-    QG --> W1
-    QG --> W2
-    QG --> W3
-    W1 --> PC
-    W2 --> PC
-    W3 --> PC
+    subgraph "Optimization Layer"
+        P[Priority Output Selector]
+        Q[Quality Enhancement Layer]
+    end
+    
+    subgraph "Memory Layer"
+        KB[(Knowledge Base)]
+        MEM[(短期记忆)]
+    end
+    
+    S --> P
+    P --> W1
+    P --> W2
+    P --> W3
+    W1 --> Q
+    W2 --> Q
+    W3 --> Q
+    Q --> KB
+    S --> MEM
+    W1 --> MEM
+    W2 --> MEM
+    W3 --> MEM
 ```
 
-## 核心创新
+## 核心创新 (Gen23)
 
-### 1. Query Pattern Analyzer (查询模式分析器)
-识别查询复杂度级别:
-- **complex**: 实现.*算法, 设计.*系统, 对比.*方案 等
-- **medium**: 实现.*, 设计.*, 分析.* 等
-- **simple**: 审查.*, 评估.*, 风险.* 等
+### 1. Precision Fusion (精确融合)
+- 融合Gen18的质量增强机制
+- 融合Gen20的效率优化
+- 更严格的Token预算 (44/38/32)
 
-### 2. Dynamic Quality Gate (动态质量门控)
-根据复杂度动态调整:
-| 复杂度 | 最小输出数 | 最低分数 |
-|--------|-----------|---------|
-| complex | 3 | 75 |
-| medium | 2 | 70 |
-| simple | 2 | 68 |
+### 2. Priority Output Selector (优先级输出选择器)
+- 根据复杂度确定优先级输出
+- 贪心选择最低成本输出
+- 成本感知的Token分配
 
-### 3. Pattern Inference Cache (模式推理缓存)
-- 基于 (task_type, complexity, query_words) 的键
-- LRU 淘汰 (max_size=50)
-- 50% 缓存命中率
-
-### 4. Task Chaining Memory (任务链记忆)
-- 关联相似查询的输出模式
-- 复用历史任务链
+### 3. Quality Enhancement Layer (质量增强层)
+- 确保必需输出都在
+- 高复杂度任务确保4个输出
+- 质量提升加成
 
 ## 组件职责
 
-### Supervisor Agent (Gen15)
-- 任务接收与模式分析
-- 动态质量门控
-- 缓存调度
+### Supervisor Agent
+- 任务接收与分解
+- Query模式分析
+- Token预算分配
 
-### Research Agent
-- 复杂/中/简单三档输出
-- 技术分析、benchmark数据、代码示例
+### Research Worker
+- 信息检索与抽取
+- 知识库更新
+- 优先级: 技术分析 > 代码示例 > benchmark数据
 
-### Coder Agent
-- 完整代码、测试用例、架构图
+### Code Worker
+- 代码生成与修复
+- 测试编写
+- 优先级: 完整代码 > 测试用例
 
-### Review Agent
-- 风险列表、缓解方案、优先级排序
+### Review Worker
+- 代码审查
+- 风险评估
+- 优先级: 风险列表 > 缓解方案
 
-## 性能对比
+## Token预算 (Gen23)
 
-| 指标 | Gen15 | Gen14 | 变化 |
-|------|-------|-------|------|
-| Token | **46** | 47 | -1.3% |
-| Score | **79** | 78 | +1.0 |
-| Efficiency | **1703** | 1646 | +3.5% |
-| Composite | **340737** | 329187 | +3.5% |
+| 复杂度 | 预算 | vs Gen18 | vs Gen20 |
+|--------|------|----------|----------|
+| Complex | 44 | -4 | -2 |
+| Medium | 38 | -4 | -1 |
+| Simple | 32 | -4 | -2 |
+
+## 评估指标
+
+| 指标 | Gen23 | Gen18 | Gen20 | 目标 |
+|------|-------|-------|-------|------|
+| Score | 81 | 81 | 79 | >=81 ✅ |
+| Token | 39.7 | 41 | 39 | <40 ✅ |
+| Efficiency | 2040 | 1961 | 2005 | >2000 ✅ |
+| 综合评分 | 408134 | 392326 | 401088 | MAX ✅ |
 
 ## 版本历史
-- v15.0: Pattern-Inference + Dynamic Quality Gating (当前冠军)
-- v14.0: Precision-Cached Minimal Processing (被超越)
-- v13.0: Ultra-Light Efficiency + Quality Floor
-- v10.0: Adaptive Token Budget
-- v7.0: Query-Analyzed Minimal Processing
-- v1.0: Tree-based Supervisor-Worker (基准)
+- v1.1: Gen23 - Precision Fusion (当前冠军)
+- v1.0: Gen18 - Fusion: Token Precision + Quality (前冠军)
+- v0.9: Gen16 - Semantic-Gradient Cache + Precision Budgeting
+- v0.8: Gen1 - Tree-based Supervisor-Worker (基准)
