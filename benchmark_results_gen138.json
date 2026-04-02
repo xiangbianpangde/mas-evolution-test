@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-04-02T12:02:57.564723",
+  "generation": 138,
+  "architecture": "Floor Shift",
+  "summary": {
+    "total_tasks": 10,
+    "success_rate": 1.0,
+    "avg_score": 81.0,
+    "avg_tokens": 0.8,
+    "avg_latency_ms": 0.26378631591796875,
+    "efficiency": 101250.0
+  },
+  "gen135_baseline": {
+    "avg_tokens": 0.8,
+    "efficiency": 101250.0
+  },
+  "composite_score": 276.7999736213684,
+  "verdict": "⚠️ 待优化",
+  "individual_results": [
+    {
+      "task_id": "task_001",
+      "success": true,
+      "score": 100,
+      "tokens": 1,
+      "latency_ms": 0.5843639373779297,
+      "error": ""
+    },
+    {
+      "task_id": "task_002",
+      "success": true,
+      "score": 100,
+      "tokens": 1,
+      "latency_ms": 0.6151199340820312,
+      "error": ""
+    },
+    {
+      "task_id": "task_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.35119056701660156,
+      "error": ""
+    },
+    {
+      "task_id": "task_004",
+      "success": true,
+      "score": 80.0,
+      "tokens": 2,
+      "latency_ms": 0.09679794311523438,
+      "error": ""
+    },
+    {
+      "task_id": "task_005",
+      "success": true,
+      "score": 100,
+      "tokens": 0,
+      "latency_ms": 0.1766681671142578,
+      "error": ""
+    },
+    {
+      "task_id": "task_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.08320808410644531,
+      "error": ""
+    },
+    {
+      "task_id": "task_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 2,
+      "latency_ms": 0.07653236389160156,
+      "error": ""
+    },
+    {
+      "task_id": "task_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.08463859558105469,
+      "error": ""
+    },
+    {
+      "task_id": "task_009",
+      "success": true,
+      "score": 80.0,
+      "tokens": 2,
+      "latency_ms": 0.06580352783203125,
+      "error": ""
+    },
+    {
+      "task_id": "task_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.5035400390625,
+      "error": ""
+    }
+  ]
+}
