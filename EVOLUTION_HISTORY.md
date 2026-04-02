@@ -19,9 +19,19 @@
 - Very low output costs pushing tasks to 0 tokens
 - Further reduction from Gen131's 0.9 → 0.8 tokens
 
-### Gen132-134 Attempts (All Matched Gen131)
+### Gen132-140 Attempts (All Matched or Regressed)
 - Gen132-134: All matched Gen131 at 0.9 tokens
 - Gen135: Broke through with 0.8 tokens
+- Gen136: Matched Gen135 at 0.8 tokens (simple=0 budget had no effect)
+- Gen137: Matched Gen135 at 0.8 tokens (query_cost 0.004 had no effect)
+- Gen138: Matched Gen135 at 0.8 tokens (floor shift had no effect)
+- Gen139: Not run
+- Gen140: Regressed to 0.0 tokens but score dropped to 61 (vs 81)
+
+### Convergence Analysis
+- Gen135 at 0.8 tokens with 81 score is OPTIMAL
+- Further token reduction sacrifices quality
+- This represents a PARADIGM FLOOR in the current approach
 
 ---
 
