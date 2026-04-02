@@ -1,0 +1,35 @@
+============================================================
+MAS Evolution Engine - Gen184 Benchmark
+Specialized Outputs for Generalization
+============================================================
+
+[测试] 运行 15 个任务...
+
+[核心任务]
+  成功率: 100.0%
+  得分: 81.0
+  Token: 0.1
+
+[泛化任务]
+  成功率: 100.0%
+  得分: 78.0
+  Token: 0.2
+
+[综合评分]
+  综合: 93.40
+  Token: 0.1
+  效率: 600000
+
+[泛化任务分解]
+  gen_001: tokens=0, score=90.0
+  gen_002: tokens=1, score=90.0
+  gen_003: tokens=0, score=70.0
+  gen_004: tokens=0, score=70.0
+  gen_005: tokens=0, score=70.0
+
+[对比Gen176]
+  Gen176 综合: 93.4, 泛化: 78.0
+  当前 综合: 93.40, 泛化: 78.0
+[判定] ⚠️ 待优化
+
+结果已保存至: /root/.openclaw/workspace/mas_repo/benchmark_results_gen184.json
