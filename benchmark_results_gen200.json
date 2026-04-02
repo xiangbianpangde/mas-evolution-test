@@ -1,0 +1,159 @@
+{
+  "timestamp": "2026-04-03T01:34:43.688983",
+  "generation": 200,
+  "architecture": "Increased Base Scores",
+  "summary": {
+    "total_tasks": 15,
+    "success_rate": 1.0,
+    "avg_score": 80.66666666666667,
+    "avg_tokens": 0.6666666666666666,
+    "avg_latency_ms": 0.24426778157552084,
+    "efficiency": 121000.00000000001,
+    "core_success_rate": 1.0,
+    "core_avg_score": 77.0,
+    "core_avg_tokens": 0.6,
+    "generalization_success_rate": 1.0,
+    "generalization_avg_score": 88.0,
+    "generalization_avg_tokens": 0.8,
+    "generalization_score": 88.0,
+    "composite_score": 96.4,
+    "degradation_detected": false
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "success": true,
+      "score": 90.0,
+      "tokens": 0,
+      "latency_ms": 0.5335807800292969,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_002",
+      "success": true,
+      "score": 90.0,
+      "tokens": 0,
+      "latency_ms": 0.8687973022460938,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.40435791015625,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_004",
+      "success": true,
+      "score": 70.0,
+      "tokens": 2,
+      "latency_ms": 0.1049041748046875,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_005",
+      "success": true,
+      "score": 100,
+      "tokens": 0,
+      "latency_ms": 0.19121170043945312,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.11777877807617188,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 2,
+      "latency_ms": 0.11014938354492188,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.13113021850585938,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_009",
+      "success": true,
+      "score": 70.0,
+      "tokens": 2,
+      "latency_ms": 0.09751319885253906,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.5364418029785156,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "gen_001",
+      "success": true,
+      "score": 80.0,
+      "tokens": 0,
+      "latency_ms": 0.11467933654785156,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_002",
+      "success": true,
+      "score": 90.0,
+      "tokens": 2,
+      "latency_ms": 0.11682510375976562,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_003",
+      "success": true,
+      "score": 80.0,
+      "tokens": 0,
+      "latency_ms": 0.12254714965820312,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_004",
+      "success": true,
+      "score": 90.0,
+      "tokens": 0,
+      "latency_ms": 0.11658668518066406,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_005",
+      "success": true,
+      "score": 100,
+      "tokens": 2,
+      "latency_ms": 0.09751319885253906,
+      "is_generalization": true,
+      "error": ""
+    }
+  ]
+}
