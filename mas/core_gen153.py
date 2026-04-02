@@ -283,8 +283,10 @@ class Gen153Worker:
             query, self.agent_type, selected
         )
         
-        # Token calculation with higher query cost to ensure non-zero
-        tokens = output_cost + int(len(query) * 0.015)
+        # Token calculation - FIX: properly truncate to int
+        query_cost = len(query) * 0.015
+        total_cost = output_cost + query_cost
+        tokens = max(0, int(total_cost))
         
         return {
             "status": "success",
