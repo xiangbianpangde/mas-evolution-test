@@ -23,11 +23,20 @@
 - Gen114-116 with complex=3: 1.6 tokens, 80 score (below 81 threshold)
 - Fractional cost floor reached for complex tasks
 
-### Gen114-120 Exploration
+### Gen114-122 Exploration
 - complex=3: 1.6 tokens, 80 score (insufficient for 完整代码 + 测试用例)
 - complex=4: 1.9 tokens, 81 score (current optimum)
 - Gen118: Efficiency 50000 (+17% vs Gen108) but score 80
-- Gen119: Matches Gen108 at 1.9 tokens, 81 score
+- Gen119-120: Matches Gen108 at 1.9 tokens, 81 score
+- Gen121: Output cost tuning - matched Gen108 at 1.9 tokens
+- Gen122: Complex budget 3 - matched Gen108 at 1.9 tokens (floor reached)
+
+### Convergence Analysis
+- Floor reached: 1.9 tokens appears to be the minimum given:
+  - Query cost multiplier (0.008-0.012) contributes 0-2 tokens
+  - Output costs truncate to minimum integers
+  - int() function creates quantization barrier
+- To break below 1.9: need to eliminate query cost or restructure selection
 - Gen120: Matches Gen108 (完整代码 cost 2.5 → no change)
 
 ---
