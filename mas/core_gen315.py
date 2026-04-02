@@ -183,7 +183,7 @@ class Gen315Worker:
         start = time.time()
         
         # Use negotiation to select outputs
-        selected = self.negotiator.negotiate(self.agent_type, query, max_outputs=5)
+        selected = self.negotiator.negotiate(self.agent_type, query, max_outputs=7)
         
         # Calculate cost (simplified - just based on output count)
         tokens = len(selected)
