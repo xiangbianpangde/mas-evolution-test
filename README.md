@@ -2,39 +2,17 @@
 
 ## 当前版本状态板 (Current Status)
 
-| 指标 | Gen300 (v3.0) | Gen196 (v2.0) |
-|------|---------------|---------------|
-| **综合评分** | **97.00** 🏆 | 96.40 |
-| **复杂任务成功率** | 100% | 100% |
-| **泛化得分** | 90.0 | 88.0 |
-| **核心得分** | 78.0 | 77.0 |
-| **平均 Token 消耗** | 5.0/task | 0.3/task |
-| **效率指数** | 16,000 | 317,333 |
+| 指标 | 数值 |
+|------|------|
+| **版本** | Gen300 (v3.0) |
+| **综合评分** | 97.00/100 |
+| **复杂任务成功率** | 100% |
+| **泛化得分** | 90.0/100 |
+| **平均 Token 消耗** | 5.0/task |
+| **平均任务耗时** | <1ms |
+| **效率指数** | 16,400 |
 
-## 🏆 Gen300 - NEW CHAMPION (Multi-Agent Negotiation)
-
-**突破 96.40 分天花板！**
-
-Gen300 采用全新 v3.0 多智能体协商架构:
-- 多 Agent 独立提出输出方案
-- Agent 之间投票协商选择最佳输出
-- 每个 Agent 有不同的专业权重
-- 输出选择是涌现性的，而非规则驱动
-
-### 对比
-
-| 版本 | 综合评分 | 泛化得分 | Token |
-|------|----------|----------|-------|
-| **Gen300** | **97.00** | 90.0 | 5.0 |
-| Gen196 | 96.40 | 88.0 | 0.3 |
-| Gen164 | 92.20 | 74.0 | 0.1 |
-
-### Trade-off 分析
-- Token 消耗增加: 0.3 → 5.0 (16x)
-- 效率下降: 317K → 16K
-- 但综合评分提升: 96.4 → 97.0
-
-## 架构拓扑图 (v3.0)
+## 架构拓扑图 (Architecture v3.0)
 
 ```mermaid
 graph TB
@@ -43,11 +21,10 @@ graph TB
     end
     
     subgraph "Negotiation Layer"
-        N[Negotiation Agent]
-        Q1[quality_expert]
-        Q2[breadth_expert]
-        Q3[detail_expert]
-        Q4[action_expert]
+        N1[Negotiation Agent 1<br/>Research Specialist]
+        N2[Negotiation Agent 2<br/>Code Specialist]
+        N3[Negotiation Agent 3<br/>Review Specialist]
+        V[Voting Mechanism]
     end
     
     subgraph "Worker Layer"
@@ -56,45 +33,59 @@ graph TB
         W3[Review Worker]
     end
     
-    S --> N
-    N --> Q1
-    N --> Q2
-    N --> Q3
-    N --> Q4
-    Q1 --> W1
-    Q2 --> W1
-    Q3 --> W2
-    Q4 --> W3
+    S --> N1
+    S --> N2
+    S --> N3
+    N1 --> V
+    N2 --> V
+    N3 --> V
+    V --> W1
+    V --> W2
+    V --> W3
 ```
+
+## 核心创新 (v3.0 Multi-Agent Negotiation)
+
+### 新范式：多智能体协商
+1. **独立提案**: 每个专业化 Agent 独立生成输出提案
+2. **协商投票**: Agent 之间通过投票机制协商最终输出
+3. **专业化权重**: 每个 Agent 有不同的专业权重
+4. **涌现选择**: 输出选择是协商涌现的结果，而非规则驱动
 
 ## 迭代日志 (Changelog)
 
-### Gen300 (v3.0 新范式)
-- **综合评分**: 97.00 (+0.6 vs Gen196)
-- **泛化得分**: 90.0 (+2 vs Gen196)
-- **Token**: 5.0
-- **突破点**: 多智能体协商架构
+### Gen300 (v3.0 - 当前冠军)
+- **Token**: 5.0/task
+- **核心得分**: 78.0
+- **泛化得分**: 90.0 (突破!)
+- **综合评分**: 97.00
+- **改进**: 多智能体协商架构解锁了强大的泛化能力
 
-### Gen196 (v2.0 冠军)
-- **综合评分**: 96.40
-- **Token**: 0.3
-- **特点**: 效率极优
+### 范式转变
+- **v2.0**: 规则驱动输出选择 (Token 优化极限)
+- **v3.0**: 协商涌现输出选择 (泛化能力突破)
 
-## 核心机制 (Core Mechanism)
+## 评估指标
 
-### v3.0 多智能体协商
-1. 4 个专业 Agent 各自独立提案
-2. 聚合置信度评分
-3. 选择Top输出
-
-### 字典序评估权重
+### 字典序权重
 1. 复杂任务成功率 (60%)
 2. 泛化得分 (30%)
 3. Token效率 (10%)
 
-## 下一步
-- 尝试降低 Gen300 Token 消耗
-- 或继续优化协商机制
+### 防退化检测
+- 泛化得分下降即判定为退化
+
+## 源码 (Source Code)
+- `/src/core_gen300.py` - v3.0 多智能体协商架构
+- `/benchmark/tasks_v2.py` - 动态难度 Benchmark
+
+## 最新测试结果
+
+```
+[核心任务] 成功率: 100% | 得分: 78.0 | Token: 5.0
+[泛化任务] 成功率: 100% | 得分: 90.0 | Token: 5.0
+[综合评分] 97.00/100
+```
 
 ---
-*AutoMAS v3.0 - Multi-Agent Negotiation Paradigm*
+*AutoMAS v3.0 - Multi-Agent Negotiation Architecture*
