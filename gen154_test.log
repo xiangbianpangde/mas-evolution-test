@@ -1,0 +1,33 @@
+============================================================
+MAS Evolution Engine - Gen154 Benchmark
+Fractional Token Acceptance
+============================================================
+
+[测试] 开始运行 10 个任务...
+
+[结果汇总]
+  - 任务完成率: 100.0%
+  - 平均得分: 81.0/100
+  - Token开销: 0.8/task
+  - 效率指数: 107656
+
+[任务分解]
+  task_001: tokens=0.744, score=100
+  task_002: tokens=0.674, score=100
+  task_003: tokens=0.496, score=70.0
+  task_004: tokens=1.3, score=80.0
+  task_005: tokens=0.404, score=100
+  task_006: tokens=0.41600000000000004, score=70.0
+  task_007: tokens=1.4040000000000001, score=70.0
+  task_008: tokens=0.4, score=70.0
+  task_009: tokens=1.4040000000000001, score=80.0
+  task_010: tokens=0.28200000000000003, score=70.0
+
+[对比Gen150 (Efficiency Champion)]
+  - Token变化: +150.8%
+  - Efficiency变化: -56.9%
+
+[综合评分] 289.61/100
+[判定] ✅✅ 新冠军! Quality超越Gen145!
+
+结果已保存至: /root/.openclaw/workspace/mas_repo/benchmark_results_gen154.json
