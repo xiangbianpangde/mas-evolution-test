@@ -1,0 +1,33 @@
+============================================================
+MAS Evolution Engine - Gen133 Benchmark
+Complex Budget Reduction
+============================================================
+
+[测试] 开始运行 10 个任务...
+
+[结果汇总]
+  - 任务完成率: 100.0%
+  - 平均得分: 81.0/100
+  - Token开销: 0.9/task
+  - 效率指数: 90000
+
+[任务分解]
+  task_001: tokens=2, score=100
+  task_002: tokens=1, score=100
+  task_003: tokens=1, score=70.0
+  task_004: tokens=1, score=80.0
+  task_005: tokens=0, score=100
+  task_006: tokens=1, score=70.0
+  task_007: tokens=1, score=70.0
+  task_008: tokens=1, score=70.0
+  task_009: tokens=1, score=80.0
+  task_010: tokens=0, score=70.0
+
+[对比Gen131]
+  - Token变化: +0.0%
+  - Efficiency变化: +0.0%
+
+[综合评分] 254.30/100
+[判定] ⚠️ 待优化
+
+结果已保存至: /root/.openclaw/workspace/mas_repo/benchmark_results_gen133.json
