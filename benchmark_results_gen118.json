@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-04-02T08:31:00.824986",
+  "generation": 118,
+  "summary": {
+    "total_tasks": 10,
+    "success_rate": 1.0,
+    "avg_score": 80.0,
+    "avg_tokens": 1.6,
+    "avg_latency_ms": 0.2747535705566406,
+    "efficiency": 50000.0
+  },
+  "composite_score": 173.99997252464294,
+  "verdict": "✅✅ 新冠军! Efficiency提升",
+  "individual_results": [
+    {
+      "task_id": "task_001",
+      "success": true,
+      "score": 100,
+      "tokens": 2,
+      "latency_ms": 0.6585121154785156,
+      "error": ""
+    },
+    {
+      "task_id": "task_002",
+      "success": true,
+      "score": 100,
+      "tokens": 2,
+      "latency_ms": 0.6234645843505859,
+      "error": ""
+    },
+    {
+      "task_id": "task_003",
+      "success": true,
+      "score": 70.0,
+      "tokens": 1,
+      "latency_ms": 0.36978721618652344,
+      "error": ""
+    },
+    {
+      "task_id": "task_004",
+      "success": true,
+      "score": 70.0,
+      "tokens": 3,
+      "latency_ms": 0.07939338684082031,
+      "error": ""
+    },
+    {
+      "task_id": "task_005",
+      "success": true,
+      "score": 100,
+      "tokens": 0,
+      "latency_ms": 0.1609325408935547,
+      "error": ""
+    },
+    {
+      "task_id": "task_006",
+      "success": true,
+      "score": 70.0,
+      "tokens": 1,
+      "latency_ms": 0.08606910705566406,
+      "error": ""
+    },
+    {
+      "task_id": "task_007",
+      "success": true,
+      "score": 70.0,
+      "tokens": 3,
+      "latency_ms": 0.080108642578125,
+      "error": ""
+    },
+    {
+      "task_id": "task_008",
+      "success": true,
+      "score": 70.0,
+      "tokens": 1,
+      "latency_ms": 0.08273124694824219,
+      "error": ""
+    },
+    {
+      "task_id": "task_009",
+      "success": true,
+      "score": 80.0,
+      "tokens": 3,
+      "latency_ms": 0.06699562072753906,
+      "error": ""
+    },
+    {
+      "task_id": "task_010",
+      "success": true,
+      "score": 70.0,
+      "tokens": 0,
+      "latency_ms": 0.5395412445068359,
+      "error": ""
+    }
+  ]
+}
