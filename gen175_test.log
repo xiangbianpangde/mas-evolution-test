@@ -1,0 +1,10 @@
+[Gen175 Results]
+  核心: 81.0, Token: 0.1
+  泛化: 74.0, Token: 0.0
+  综合: 92.20
+  [泛化] gen_001: tokens=0, score=80.0
+  [泛化] gen_002: tokens=0, score=80.0
+  [泛化] gen_003: tokens=0, score=70.0
+  [泛化] gen_004: tokens=0, score=70.0
+  [泛化] gen_005: tokens=0, score=70.0
+  判定: ⚠️ 待优化
