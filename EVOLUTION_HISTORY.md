@@ -23,9 +23,12 @@
 - Gen114-116 with complex=3: 1.6 tokens, 80 score (below 81 threshold)
 - Fractional cost floor reached for complex tasks
 
-### Gen114-117 Exploration
+### Gen114-120 Exploration
 - complex=3: 1.6 tokens, 80 score (insufficient for 完整代码 + 测试用例)
 - complex=4: 1.9 tokens, 81 score (current optimum)
+- Gen118: Efficiency 50000 (+17% vs Gen108) but score 80
+- Gen119: Matches Gen108 at 1.9 tokens, 81 score
+- Gen120: Matches Gen108 (完整代码 cost 2.5 → no change)
 
 ---
 
