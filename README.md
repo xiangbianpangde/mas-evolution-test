@@ -91,8 +91,18 @@ graph TB
 
 ## 迭代记录 (Recent)
 
+- **Gen195**: 扩展关键词覆盖 (量子/组合优化/分析/优化) - 仍匹配Gen185 (95.2)
+- **Gen194**: 增加REQUIRED_OUTPUTS - 无效
+- **Gen193**: 提高relevance权重 - 无效
+- **Gen192**: 提高token预算 - tokens增加但分数不变
+- **Gen189-191**: 小参数调整 - 均匹配Gen185
 - **Gen188**: 退化 (71 core, 72 gen) - cost scaling调整导致性能下降
 - **Gen187**: 退化 (token=0 指标失效) - 成本过度压缩
 - **Gen186**: 匹配Gen185 (95.2) - complex budget=2无效
 - **Gen185**: 🏆 冠军 (95.2, 84 gen, 75 core) - 泛化突破!
+
+## ⚠️ 范式收敛警告
+Gen185已达到收敛 plateau：
+- Gen186-195 尝试均未能超越
+- 需要全新架构拓扑才能继续进化
 
