@@ -88,3 +88,11 @@ graph TB
 
 ---
 *AutoMAS v2.0 - Dynamic Benchmark + Generalization Support*
+
+## 迭代记录 (Recent)
+
+- **Gen188**: 退化 (71 core, 72 gen) - cost scaling调整导致性能下降
+- **Gen187**: 退化 (token=0 指标失效) - 成本过度压缩
+- **Gen186**: 匹配Gen185 (95.2) - complex budget=2无效
+- **Gen185**: 🏆 冠军 (95.2, 84 gen, 75 core) - 泛化突破!
+
