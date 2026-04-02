@@ -11,7 +11,7 @@
 | **平均 Token 消耗** | 5.0/task |
 | **效率指数** | 16,400 |
 
-## 架构拓扑图 (Architecture v3.0)
+## 架构拓扑图 (Architecture v3.0 - Multi-Agent Negotiation)
 
 ```mermaid
 graph TB
@@ -19,7 +19,7 @@ graph TB
         S[Supervisor Agent]
     end
     
-    subgraph "Negotiation Layer"
+    subgraph "Negotiation Layer (4 Experts)"
         Q1[quality_expert]
         Q2[breadth_expert]
         Q3[detail_expert]
@@ -46,47 +46,47 @@ graph TB
     V --> W3
 ```
 
-## 核心创新 (v3.0 Multi-Agent Negotiation)
-
-### 新范式：多智能体协商
-1. **独立提案**: 4个专业化 Agent 独立生成输出提案
-2. **协商投票**: Agent 之间通过投票机制协商最终输出
-3. **专业化权重**: 每个 Agent 有不同的专业权重
-4. **涌现选择**: 输出选择是协商涌现的结果
-
-### Agent 配置
-- **quality_expert**: 技术分析、完整代码、风险评估
-- **breadth_expert**: 代码示例、测试用例、benchmark数据
-- **detail_expert**: 性能优化建议、复杂度分析、架构图
-- **action_expert**: 缓解方案、实施建议、优先级排序
-
-## 迭代日志 (Recent Changelog)
+## 迭代日志 (Changelog)
 
 ### Gen300 (v3.0 - 当前冠军)
+- **架构**: Multi-Agent Negotiation
+- **综合评分**: 97.00/100
+- **泛化得分**: 90.0/100 (历史最高!)
 - **Token**: 5.0/task
-- **核心得分**: 78.0
-- **泛化得分**: 90.0 (突破!)
-- **综合评分**: 97.00
-- **状态**: 多智能体协商架构 - 仍未被超越
+- **状态**: 范式收敛，Gen301-310 均未能超越
 
-### Gen301-309 (优化尝试 - 均未能超越)
-- Gen305: 添加synthesis专家，但泛化降至82，综合94.6
-- Gen306: 扩展候选列表，泛化86，综合95.8
-- Gen307: max_outputs=4降低Token，但泛化降至84
-- Gen308: 改进权重，泛化86，综合95.8
-- Gen309: 增加噪声，泛化86，综合95.8
+### Gen164 (v2.0 - 历史)  
+- **架构**: Token Optimization
+- **综合评分**: 92.20/100
+- **泛化得分**: 74.0/100
+- **Token**: 0.1/task (极低)
 
-**结论**: Gen300在当前范式下已达到局部最优
+## 范式收敛警告
 
-## 评估指标
+**当前范式 (v3.0 Multi-Agent Negotiation) 已收敛**
 
-### 字典序权重
+| 代数 | 尝试 | 结果 |
+|------|------|------|
+| Gen301-303 | Token优化 | 失败 |
+| Gen304 | 优化准备 | 未测试 |
+| Gen305-309 | 扩展候选输出 | 失败 |
+| Gen310 | 6专家协商 | 失败 (退化) |
+
+**需要**: 全新技术范式突破
+
+## 核心机制 (Core Mechanism)
+
+### 字典序评估权重
 1. 复杂任务成功率 (60%)
-2. 泛化得分 (30%)
+2. 泛化得分 (30%)  
 3. Token效率 (10%)
 
+### 收敛判断
+连续 10 轮迭代提升 < 1% = 范式收敛
+
 ## 源码 (Source Code)
-- `/src/core_gen300.py` - v3.0 多智能体协商架构
+- `/src/core_gen300.py` - v3.0 Multi-Agent Negotiation (当前最优)
+- `/src/core_gen164.py` - v2.0 Token Optimization
 - `/benchmark/tasks_v2.py` - 动态难度 Benchmark
 
 ## 最新测试结果
@@ -94,8 +94,8 @@ graph TB
 ```
 [核心任务] 成功率: 100% | 得分: 78.0 | Token: 5.0
 [泛化任务] 成功率: 100% | 得分: 90.0 | Token: 5.0
-[综合评分] 97.00/100
+[综合评分] 97.00/100 | 效率: 16,400
 ```
 
 ---
-*AutoMAS v3.0 - Multi-Agent Negotiation Architecture*
+*AutoMAS v3.0 - Multi-Agent Negotiation Paradigm*
