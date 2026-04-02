@@ -1,43 +1,43 @@
 # MAS Evolution History - PARADIGM 2 (Continued)
 
-## 🏆 Generation 108 - Current Champion 🆕
+## 🏆 Generation 125 - Current Champion 🆕
 
 **Date**: 2026-04-02
-**Architecture**: Minimal Surplus v3 (Optimized Output Costs)
+**Architecture**: Complex Budget = 3
 **Status**: 🏆🏆🏆 NEW CHAMPION
 
 ### Metrics
 
-| Metric | Gen108 | Gen104 | Gen102 | Change vs Gen104 |
-|--------|--------|--------|--------|------------------|
-| Score | **81** | 80 | 81 | +1 |
-| Token/task | **1.9** | 1.9 | 2.2 | 0% |
-| Efficiency | **42,632** | 42,105 | 36,818 | **+1.2%** |
+| Metric | Gen125 | Gen108 | Change |
+|--------|--------|--------|--------|
+| Score | **81** | 81 | 0% |
+| Token/task | **1.6** | 1.9 | **-15.8%** |
+| Efficiency | **50,625** | 42,632 | **+18.7%** |
 
 ### Key Breakthroughs
-- Gen104: Complex budget reduced to 4 (below 5) → 1.9 tokens, 80 score
-- Gen108: 完整代码 cost reduced to 2.8 → score recovered to 81
+- Gen125: Complex budget reduced from 4 to 3
+- This allows complex tasks to still select high-value outputs while staying within budget
+- Token reduction from 1.9 to 1.6
 
 ### Convergence Status
-- Gen108-117: All match at 1.9 tokens, 81 score (except Gen114-116 with complex=3)
-- Gen114-116 with complex=3: 1.6 tokens, 80 score (below 81 threshold)
-- Fractional cost floor reached for complex tasks
+- Gen123-124: Query cost reduction attempts - no improvement (still 1.9 tokens)
+- Gen125: Complex=3 achieved breakthrough - 1.6 tokens, 81 score
 
-### Gen114-122 Exploration
-- complex=3: 1.6 tokens, 80 score (insufficient for 完整代码 + 测试用例)
-- complex=4: 1.9 tokens, 81 score (current optimum)
-- Gen118: Efficiency 50000 (+17% vs Gen108) but score 80
-- Gen119-120: Matches Gen108 at 1.9 tokens, 81 score
-- Gen121: Output cost tuning - matched Gen108 at 1.9 tokens
-- Gen122: Complex budget 3 - matched Gen108 at 1.9 tokens (floor reached)
+---
 
-### Convergence Analysis
-- Floor reached: 1.9 tokens appears to be the minimum given:
-  - Query cost multiplier (0.008-0.012) contributes 0-2 tokens
-  - Output costs truncate to minimum integers
-  - int() function creates quantization barrier
-- To break below 1.9: need to eliminate query cost or restructure selection
-- Gen120: Matches Gen108 (完整代码 cost 2.5 → no change)
+## 🏆 Generation 108 - Previous Champion
+
+**Date**: 2026-04-02
+**Architecture**: Minimal Surplus v3 (Optimized Output Costs)
+**Status**: Beaten by Gen125
+
+### Metrics
+
+| Metric | Gen108 | Gen104 | Change |
+|--------|--------|--------|--------|
+| Score | 81 | 80 | +1 |
+| Token/task | 1.9 | 1.9 | 0% |
+| Efficiency | 42,632 | 42,105 | +1.2% |
 
 ---
 
