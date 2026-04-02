@@ -1,0 +1,20 @@
+{
+  "generation": 202,
+  "summary": {
+    "total_tasks": 15,
+    "success_rate": 1.0,
+    "avg_score": 80.66666666666667,
+    "avg_tokens": 0.6666666666666666,
+    "avg_latency_ms": 0.2750555674235026,
+    "efficiency": 121000.00000000001,
+    "core_success_rate": 1.0,
+    "core_avg_score": 77.0,
+    "core_avg_tokens": 0.6,
+    "generalization_success_rate": 1.0,
+    "generalization_avg_score": 88.0,
+    "generalization_avg_tokens": 0.8,
+    "generalization_score": 88.0,
+    "composite_score": 96.4,
+    "degradation_detected": false
+  }
+}
