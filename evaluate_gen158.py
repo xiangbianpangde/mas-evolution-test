@@ -11,12 +11,12 @@ from datetime import datetime
 sys.path.insert(0, '/root/.openclaw/workspace/mas_repo')
 
 from benchmark.tasks import BenchmarkSuite, get_baseline_single_agent
-from mas.core_gen158 import create_mas_system
+from mas.core_gen159 import create_mas_system
 from dataclasses import asdict
 
 def run_evaluation():
     print("=" * 60)
-    print("MAS Evolution Engine - Gen158 Benchmark")
+    print("MAS Evolution Engine - Gen159 Benchmark")
     print("Higher Density Thresholds")
     print("=" * 60)
     
@@ -85,7 +85,7 @@ def run_evaluation():
 
 if __name__ == "__main__":
     result = run_evaluation()
-    output_file = "/root/.openclaw/workspace/mas_repo/benchmark_results_gen158.json"
+    output_file = "/root/.openclaw/workspace/mas_repo/benchmark_results_gen159.json"
     with open(output_file, 'w') as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
     print(f"\n结果已保存至: {output_file}")
