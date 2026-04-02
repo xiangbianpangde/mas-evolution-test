@@ -9,7 +9,6 @@
 | **复杂任务成功率** | 100% |
 | **泛化得分** | 90.0/100 |
 | **平均 Token 消耗** | 5.0/task |
-| **平均任务耗时** | <1ms |
 | **效率指数** | 16,400 |
 
 ## 架构拓扑图 (Architecture v3.0)
@@ -21,9 +20,10 @@ graph TB
     end
     
     subgraph "Negotiation Layer"
-        N1[Negotiation Agent 1<br/>Research Specialist]
-        N2[Negotiation Agent 2<br/>Code Specialist]
-        N3[Negotiation Agent 3<br/>Review Specialist]
+        Q1[quality_expert]
+        Q2[breadth_expert]
+        Q3[detail_expert]
+        Q4[action_expert]
         V[Voting Mechanism]
     end
     
@@ -33,12 +33,14 @@ graph TB
         W3[Review Worker]
     end
     
-    S --> N1
-    S --> N2
-    S --> N3
-    N1 --> V
-    N2 --> V
-    N3 --> V
+    S --> Q1
+    S --> Q2
+    S --> Q3
+    S --> Q4
+    Q1 --> V
+    Q2 --> V
+    Q3 --> V
+    Q4 --> V
     V --> W1
     V --> W2
     V --> W3
@@ -47,23 +49,30 @@ graph TB
 ## 核心创新 (v3.0 Multi-Agent Negotiation)
 
 ### 新范式：多智能体协商
-1. **独立提案**: 每个专业化 Agent 独立生成输出提案
+1. **独立提案**: 4个专业化 Agent 独立生成输出提案
 2. **协商投票**: Agent 之间通过投票机制协商最终输出
 3. **专业化权重**: 每个 Agent 有不同的专业权重
-4. **涌现选择**: 输出选择是协商涌现的结果，而非规则驱动
+4. **涌现选择**: 输出选择是协商涌现的结果
 
-## 迭代日志 (Changelog)
+### Agent 配置
+- **quality_expert**: 技术分析、完整代码、风险评估
+- **breadth_expert**: 代码示例、测试用例、benchmark数据
+- **detail_expert**: 性能优化建议、复杂度分析、架构图
+- **action_expert**: 缓解方案、实施建议、优先级排序
+
+## 迭代日志 (Recent Changelog)
 
 ### Gen300 (v3.0 - 当前冠军)
 - **Token**: 5.0/task
 - **核心得分**: 78.0
 - **泛化得分**: 90.0 (突破!)
 - **综合评分**: 97.00
-- **改进**: 多智能体协商架构解锁了强大的泛化能力
+- **状态**: 多智能体协商架构解锁了强大的泛化能力
 
-### 范式转变
-- **v2.0**: 规则驱动输出选择 (Token 优化极限)
-- **v3.0**: 协商涌现输出选择 (泛化能力突破)
+### Gen301-303 (优化尝试)
+- Gen301: 分数降低，退化
+- Gen302: Token计算错误
+- Gen303: Token降至4.0，但泛化降至86，综合95.8
 
 ## 评估指标
 
@@ -71,9 +80,6 @@ graph TB
 1. 复杂任务成功率 (60%)
 2. 泛化得分 (30%)
 3. Token效率 (10%)
-
-### 防退化检测
-- 泛化得分下降即判定为退化
 
 ## 源码 (Source Code)
 - `/src/core_gen300.py` - v3.0 多智能体协商架构
