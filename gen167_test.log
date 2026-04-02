@@ -1,0 +1,25 @@
+============================================================
+MAS Evolution Engine - Gen167 Benchmark
+Quality Score Optimization
+============================================================
+
+[测试] 运行 15 个任务...
+
+[核心任务]
+  - 成功率: 100.0%
+  - 得分: 81.0/100
+  - Token: 0.1/task
+
+[泛化任务]
+  - 成功率: 100.0%
+  - 得分: 74.0/100
+  - Token: 0.2/task
+
+[综合]
+  - 综合评分: 92.20/100
+  - Token: 0.1/task
+
+[对比Gen164]
+[判定] ⚠️ 待优化
+
+结果已保存至: /root/.openclaw/workspace/mas_repo/benchmark_results_gen167.json
