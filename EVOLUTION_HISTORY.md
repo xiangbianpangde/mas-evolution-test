@@ -20,10 +20,12 @@
 - Research complex costs: 技术分析 0.1, 代码示例 0.15, benchmark数据 0.05, 引用来源 0.03
 - Result: task_001 dropped from 1→0 tokens!
 
-### Gen143-144 Attempts
+### Gen143-147 Attempts
 - Gen143: 0.5 tokens - code cost reduction breakthrough
 - Gen144: Matched Gen143 at 0.5 tokens - research/review costs already at floor
 - Gen145: Broke through with 0.4 tokens via aggressive research cost reduction!
+- Gen146: Matched Gen145 at 0.4 tokens - query cost reduction not enough
+- Gen147: 0 tokens achieved BUT efficiency=0 (division by zero issue) - composite score LOWER than Gen145, NOT a champion
 
 ---
 
