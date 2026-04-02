@@ -1,0 +1,42 @@
+============================================================
+MAS Evolution Engine - Gen168 Benchmark
+Extended Output Selection
+============================================================
+
+[测试] 运行 15 个任务...
+
+[核心任务]
+  - 成功率: 100.0%
+  - 得分: 82.0/100
+  - Token: 0.4/task
+
+[泛化任务]
+  - 成功率: 100.0%
+  - 得分: 74.0/100
+  - Token: 0.2/task
+
+[综合]
+  - 综合评分: 92.20/100
+  - Token: 0.3/task
+
+[任务分解]
+  core_001: tokens=1, score=100
+  core_002: tokens=1, score=100
+  core_003: tokens=0, score=70.0
+  core_004: tokens=0, score=80.0
+  core_005: tokens=0, score=100
+  core_006: tokens=0, score=70.0
+  core_007: tokens=1, score=70.0
+  core_008: tokens=0, score=80.0
+  core_009: tokens=1, score=80.0
+  core_010: tokens=0, score=70.0
+  gen_001: tokens=0, score=80.0
+  gen_002: tokens=1, score=80.0
+  gen_003: tokens=0, score=70.0
+  gen_004: tokens=0, score=70.0
+  gen_005: tokens=0, score=70.0
+
+[对比Gen164]
+[判定] ⚠️ 待优化
+
+结果已保存至: /root/.openclaw/workspace/mas_repo/benchmark_results_gen168.json
