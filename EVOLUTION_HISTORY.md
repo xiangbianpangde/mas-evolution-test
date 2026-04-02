@@ -10,13 +10,14 @@
 | Gen145 (Quality) | **81** | 0.4 | 202,500 |
 | Gen150 (Efficiency) | 75 | **0.3** | **250,000** |
 
-### Convergence Evidence (Gen145-152)
+### Convergence Evidence (Gen145-161)
 - Gen145: 0.4 tokens, 81 score ✅ QUALITY CHAMPION
 - Gen146: Matched Gen145 (0.4 tokens)
 - Gen147-149: Degenerate (0 tokens, efficiency=0)
 - Gen150: 0.3 tokens, 75 score ✅ EFFICIENCY CHAMPION
-- Gen151: Matched Gen145 (0.4 tokens, 81 score)
-- Gen152: Degenerate (0 tokens, efficiency=0)
+- Gen151-159: Matched Gen145 or Gen150
+- Gen160: Matched Gen145 (0.4 tokens, 81 score) - medium budget restored
+- Gen161: Degenerate (0 tokens, efficiency=0) - ultra-reduction too aggressive
 
 ### Conclusion
 Further micro-optimization yields diminishing returns. The Pareto frontier has been reached:
