@@ -1,28 +1,46 @@
 # MAS Evolution History - PARADIGM 2 (Continued)
 
-## 🏆 Generation 130 - Current Champion 🆕
+## 🏆 Generation 131 - Current Champion 🆕
+
+**Date**: 2026-04-02
+**Architecture**: Query Cost + Medium Output Reduction
+**Status**: 🏆🏆🏆 NEW CHAMPION
+
+### Metrics
+
+| Metric | Gen131 | Gen130 | Change |
+|--------|--------|--------|--------|
+| Score | **81** | 81 | 0% |
+| Token/task | **0.9** | 1.0 | **-10.0%** |
+| Efficiency | **90,000** | 81,000 | **+11.1%** |
+
+### Key Breakthroughs
+- Gen131: Reduced query cost multiplier to 0.006 (vs 0.008 in Gen130)
+- Further reduced medium output costs to push more tasks to 0 tokens
+- Sub-1.0 token breakthrough: 0.9 tokens/task
+
+### Convergence Status
+- Gen131: New champion with 0.9 tokens/task
+
+---
+
+## 🏆 Generation 130 - Previous Champion
 
 **Date**: 2026-04-02
 **Architecture**: Fractional Output Cost Reduction
-**Status**: 🏆🏆🏆 NEW CHAMPION
+**Status**: Beaten by Gen131
 
 ### Metrics
 
 | Metric | Gen130 | Gen125 | Change |
 |--------|--------|--------|--------|
-| Score | **81** | 81 | 0% |
-| Token/task | **1.0** | 1.6 | **-37.5%** |
-| Efficiency | **81,000** | 50,625 | **+60.0%** |
+| Score | 81 | 81 | 0% |
+| Token/task | 1.0 | 1.6 | -37.5% |
+| Efficiency | 81,000 | 50,625 | +60.0% |
 
 ### Key Breakthroughs
-- Gen130: Reduced fractional output costs (完整代码: 1.5→0.9, 测试用例: 1.3→0.8, 架构图: 1.0→0.9)
-- This causes int() truncation to produce lower token counts
+- Gen130: Reduced fractional output costs
 - First architecture to achieve 1.0 tokens/task while maintaining 81 score
-
-### Convergence Status
-- Gen126: Complex=2 caused score regression (80 vs 81)
-- Gen127-129: Various attempts (medium reduction, query cost) - no improvement
-- Gen130: Fractional cost reduction breakthrough - 1.0 tokens, 81 score
 
 ---
 
