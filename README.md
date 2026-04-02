@@ -4,14 +4,14 @@
 
 | 指标 | 数值 |
 |------|------|
-| **版本** | Gen300 (v3.0) |
-| **综合评分** | 97.00/100 |
+| **版本** | Gen315 (v3.1) |
+| **综合评分** | 97.60/100 |
 | **复杂任务成功率** | 100% |
-| **泛化得分** | 90.0/100 |
-| **平均 Token 消耗** | 5.0/task |
-| **效率指数** | 16,400 |
+| **泛化得分** | 92.0/100 |
+| **平均 Token 消耗** | 7.0/task |
+| **效率指数** | ~14,000 |
 
-## 架构拓扑图 (Architecture v3.0 - Multi-Agent Negotiation)
+## 架构拓扑图 (Architecture v3.1)
 
 ```mermaid
 graph TB
@@ -48,31 +48,19 @@ graph TB
 
 ## 迭代日志 (Changelog)
 
-### Gen300 (v3.0 - 当前冠军)
-- **架构**: Multi-Agent Negotiation
+### Gen315 (v3.1 - 当前冠军) 🏆
+- **架构**: Multi-Agent Negotiation with 7 outputs
+- **综合评分**: 97.60/100
+- **泛化得分**: 92.0/100 (历史最高!)
+- **核心得分**: 80.0/100
+- **Token**: 7.0/task
+- **关键改进**: 增加 max_outputs 到 7，显著提升泛化能力
+
+### Gen300 (v3.0 - 前冠军)
+- **架构**: Multi-Agent Negotiation with 5 outputs
 - **综合评分**: 97.00/100
-- **泛化得分**: 90.0/100 (历史最高!)
+- **泛化得分**: 90.0/100
 - **Token**: 5.0/task
-- **状态**: 范式收敛，Gen301-310 均未能超越
-
-### Gen164 (v2.0 - 历史)  
-- **架构**: Token Optimization
-- **综合评分**: 92.20/100
-- **泛化得分**: 74.0/100
-- **Token**: 0.1/task (极低)
-
-## 范式收敛警告
-
-**当前范式 (v3.0 Multi-Agent Negotiation) 已收敛**
-
-| 代数 | 尝试 | 结果 |
-|------|------|------|
-| Gen301-303 | Token优化 | 失败 |
-| Gen304 | 优化准备 | 未测试 |
-| Gen305-309 | 扩展候选输出 | 失败 |
-| Gen310 | 6专家协商 | 失败 (退化) |
-
-**需要**: 全新技术范式突破
 
 ## 核心机制 (Core Mechanism)
 
@@ -81,21 +69,21 @@ graph TB
 2. 泛化得分 (30%)  
 3. Token效率 (10%)
 
-### 收敛判断
-连续 10 轮迭代提升 < 1% = 范式收敛
+### 关键发现
+- 增加输出数量 (5→7) 显著提升泛化得分 (90→92)
+- 但也增加了 Token 消耗 (5→7)
 
 ## 源码 (Source Code)
-- `/src/core_gen300.py` - v3.0 Multi-Agent Negotiation (当前最优)
-- `/src/core_gen164.py` - v2.0 Token Optimization
+- `/src/core_gen315.py` - v3.1 当前最优
 - `/benchmark/tasks_v2.py` - 动态难度 Benchmark
 
 ## 最新测试结果
 
 ```
-[核心任务] 成功率: 100% | 得分: 78.0 | Token: 5.0
-[泛化任务] 成功率: 100% | 得分: 90.0 | Token: 5.0
-[综合评分] 97.00/100 | 效率: 16,400
+[核心任务] 成功率: 100% | 得分: 80.0 | Token: 7.0
+[泛化任务] 成功率: 100% | 得分: 92.0 | Token: 7.0
+[综合评分] 97.60/100
 ```
 
 ---
-*AutoMAS v3.0 - Multi-Agent Negotiation Paradigm*
+*AutoMAS v3.1 - Enhanced Multi-Agent Negotiation*
