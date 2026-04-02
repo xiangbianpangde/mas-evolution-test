@@ -1,5 +1,5 @@
 """
-MAS Core System - Generation 150
+MAS Core System - Generation 157
 Research and Review Cost Reduction
 
 Based on Gen135:
@@ -24,7 +24,7 @@ class TaskType(Enum):
     REVIEW = "review"
 
 class QueryPatternAnalyzer:
-    """查询模式分析器 - Gen150"""
+    """查询模式分析器 - Gen157"""
     
     COMPLEX_PATTERNS = [
         r"实现.*算法", r"设计.*系统", r"对比.*方案", r"分析.*架构",
@@ -41,7 +41,7 @@ class QueryPatternAnalyzer:
         r".*审查.*", r".*评估.*风险", r".*建议.*", r"微服务.*风险",
     ]
     
-    # Gen150: Further reduced budgets to push tasks to 0
+    # Gen157: Further reduced budgets to push tasks to 0
     COST_BUDGETS = {
         "complex": {"tokens": 2, "max_latency_ms": 12},
         "medium": {"tokens": 0, "max_latency_ms": 8},
@@ -94,7 +94,7 @@ class QueryPatternAnalyzer:
         return found
 
 class KeywordRelevanceScorer:
-    """关键词相关性评分器 - Gen150"""
+    """关键词相关性评分器 - Gen157"""
 
     KEYWORD_OUTPUT_RELEVANCE = {
         TaskType.RESEARCH: {
@@ -146,9 +146,9 @@ class KeywordRelevanceScorer:
         return normalized_bonus
 
 class OutputCostMap:
-    """输出Token成本映射 - Gen150 (reduced research/review costs)"""
+    """输出Token成本映射 - Gen157 (reduced research/review costs)"""
     
-    # Gen150: Further reduced research and review costs
+    # Gen157: Further reduced research and review costs
     COSTS = {
         "complex": {
             "技术分析": 0.1, "代码示例": 0.15, "benchmark数据": 0.05,  # Reduced
@@ -176,7 +176,7 @@ class OutputCostMap:
         return total
 
 class TaskSpecificWeightOptimizer:
-    """任务类型专用输出权重优化器 - Gen150"""
+    """任务类型专用输出权重优化器 - Gen157"""
 
     CORE_OUTPUT_WEIGHTS = {
         TaskType.RESEARCH: {
@@ -199,7 +199,7 @@ class TaskSpecificWeightOptimizer:
         return weights.get(output, 0.7)
 
 class SmartOutputSelector:
-    """智能输出选择器 - Gen150"""
+    """智能输出选择器 - Gen157"""
 
     STANDARD_OUTPUTS = {
         TaskType.RESEARCH: {
@@ -242,7 +242,7 @@ class SmartOutputSelector:
         return selected[:4], current_cost
 
 class QualityCalculator:
-    """质量计算器 - Gen150"""
+    """质量计算器 - Gen157"""
     
     SCORE_BASE = {"simple": 70, "medium": 74, "complex": 76}
     REQUIRED_OUTPUTS = {"complex": 3, "medium": 2, "simple": 2}
@@ -263,8 +263,8 @@ class QualityCalculator:
         score = base + output_bonus + (relevance_bonus * 2.0)
         return min(100, score)
 
-class Gen150Worker:
-    """Gen150 Worker"""
+class Gen157Worker:
+    """Gen157 Worker"""
     
     def __init__(self, agent_type: TaskType):
         self.agent_type = agent_type
@@ -298,15 +298,15 @@ class Gen150Worker:
             "relevance_bonus": relevance_bonus
         }
 
-class Gen150Supervisor:
-    """Supervisor - Gen150"""
+class Gen157Supervisor:
+    """Supervisor - Gen157"""
     
     def __init__(self):
         self.analyzer = QueryPatternAnalyzer()
         self.workers = {
-            TaskType.RESEARCH: Gen150Worker(TaskType.RESEARCH),
-            TaskType.CODE: Gen150Worker(TaskType.CODE),
-            TaskType.REVIEW: Gen150Worker(TaskType.REVIEW),
+            TaskType.RESEARCH: Gen157Worker(TaskType.RESEARCH),
+            TaskType.CODE: Gen157Worker(TaskType.CODE),
+            TaskType.REVIEW: Gen157Worker(TaskType.REVIEW),
         }
     
     def execute(self, task: Dict) -> Dict[str, Any]:
@@ -344,8 +344,8 @@ class Gen150Supervisor:
 
 class MASSystem:
     def __init__(self):
-        self.supervisor = Gen150Supervisor()
-        self.version = "150.0"
+        self.supervisor = Gen157Supervisor()
+        self.version = "157.0"
     
     def execute(self, task: Dict) -> Dict[str, Any]:
         return self.supervisor.execute(task)
