@@ -1,5 +1,5 @@
 """
-MAS Core System - Generation 301 (v3.0 Prototype)
+MAS Core System - Generation 303 (v3.0 Prototype)
 Multi-Agent Negotiation Architecture
 
 NEW PARADIGM: Instead of single-pass output selection, use multiple agents
@@ -169,7 +169,7 @@ class QualityCalculator:
         score = base + coverage * 30
         return min(100, score)
 
-class Gen301Worker:
+class Gen303Worker:
     """Worker using negotiation for output selection"""
     
     def __init__(self, agent_type: TaskType):
@@ -181,22 +181,10 @@ class Gen301Worker:
         start = time.time()
         
         # Use negotiation to select outputs
-        selected = self.negotiator.negotiate(self.agent_type, query, max_outputs=3)
+        selected = self.negotiator.negotiate(self.agent_type, query, max_outputs=4)
         
-        # Calculate cost (fractional based on output type)
-        output_costs = {
-            "技术分析": 0.1, "代码示例": 0.15, "benchmark数据": 0.08,
-            "完整代码": 0.2, "测试用例": 0.1, "架构图": 0.08,
-            "风险列表": 0.05, "缓解方案": 0.08, "优先级排序": 0.03,
-            "改进建议": 0.05, "案例研究": 0.08, "可行性评估": 0.08,
-            "风险评估": 0.08, "成本收益分析": 0.08, "实施建议": 0.08,
-            "隐私分析": 0.08, "应用案例": 0.08, "技术综述": 0.08,
-            "SOTA分析": 0.08, "系统架构": 0.08, "融合算法": 0.1,
-            "性能测试": 0.08, "设计文档": 0.08, "测试结果": 0.08,
-            "引用来源": 0.05, "性能优化建议": 0.08
-        }
-        tokens = sum(output_costs.get(o, 0.1) for o in selected)
-        tokens = max(1, int(tokens))
+        # Calculate cost (simplified - just based on output count)
+        tokens = len(selected)
         
         return {
             "status": "success",
@@ -208,15 +196,15 @@ class Gen301Worker:
             "negotiation_rounds": 1
         }
 
-class Gen301Supervisor:
+class Gen303Supervisor:
     """Supervisor - v3.0 with negotiation"""
     
     def __init__(self):
         self.analyzer = QueryPatternAnalyzer()
         self.workers = {
-            TaskType.RESEARCH: Gen301Worker(TaskType.RESEARCH),
-            TaskType.CODE: Gen301Worker(TaskType.CODE),
-            TaskType.REVIEW: Gen301Worker(TaskType.REVIEW),
+            TaskType.RESEARCH: Gen303Worker(TaskType.RESEARCH),
+            TaskType.CODE: Gen303Worker(TaskType.CODE),
+            TaskType.REVIEW: Gen303Worker(TaskType.REVIEW),
         }
     
     def execute(self, task: Dict) -> Dict[str, Any]:
@@ -248,8 +236,8 @@ class Gen301Supervisor:
 
 class MASSystem:
     def __init__(self):
-        self.supervisor = Gen301Supervisor()
-        self.version = "301.0"
+        self.supervisor = Gen303Supervisor()
+        self.version = "303.0"
     
     def execute(self, task: Dict) -> Dict[str, Any]:
         return self.supervisor.execute(task)
