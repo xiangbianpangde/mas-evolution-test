@@ -1,0 +1,213 @@
+{
+  "timestamp": "2026-04-03T21:59:28.997117",
+  "architecture": "OpenClaw Native MAS",
+  "elapsed_seconds": 506.4709939956665,
+  "summary": {
+    "total_tasks": 15,
+    "success_rate": 1.0,
+    "avg_score": 72.66666666666667,
+    "avg_tokens": 1363.2,
+    "total_tokens": 20448,
+    "avg_latency_ms": 33760.403521855675,
+    "core_success_rate": 1.0,
+    "core_avg_score": 73.0,
+    "generalization_success_rate": 1.0,
+    "generalization_avg_score": 72.0,
+    "composite_score": 75.39999999999999,
+    "degradation_detected": true
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 833,
+      "latency_ms": 26427.366256713867,
+      "outputs": [
+        "稀疏注意力机制",
+        "线性注意力近似",
+        "Flash Attention分块融合",
+        "层次化记忆增强"
+      ],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_002",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 2048,
+      "latency_ms": 43965.428590774536,
+      "outputs": [],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_003",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 833,
+      "latency_ms": 25562.02483177185,
+      "outputs": [
+        "技术实现成本对比",
+        "运维与迭代成本对比",
+        "垂直领域效果表现对比",
+        "投资回报与场景适配分析"
+      ],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_004",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 2048,
+      "latency_ms": 39550.161361694336,
+      "outputs": [],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_005",
+      "success": true,
+      "score": 100,
+      "tokens_used": 593,
+      "latency_ms": 17750.597953796387,
+      "outputs": [
+        "风险列表",
+        "缓解方案",
+        "优先级排序"
+      ],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_006",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 646,
+      "latency_ms": 22886.138439178467,
+      "outputs": [
+        "技术方法进展",
+        "基准测试与能力评估",
+        "现存瓶颈与挑战",
+        "未来发展方向"
+      ],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_007",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 2048,
+      "latency_ms": 47225.8996963501,
+      "outputs": [],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_008",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 831,
+      "latency_ms": 29368.63374710083,
+      "outputs": [
+        "性能与延迟指标分析",
+        "扩展性与高可用架构",
+        "功能特性与算法支持",
+        "总拥有成本与集成兼容性"
+      ],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_009",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 2048,
+      "latency_ms": 48710.99925041199,
+      "outputs": [],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_010",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 1140,
+      "latency_ms": 32034.63840484619,
+      "outputs": [
+        "风险列表",
+        "缓解方案",
+        "优先级排序"
+      ],
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "gen_001",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 608,
+      "latency_ms": 18316.301345825195,
+      "outputs": [
+        "投资组合优化与资产配置",
+        "风险管理与市场预测",
+        "交易算法与欺诈检测",
+        "安全挑战与合规风险"
+      ],
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_002",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 2048,
+      "latency_ms": 41371.81639671326,
+      "outputs": [],
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_003",
+      "success": true,
+      "score": 80.0,
+      "tokens_used": 1101,
+      "latency_ms": 34243.45254898071,
+      "outputs": [
+        "风险列表",
+        "缓解方案",
+        "优先级排序"
+      ],
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_004",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 1575,
+      "latency_ms": 39737.01500892639,
+      "outputs": [
+        "技术进展概述",
+        "核心技术突破",
+        "商业化挑战与机遇",
+        "未来发展趋势"
+      ],
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_005",
+      "success": true,
+      "score": 70.0,
+      "tokens_used": 2048,
+      "latency_ms": 39255.57899475098,
+      "outputs": [],
+      "is_generalization": true,
+      "error": ""
+    }
+  ]
+}
