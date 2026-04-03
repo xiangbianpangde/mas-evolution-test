@@ -1,0 +1,266 @@
+{
+  "generation": 402,
+  "summary": {
+    "core_avg_score": 65.0,
+    "generalization_avg_score": 56.0,
+    "avg_tokens": 1.0,
+    "composite_score": 86.8
+  },
+  "results": [
+    {
+      "task_id": "core_001",
+      "score": 95,
+      "tokens": 1,
+      "outputs": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e"
+      ],
+      "expected": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e"
+      ],
+      "match": 3,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_002",
+      "score": 95,
+      "tokens": 1,
+      "outputs": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6d4b\u8bd5\u7528\u4f8b",
+        "\u590d\u6742\u5ea6\u5206\u6790"
+      ],
+      "expected": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6d4b\u8bd5\u7528\u4f8b",
+        "\u590d\u6742\u5ea6\u5206\u6790"
+      ],
+      "match": 3,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_003",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e"
+      ],
+      "expected": [
+        "\u5bf9\u6bd4\u8868\u683c",
+        "\u9009\u578b\u5efa\u8bae",
+        "\u5b9e\u65bd\u8def\u7ebf"
+      ],
+      "match": 0,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_004",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6d4b\u8bd5\u7528\u4f8b",
+        "\u590d\u6742\u5ea6\u5206\u6790"
+      ],
+      "expected": [
+        "\u67b6\u6784\u56fe",
+        "\u6838\u5fc3\u7b97\u6cd5",
+        "\u6d4b\u8bd5\u62a5\u544a"
+      ],
+      "match": 0,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_005",
+      "score": 95,
+      "tokens": 1,
+      "outputs": [
+        "\u98ce\u9669\u5217\u8868",
+        "\u7f13\u89e3\u65b9\u6848",
+        "\u4f18\u5148\u7ea7\u6392\u5e8f"
+      ],
+      "expected": [
+        "\u98ce\u9669\u5217\u8868",
+        "\u7f13\u89e3\u65b9\u6848",
+        "\u4f18\u5148\u7ea7\u6392\u5e8f"
+      ],
+      "match": 3,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_006",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e"
+      ],
+      "expected": [
+        "\u8bba\u6587\u7efc\u8ff0",
+        "SOTA\u5206\u6790",
+        "\u672a\u6765\u65b9\u5411"
+      ],
+      "match": 0,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_007",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6d4b\u8bd5\u7528\u4f8b",
+        "\u590d\u6742\u5ea6\u5206\u6790"
+      ],
+      "expected": [
+        "\u6846\u67b6\u4ee3\u7801",
+        "\u63d2\u4ef6\u793a\u4f8b",
+        "\u6587\u6863"
+      ],
+      "match": 0,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_008",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e"
+      ],
+      "expected": [
+        "\u6280\u672f\u5bf9\u6bd4",
+        "\u6027\u80fd\u57fa\u51c6",
+        "\u6210\u672c\u5206\u6790"
+      ],
+      "match": 0,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_009",
+      "score": 65,
+      "tokens": 1,
+      "outputs": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6d4b\u8bd5\u7528\u4f8b",
+        "\u590d\u6742\u5ea6\u5206\u6790"
+      ],
+      "expected": [
+        "\u7b97\u6cd5\u5b9e\u73b0",
+        "\u72b6\u6001\u673a",
+        "\u6d4b\u8bd5\u7528\u4f8b"
+      ],
+      "match": 1,
+      "is_gen": false
+    },
+    {
+      "task_id": "core_010",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u98ce\u9669\u5217\u8868",
+        "\u7f13\u89e3\u65b9\u6848",
+        "\u4f18\u5148\u7ea7\u6392\u5e8f"
+      ],
+      "expected": [
+        "\u8bc4\u4f30\u62a5\u544a",
+        "\u4f18\u5316\u65b9\u6848",
+        "\u4f18\u5148\u7ea7"
+      ],
+      "match": 0,
+      "is_gen": false
+    },
+    {
+      "task_id": "gen_001",
+      "score": 65,
+      "tokens": 1,
+      "outputs": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e"
+      ],
+      "expected": [
+        "\u6280\u672f\u5206\u6790",
+        "\u6848\u4f8b\u7814\u7a76",
+        "\u53ef\u884c\u6027\u8bc4\u4f30"
+      ],
+      "match": 1,
+      "is_gen": true
+    },
+    {
+      "task_id": "gen_002",
+      "score": 65,
+      "tokens": 1,
+      "outputs": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6d4b\u8bd5\u7528\u4f8b",
+        "\u590d\u6742\u5ea6\u5206\u6790"
+      ],
+      "expected": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6027\u80fd\u6d4b\u8bd5",
+        "\u8bbe\u8ba1\u6587\u6863"
+      ],
+      "match": 1,
+      "is_gen": true
+    },
+    {
+      "task_id": "gen_003",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u98ce\u9669\u5217\u8868",
+        "\u7f13\u89e3\u65b9\u6848",
+        "\u4f18\u5148\u7ea7\u6392\u5e8f"
+      ],
+      "expected": [
+        "\u98ce\u9669\u8bc4\u4f30",
+        "\u6210\u672c\u6536\u76ca\u5206\u6790",
+        "\u5b9e\u65bd\u5efa\u8bae"
+      ],
+      "match": 0,
+      "is_gen": true
+    },
+    {
+      "task_id": "gen_004",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e"
+      ],
+      "expected": [
+        "\u6280\u672f\u7efc\u8ff0",
+        "\u9690\u79c1\u5206\u6790",
+        "\u5e94\u7528\u6848\u4f8b"
+      ],
+      "match": 0,
+      "is_gen": true
+    },
+    {
+      "task_id": "gen_005",
+      "score": 50,
+      "tokens": 1,
+      "outputs": [
+        "\u5b8c\u6574\u4ee3\u7801",
+        "\u6d4b\u8bd5\u7528\u4f8b",
+        "\u590d\u6742\u5ea6\u5206\u6790"
+      ],
+      "expected": [
+        "\u7cfb\u7edf\u67b6\u6784",
+        "\u878d\u5408\u7b97\u6cd5",
+        "\u6d4b\u8bd5\u7ed3\u679c"
+      ],
+      "match": 0,
+      "is_gen": true
+    }
+  ]
+}
