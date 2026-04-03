@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-04-03T06:33:24.252666",
+  "timestamp": "2026-04-03T08:02:03.209575",
   "generation": 323,
   "summary": {
     "total_tasks": 15,
     "success_rate": 1.0,
     "avg_score": 86.66666666666667,
     "avg_tokens": 8.6,
-    "avg_latency_ms": 0.1544475555419922,
+    "avg_latency_ms": 0.15668869018554688,
     "efficiency": 10077.519379844962,
     "core_success_rate": 1.0,
     "core_avg_score": 80.0,
@@ -24,7 +24,7 @@
       "success": true,
       "score": 100,
       "tokens": 9,
-      "latency_ms": 0.2067089080810547,
+      "latency_ms": 0.2315044403076172,
       "is_generalization": false,
       "error": ""
     },
@@ -33,7 +33,7 @@
       "success": true,
       "score": 90.0,
       "tokens": 9,
-      "latency_ms": 0.1595020294189453,
+      "latency_ms": 0.16641616821289062,
       "is_generalization": false,
       "error": ""
     },
@@ -42,7 +42,7 @@
       "success": true,
       "score": 70.0,
       "tokens": 9,
-      "latency_ms": 0.1850128173828125,
+      "latency_ms": 0.1685619354248047,
       "is_generalization": false,
       "error": ""
     },
@@ -51,7 +51,7 @@
       "success": true,
       "score": 80.0,
       "tokens": 9,
-      "latency_ms": 0.14352798461914062,
+      "latency_ms": 0.1652240753173828,
       "is_generalization": false,
       "error": ""
     },
@@ -60,7 +60,7 @@
       "success": true,
       "score": 100,
       "tokens": 7,
-      "latency_ms": 0.1266002655029297,
+      "latency_ms": 0.12755393981933594,
       "is_generalization": false,
       "error": ""
     },
@@ -69,7 +69,7 @@
       "success": true,
       "score": 70.0,
       "tokens": 9,
-      "latency_ms": 0.16450881958007812,
+      "latency_ms": 0.16379356384277344,
       "is_generalization": false,
       "error": ""
     },
@@ -78,7 +78,7 @@
       "success": true,
       "score": 70.0,
       "tokens": 9,
-      "latency_ms": 0.14162063598632812,
+      "latency_ms": 0.1430511474609375,
       "is_generalization": false,
       "error": ""
     },
@@ -87,7 +87,7 @@
       "success": true,
       "score": 70.0,
       "tokens": 9,
-      "latency_ms": 0.14066696166992188,
+      "latency_ms": 0.141143798828125,
       "is_generalization": false,
       "error": ""
     },
@@ -96,7 +96,7 @@
       "success": true,
       "score": 80.0,
       "tokens": 9,
-      "latency_ms": 0.16808509826660156,
+      "latency_ms": 0.141143798828125,
       "is_generalization": false,
       "error": ""
     },
@@ -105,7 +105,7 @@
       "success": true,
       "score": 70.0,
       "tokens": 7,
-      "latency_ms": 0.11897087097167969,
+      "latency_ms": 0.12993812561035156,
       "is_generalization": false,
       "error": ""
     },
@@ -114,7 +114,7 @@
       "success": true,
       "score": 100,
       "tokens": 9,
-      "latency_ms": 0.1614093780517578,
+      "latency_ms": 0.18024444580078125,
       "is_generalization": true,
       "error": ""
     },
@@ -123,7 +123,7 @@
       "success": true,
       "score": 100,
       "tokens": 9,
-      "latency_ms": 0.1423358917236328,
+      "latency_ms": 0.1442432403564453,
       "is_generalization": true,
       "error": ""
     },
@@ -132,7 +132,7 @@
       "success": true,
       "score": 100,
       "tokens": 7,
-      "latency_ms": 0.1373291015625,
+      "latency_ms": 0.13875961303710938,
       "is_generalization": true,
       "error": ""
     },
@@ -141,7 +141,7 @@
       "success": true,
       "score": 100,
       "tokens": 9,
-      "latency_ms": 0.16069412231445312,
+      "latency_ms": 0.1614093780517578,
       "is_generalization": true,
       "error": ""
     },
@@ -150,7 +150,7 @@
       "success": true,
       "score": 100,
       "tokens": 9,
-      "latency_ms": 0.15974044799804688,
+      "latency_ms": 0.14734268188476562,
       "is_generalization": true,
       "error": ""
     }
