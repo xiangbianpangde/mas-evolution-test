@@ -1,0 +1,39 @@
+============================================================
+OpenClaw Harness v14.0 - Two-Example Focus + Strict Completeness
+核心：回归 2 Good examples，强调完整性维度
+============================================================
+[core_001] Executor(research)... 质量:46(深:L3完:L3行:L3) 延迟:44.8s
+[core_002] Executor(code)... 质量:12(深:L2完:L1行:L1) 延迟:33.0s
+[core_003] Executor(research)... 质量:80(深:L4完:L4行:L4) 延迟:43.7s
+[core_004] Executor(code)... 质量:23(深:L2完:L2行:L1) 延迟:30.6s
+[core_005] Executor(review)... 质量:62(深:L3完:L4行:L4) 延迟:44.6s
+[core_006] Executor(research)... 质量:52(深:L4完:L3行:L2) 延迟:50.1s
+[core_007] Executor(code)... 质量:27(深:L3完:L2行:L1) 延迟:32.2s
+[core_008] Executor(research)... 质量:58(深:L4完:L3行:L3) 延迟:41.2s
+[core_009] Executor(code)... 质量:17(深:L2完:L1行:L1) 延迟:33.1s
+[core_010] Executor(review)... 质量:33(深:L2完:L2行:L2) 延迟:40.2s
+[gen_001] Executor(research)... 质量:50(深:L3完:L3行:L3) 延迟:47.3s
+[gen_002] Executor(code)... 质量:43(深:L3完:L3行:L2) 延迟:29.0s
+[gen_003] Executor(review)... 质量:42(深:L3完:L2行:L2) 延迟:43.3s
+[gen_004] Executor(research)... 质量:50(深:L3完:L3行:L3) 延迟:59.6s
+[gen_005] Executor(code)... 质量:27(深:L2完:L2行:L1) 延迟:31.1s
+
+============================================================
+Benchmark 结果汇总
+============================================================
+
+[核心任务] 平均质量分: 41.5
+  - 平均深度等级: L2.9
+  - 平均完整性等级: L2.5
+  - 平均可操作性等级: L2.2
+
+[泛化任务] 平均质量分: 41.5
+[Token消耗] 总计: 43894
+[平均延迟] 40.2秒/任务
+[可疑检测] 0 个任务标记为可疑
+
+[综合评分] 39.74/100
+[抗欺骗系数] 1.00
+[总耗时] 929秒
+
+[保存] 结果已保存至: /root/.openclaw/workspace/mas_repo/openclaw_native/benchmark_results_v14_gen1.json

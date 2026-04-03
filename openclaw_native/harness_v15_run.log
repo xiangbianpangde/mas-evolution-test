@@ -1,0 +1,39 @@
+============================================================
+OpenClaw Harness v15.0 - Back to v12 Foundation
+核心：回归 v12 的 1 good + 1 bad example 设计
+============================================================
+[core_001] Executor(research)... 质量:62(深:L4完:L3行:L3) 延迟:54.0s
+[core_002] Executor(code)... 质量:42(深:L3完:L2行:L2) 延迟:34.0s
+[core_003] Executor(research)... 质量:50(深:L3完:L3行:L3) 延迟:44.8s
+[core_004] Executor(code)... 质量:53(深:L3完:L2行:L3) 延迟:27.9s
+[core_005] Executor(review)... 质量:78(深:L4完:L3行:L4) 延迟:41.2s
+[core_006] Executor(research)... 质量:50(深:L3完:L3行:L3) 延迟:44.4s
+[core_007] Executor(code)... 质量:45(深:L3完:L3行:L2) 延迟:33.9s
+[core_008] Executor(research)... 质量:78(深:L4完:L3行:L4) 延迟:33.7s
+[core_009] Executor(code)... 质量:15(深:L1完:L1行:L1) 延迟:38.7s
+[core_010] Executor(review)... 质量:48(深:L3完:L2行:L2) 延迟:47.3s
+[gen_001] Executor(research)... 质量:88(深:L5完:L4行:L5) 延迟:56.3s
+[gen_002] Executor(code)... 质量:15(深:L2完:L2行:L1) 延迟:36.1s
+[gen_003] Executor(review)... 质量:78(深:L4完:L4行:L3) 延迟:52.8s
+[gen_004] Executor(research)... 质量:50(深:L3完:L3行:L3) 延迟:47.1s
+[gen_005] Executor(code)... 质量:15(深:L2完:L1行:L1) 延迟:35.1s
+
+============================================================
+Benchmark 结果汇总
+============================================================
+
+[核心任务] 平均质量分: 51.1
+  - 平均深度等级: L3.1
+  - 平均完整性等级: L2.6
+  - 平均可操作性等级: L2.7
+
+[泛化任务] 平均质量分: 51.1
+[Token消耗] 总计: 43160
+[平均延迟] 41.8秒/任务
+[可疑检测] 0 个任务标记为可疑
+
+[综合评分] 48.35/100
+[抗欺骗系数] 1.00
+[总耗时] 980秒
+
+[保存] 结果已保存至: /root/.openclaw/workspace/mas_repo/openclaw_native/benchmark_results_v15_gen1.json
