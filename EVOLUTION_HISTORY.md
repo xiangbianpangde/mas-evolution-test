@@ -151,3 +151,25 @@
 - Need to fix API timeout handling
 - Increase timeout to 120s
 - Add proper error handling and retry logic
+
+## Gen502 - Benchmark Fix in Progress
+
+**Timestamp**: 2026-04-03 22:40 GMT+8
+
+### Issues Fixed
+1. Timeout: 60s -> 120s with 3x retry (exponential backoff)
+2. JSON parsing: Handle markdown code blocks
+3. Prompt format: Fixed to output exact output type names
+
+### Quick Test Results
+- core_001: Score 100 (完美匹配)
+- core_002: Score 80
+- core_005: Score 100
+
+### Full Benchmark
+- Started but interrupted
+- Need to run complete 15-task benchmark
+
+### Next Steps
+- Complete full Gen502 benchmark run
+- Compare with Gen500 (14.67 score) and Gen402 (86.8 score)
