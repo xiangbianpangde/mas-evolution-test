@@ -6,19 +6,34 @@
 
 ---
 
-## 📊 当前状态 (v8.0 Running)
+## 📊 当前状态 (v9.0 Running)
 
-| 架构版本 | Composite | Core | Gen | Token | 备注 |
-|---------|-----------|------|-----|-------|------|
-| **v8.0** | TBD | TBD | TBD | TBD | Running - Improved Executor |
-| v7.0 | 47.78 | 53.09 | 53.09 | 36.5k | Multi-dim scoring |
-| v6.0 | 45.00 | 50.0 | 50.0 | 38.2k | Anti-cheat separation |
+| 架构版本 | Composite | Core | Gen | Token/Task | 备注 |
+|---------|-----------|------|-----|------------|------|
+| **v9.0** | TBD | TBD | TBD | TBD | Running - Self-Reflection |
+| v8.0 | 46.80 | 52.2 | 51.6 | 2,545 | Improved Executor |
+| v7.0 | 47.78 | 53.09 | 53.09 | 2,436 | Multi-dim scoring |
+| v6.0 | 45.00 | 50.0 | 50.0 | 2,551 | Anti-cheat separation |
 
-## 🎯 v8.0 改进
+## 🎯 v9.0 核心突破：自反射架构
 
-- Chain-of-Thought reasoning
-- 任务结构化指导（Research/Code/Review 各有框架）
-- 更详细的输出模板
+```
+Task → Draft → Reflection → Revision → Evaluate
+
+Stage 1: Executor 生成初稿
+Stage 2: Executor 自我反思（识别深度不足）
+Stage 3: 基于反思修订输出
+Stage 4: Evaluator 独立评分
+```
+
+**关键改进**：
+- 双次通过：初稿 → 反思 → 修订
+- 强制深度：要求 400+ 字，带具体数字/代码/引用
+- 防作弊：Reflection 仍然看不到 expected outputs
+
+**收敛分析**：
+- v6-v8 三代得分稳定在 45-48 区间（提升 < 1%/代）
+- 假设：单次通过已达天花板，需要多轮反思突破
 
 ## 🔬 防作弊架构
 
