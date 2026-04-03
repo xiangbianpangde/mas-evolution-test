@@ -1,0 +1,12 @@
+============================================================
+OpenClaw Harness v18.0 - Ensemble Execution (3x v12)
+核心：运行 3 次 v12-style，取最佳结果
+============================================================
+[core_001] Executor(research)... ensemble(3x) 质量:72(深:L3完:L3行:L3)
+[core_002] Executor(code)... ensemble(3x) 质量:55(深:L2完:L2行:L2)
+[core_003] Executor(research)... ensemble(3x) 质量:88(深:L4完:L3行:L4) [SUSPICIOUS]
+[core_004] Executor(code)... ensemble(3x) 质量:58(深:L4完:L3行:L3)
+[core_005] Executor(review)... ensemble(3x) 质量:62(深:L3完:L3行:L3)
+[core_006] Executor(research)... ensemble(3x) 质量:95(深:L4完:L3行:L3) [SUSPICIOUS]
+[core_007] Executor(code)... ensemble(3x) 质量:38(深:L3完:L2行:L2)
+[core_008] Executor(research)... ensemble(3x) 
