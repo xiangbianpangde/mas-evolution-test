@@ -2,4 +2,38 @@
 OpenClaw Harness v7.0 - Multi-Dimensional Scoring
 ============================================================
 [core_001] research... 技术:50 完整:40 可执行:45 综合:45
-[core_002] code... 
+[core_002] code... 技术:55 完整:35 可执行:40 综合:43
+[core_003] research... 技术:68 完整:72 可执行:62 综合:67
+[core_004] code... 技术:60 完整:50 可执行:45 综合:52
+[core_005] review... 技术:50 完整:50 可执行:50 综合:50
+[core_006] research... 技术:50 完整:50 可执行:50 综合:50
+[core_007] code... 技术:50 完整:50 可执行:50 综合:50
+[core_008] research... 技术:67 完整:72 可执行:63 综合:67
+[core_009] code... 技术:50 完整:50 可执行:50 综合:50
+[core_010] review... 技术:50 完整:50 可执行:50 综合:50
+[gen_001] research... 技术:50 完整:50 可执行:50 综合:50
+[gen_002] code... 技术:72 完整:65 可执行:68 综合:68
+[gen_003] review... 技术:50 完整:50 可执行:50 综合:50
+[gen_004] research... 技术:50 完整:50 可执行:50 综合:50
+[gen_005] code... 技术:65 完整:55 可执行:40 综合:53
+
+============================================================
+Benchmark Results
+============================================================
+
+[Core Tasks]
+  Technical Depth: 55.8
+  Completeness: 52.6
+  Actionability: 50.9
+  Overall: 53.1
+
+[Generalization]
+  Overall: 53.1
+
+[Tokens] Executor: 29353 | Evaluator: 7189
+[Latency] 41.0s/task
+[Suspicious] 0
+
+[Composite Score] 47.78
+
+[Saved] /root/.openclaw/workspace/mas_repo/openclaw_native/benchmark_results_v7_gen1.json

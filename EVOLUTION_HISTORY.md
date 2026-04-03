@@ -217,3 +217,55 @@ core_006: interrupted at 60s
 1. Fix timeout settings in benchmark_runner.py
 2. Re-run Gen503 with extended timeout
 3. Update SOUL.md based on task type analysis
+
+## v6.0 / v7.0 - Anti-Cheat Harness (2026-04-04)
+
+**Architecture**: Separated Executor/Evaluator with Anti-Cheat
+**Status**: 🔍 HONEST SCORING - True capability measurement
+
+### v6.0 Results (Anti-Cheat Prototype)
+
+| Metric | Value | Notes |
+|--------|-------|-------|
+| **Composite** | 45.0 | 100% anti-cheat |
+| **Core Score** | 50.0 | All exactly 50 - Evaluator parsing issue |
+| **Gen Score** | 50.0 | Same issue |
+| **Avg Latency** | 41.2s | Real API |
+| **Token** | 38,262 | Executor+Evaluator |
+| **Suspicious** | 0 | Anti-cheat working |
+
+### v7.0 Results (Multi-Dimensional Scoring)
+
+| Metric | Value | Notes |
+|--------|-------|-------|
+| **Composite** | 47.78 | Honest evaluation |
+| **Core Score** | 53.09 | Technical depth: 55.8 |
+| **Gen Score** | 53.09 | Completeness: 52.6 |
+| **Avg Latency** | 41.0s | Actionability: 50.9 |
+| **Token** | 36,542 | Executor+Evaluator |
+| **Suspicious** | 0 | Anti-cheat working |
+
+### v7 Individual Results Sample
+
+| Task | Tech | Complete | Action | Overall |
+|------|------|----------|--------|---------|
+| core_001 | 50.0 | 40.0 | 45.0 | 45.0 |
+| core_002 | 55.0 | 35.0 | 40.0 | 43.3 |
+| core_003 | 68.0 | 72.0 | 62.0 | 67.3 |
+
+### Key Findings
+
+**问题：Executor 输出质量不够高**
+- Executor prompt 太泛化，导致输出缺乏深度
+- 需要更具体的任务指导
+- 评分在 45-67 分区间，中等偏下
+
+**改进方向：**
+1. 优化 Executor prompts - 更具体的输出要求
+2. 区分 task_type 优化
+3. 考虑 Few-shot examples
+
+### Next Steps
+- v8: Improve Executor prompts with task-specific guidance
+- Add few-shot examples for better output quality
+- Consider Chain-of-Thought reasoning
