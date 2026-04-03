@@ -4,4 +4,32 @@ OpenClaw Harness v6.0 - 防作弊评测架构
 ============================================================
 [core_001] Executor(research)... 质量:50 执行Token:2048 延迟:36.5s
 [core_002] Executor(code)... 质量:50 执行Token:2048 延迟:37.7s
-[core_003] Executor(research)... 
+[core_003] Executor(research)... 质量:50 执行Token:2041 延迟:46.6s
+[core_004] Executor(code)... 质量:50 执行Token:2048 延迟:35.8s
+[core_005] Executor(review)... 质量:50 执行Token:1917 延迟:42.5s
+[core_006] Executor(research)... 质量:50 执行Token:2048 延迟:49.9s
+[core_007] Executor(code)... 质量:50 执行Token:2048 延迟:35.2s
+[core_008] Executor(research)... 质量:50 执行Token:2048 延迟:39.6s
+[core_009] Executor(code)... 质量:50 执行Token:2048 延迟:34.4s
+[core_010] Executor(review)... 质量:50 执行Token:2048 延迟:49.3s
+[gen_001] Executor(research)... 质量:50 执行Token:2048 延迟:44.8s
+[gen_002] Executor(code)... 质量:50 执行Token:2048 延迟:35.6s
+[gen_003] Executor(review)... 质量:50 执行Token:2048 延迟:48.5s
+[gen_004] Executor(research)... 质量:50 执行Token:2048 延迟:45.2s
+[gen_005] Executor(code)... 质量:50 执行Token:2048 延迟:35.8s
+
+============================================================
+Benchmark 结果汇总
+============================================================
+
+[核心任务] 平均质量分: 50.0
+[泛化任务] 平均质量分: 50.0
+[Token消耗] Executor: 30582 | Evaluator: 7680 | 总计: 38262
+[平均延迟] 41.2秒/任务
+[可疑检测] 0 个任务标记为可疑
+
+[综合评分] 45.00/100
+[抗欺骗系数] 1.00
+[总耗时] 826秒
+
+[保存] 结果已保存至: /root/.openclaw/workspace/mas_repo/openclaw_native/benchmark_results_v6_gen1.json
