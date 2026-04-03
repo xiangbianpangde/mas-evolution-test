@@ -199,7 +199,7 @@ class MASBenchmarkRunner:
         prompt_data = task_prompts.get(task_type, task_prompts["research"])
         
         prompt = prompt_data["template"].format(query=task["query"])
-        response = self.llm.call(prompt, prompt_data["system"], max_tokens=4096)
+        response = self.llm.call(prompt, prompt_data["system"], max_tokens=8192)
         
         if not response["success"]:
             return TaskResult(
