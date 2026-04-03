@@ -92,16 +92,20 @@
 ## v16.0 - Task-Specific Examples (2026-04-04)
 
 **Benchmark 结果:** 45.03/100 ❌ REGRESSION
-- 核心任务: 47.7, 泛化任务: 47.7
+- Task-specific examples for research/code/review
+- 代码任务持续低分
+
+---
+
+## v17.0 - Explicit Actionability Reinforcement (2026-04-04)
+
+**Benchmark 结果:** 49.36/100
+- 核心任务: 52.3 (was higher than v12!)
+- 泛化任务: 52.3
 - Actionability: L2.7
-- Token消耗: 43129
+- Token消耗: 43438
 
-**问题分析:**
-- 为 research/code/review 提供专用 examples 反而降低效果
-- 代码任务持续低分 (core_002: 10, core_007: 10, core_009: 15)
-- v12 的统一 Redis example 更有效
-
-**结论:** Task-specific examples don't help - contrastive learning (good vs bad) matters more
+**分析:** 虽然核心任务分数更高，但综合分数略低于 v12
 
 ---
 
@@ -110,20 +114,26 @@
 | Version | Score | Actionability | Token | 备注 |
 |---------|-------|---------------|-------|------|
 | v5 | 75.4 | N/A | - | First real API |
-| v12 | 52.0 | L3.1 | 42823 | 🏆 BEST |
-| v13 | 49.1 | L2.3 | 53437 | Regression |
-| v14 | 39.7 | L2.2 | 43894 | Worst |
-| v15 | 48.4 | L2.7 | 43160 | Partial recovery |
+| **v12** | **52.0** | **L3.1** | 42823 | 🏆 CHAMPION |
+| v13 | 49.1 | L2.3 | 53437 | 4 examples |
+| v14 | 39.7 | L2.2 | 43894 | No bad example |
+| v15 | 48.4 | L2.7 | 43160 | Back to v12 |
+| v16 | 45.0 | L2.7 | 43129 | Task-specific |
+| v17 | 49.4 | L2.7 | 43438 | Actionability+ |
 
-## 关键发现
+---
 
-1. **Bad example 很重要** - 单独用 good example 会降低 actionability
-2. **2 examples 优于 4 examples** - v12 > v13
-3. **v12 的结构最优** - 回归后分数回稳但未完全恢复
+## 收敛分析 (v12-v17)
 
-## 下一步
+**v12 是稳定的局部最优**：
+- v12 已被确认稳定（51-52 分）
+- v13-v17 都试图改进但都失败了
+- API 响应方差显著
 
-需要找出 v12 和 v15 之间差异的真正原因：
-- 可能问题：API 调用变化？
-- 可能问题：评分随机性？
-- 需要做 A/B 测试验证
+**失败尝试**：
+1. 更多 examples (v13) - 信息过载
+2. 没有 bad example (v14) - 对比学习失效
+3. Task-specific (v16) - 适得其反
+4. Actionability 强化 (v17) - 无显著提升
+
+**结论**: 1 good + 1 bad example (v12 结构) 是最优配置
