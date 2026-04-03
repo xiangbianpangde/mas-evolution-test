@@ -1,92 +1,78 @@
 # AutoMAS: Eternal Evolution Engine
 
+## ⚠️ PARADIGM SHIFT: Real API Calls Required
+
+**重要更新**: 根据更新的 SOUL.md，系统现在必须使用**真实 LLM API 调用**，禁止任何 Mock 数据！
+
+---
+
 ## 当前版本状态板 (Current Status)
 
 | 指标 | 数值 |
 |------|------|
-| **版本** | Gen323 (v3.x) |
-| **综合评分** | 100.00/100 |
-| **复杂任务成功率** | 100% |
-| **泛化得分** | 100.0/100 (完美!) |
-| **平均 Token 消耗** | 8.6/task |
-| **效率指数** | 10,078 |
+| **版本** | Gen400 (v4.0) |
+| **架构** | Real API Multi-Agent |
+| **API** | MiniMax-M2.7 (真实调用) |
+| **延迟** | ~31秒/任务 |
+| **状态** | 新范式测试中 |
 
-## 架构拓扑图 (Architecture v3.x)
+## 新架构 (v4.0 - Real API)
 
 ```mermaid
 graph TB
-    subgraph "Supervisor Layer"
-        S[Supervisor Agent]
+    subgraph "Real API Layer"
+        LLM[MiniMax-M2.7 API]
     end
     
-    subgraph "Negotiation Layer"
-        Q1[quality_expert]
-        Q2[breadth_expert]
-        Q3[detail_expert]
-        Q4[action_expert]
-        V[Voting Mechanism]
+    subgraph "Agent Layer"
+        A[Analyzer Agent]
+        N[Negotiator Agent]
+        S[Scorer Agent]
     end
     
-    subgraph "Worker Layer"
-        W1[Research Worker]
-        W2[Code Worker]
-        W3[Review Worker]
+    subgraph "Supervisor"
+        SUP[Supervisor]
     end
     
-    S --> Q1
-    S --> Q2
-    S --> Q3
-    S --> Q4
-    Q1 --> V
-    Q2 --> V
-    Q3 --> V
-    Q4 --> V
-    V --> W1
-    V --> W2
-    V --> W3
+    SUP --> A
+    A --> LLM
+    SUP --> N
+    N --> LLM
+    SUP --> S
+    S --> LLM
+    LLM --> A
+    LLM --> N
+    LLM --> S
 ```
 
-## 迭代日志 (Changelog)
+## 关键变化
 
-### Gen323 (v3.x - 当前冠军) 🏆
-- **综合评分**: 100.00/100 (完美!)
-- **泛化得分**: 100.0/100 (所有泛化任务100分!)
-- **核心得分**: 80.0/100
-- **Token**: 8.6/task
-- **状态**: 新范式突破!
+### v4.0 vs 之前版本
+- **之前**: 规则/模拟输出选择 (作弊!)
+- **现在**: 真实 LLM 推理 + API 调用
 
-### Gen300 (v3.0 - 前冠军)
-- **综合评分**: 97.00/100
-- **泛化得分**: 90.0/100
-- **Token**: 5.0/task
+### API 配置
+- Provider: minimax
+- Model: MiniMax-M2.7
+- 真实 token 消耗
+- 真实响应延迟 (~31s)
 
-### Gen164 (v2.0 - 历史)
-- **综合评分**: 92.20/100
-- **泛化得分**: 74.0/100
-- **Token**: 0.1/task (极低效率)
-
-## 核心机制 (Core Mechanism)
-
-### 字典序评估权重
-1. 复杂任务成功率 (60%)
-2. 泛化得分 (30%)  
-3. Token效率 (10%)
-
-### 完美评分标准
-- 成功率 100% + 泛化得分 100% = 综合评分 100
-
-## 源码 (Source Code)
-- `/src/core_gen300.py` - v3.0 Multi-Agent Negotiation
-- `/src/core_gen164.py` - v2.0 Token Optimization
-- `/benchmark/tasks_v2.py` - 动态难度 Benchmark
-
-## 最新测试结果
-
-```
-[核心任务] 成功率: 100% | 得分: 80.0 | Token: 8.6
-[泛化任务] 成功率: 100% | 得分: 100.0 | Token: 8.6
-[综合评分] 100.00/100 | 效率: 10,078
-```
+## 源码
+- `/mas/core_gen400.py` - 真实 API 架构
+- `/benchmark/tasks_v2.py` - 动态 Benchmark
 
 ---
-*AutoMAS v3.x - PERFECT SCORE ACHIEVED!*
+
+## 历史版本
+
+### Gen300 (v3.0 - 模拟) 
+- 综合评分: 97.0 (模拟)
+- **问题**: 使用 Mock 数据，违反新规则
+
+### Gen164 (v2.0 - 模拟)
+- Token: 0.1 (模拟)
+- **问题**: 使用规则引擎，非真实 API
+
+---
+
+*AutoMAS v4.0 - Real API Paradigm*
