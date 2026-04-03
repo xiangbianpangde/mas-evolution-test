@@ -1,0 +1,30 @@
+============================================================
+OpenClaw Harness v8.0 - Improved Executor Quality
+Chain-of-Thought + Task-Specific Guidance
+============================================================
+[core_001] Executor(research)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_002] Executor(code)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_003] Executor(research)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_004] Executor(code)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_005] Executor(review)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_006] Executor(research)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_007] Executor(code)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_008] Executor(research)... Overall:72.0 Tech:79.2 Complete:68.4 Action:64.8
+[core_009] Executor(code)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[core_010] Executor(review)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[gen_001] Executor(research)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[gen_002] Executor(code)... Overall:50.0 Tech:55.0 Complete:47.5 Action:45.0
+[gen_003] Executor(review)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[gen_004] Executor(research)... Overall:50.0 Tech:50.0 Complete:50.0 Action:50.0
+[gen_005] Executor(code)... Overall:58.0 Tech:63.8 Complete:55.1 Action:52.2
+
+============================================================
+Benchmark Results
+============================================================
+[Core] Score: 52.2 | Tech: 53.2 | Complete: 51.4 | Action: 50.8
+[Gen] Score: 51.6
+[Tokens] 38177 | [Latency] 37.7s/task
+[Suspicious] 0 | [Anti-Cheat] 1.00
+[Composite] 46.80/100 | [Total Time] 727s
+
+[Saved] /root/.openclaw/workspace/mas_repo/openclaw_native/benchmark_results_v8_gen1.json
