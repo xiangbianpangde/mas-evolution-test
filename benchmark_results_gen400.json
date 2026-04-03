@@ -1,0 +1,159 @@
+{
+  "timestamp": "2026-04-03T12:10:02.923363",
+  "generation": 400,
+  "architecture": "Real API Multi-Agent Architecture",
+  "summary": {
+    "total_tasks": 15,
+    "success_rate": 1.0,
+    "avg_score": 58.0,
+    "avg_tokens": 1.0,
+    "avg_latency_ms": 34980.286741256714,
+    "efficiency": 58000.0,
+    "core_success_rate": 1.0,
+    "core_avg_score": 60.0,
+    "core_avg_tokens": 1.0,
+    "generalization_success_rate": 1.0,
+    "generalization_avg_score": 54.0,
+    "generalization_avg_tokens": 1.0,
+    "generalization_score": 54.0,
+    "composite_score": 86.2,
+    "degradation_detected": false
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "success": true,
+      "score": 80.0,
+      "tokens": 1,
+      "latency_ms": 31598.35720062256,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_002",
+      "success": true,
+      "score": 80.0,
+      "tokens": 1,
+      "latency_ms": 37178.32136154175,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_003",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 43107.99193382263,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_004",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 59073.92168045044,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_005",
+      "success": true,
+      "score": 80.0,
+      "tokens": 1,
+      "latency_ms": 40229.94661331177,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_006",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 30968.408823013306,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_007",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 37124.81617927551,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_008",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 34059.15379524231,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_009",
+      "success": true,
+      "score": 60.0,
+      "tokens": 1,
+      "latency_ms": 33638.006925582886,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "core_010",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 26896.81315422058,
+      "is_generalization": false,
+      "error": ""
+    },
+    {
+      "task_id": "gen_001",
+      "success": true,
+      "score": 60.0,
+      "tokens": 1,
+      "latency_ms": 39939.398765563965,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_002",
+      "success": true,
+      "score": 60.0,
+      "tokens": 1,
+      "latency_ms": 23028.522729873657,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_003",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 37417.922019958496,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_004",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 29539.440155029297,
+      "is_generalization": true,
+      "error": ""
+    },
+    {
+      "task_id": "gen_005",
+      "success": true,
+      "score": 50.0,
+      "tokens": 1,
+      "latency_ms": 20903.279781341553,
+      "is_generalization": true,
+      "error": ""
+    }
+  ]
+}
