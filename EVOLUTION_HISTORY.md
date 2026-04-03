@@ -424,3 +424,44 @@ v10 成功解决了 v6-v9 的 Evaluator 瓶颈：
 v10证明了严格评分机制有效。下一步：
 1. 分析 L2.7 actionability（可操作性最低）——需要改进 Executor prompts
 2. 设计 v11：强化 actionability 指导
+
+## v12.0 - Few-Shot Actionability Results (2026-04-04 02:23)
+
+**Architecture**: Few-Shot Good/Bad Examples
+**Status**: ✅ BREAKTHROUGH - Scores improving!
+
+### v12.0 Results
+
+| Metric | v12.0 | v10.0 | Change |
+|--------|-------|--------|--------|
+| **Composite** | 51.97 | 49.84 | **+2.13** ✅ |
+| **Core Score** | 54.5 | 52.1 | **+2.4** |
+| **Actionability** | L3.1 | L2.7 | **+0.4** |
+| **Avg Latency** | 32.9s | 33.3s | -0.4s |
+
+### Convergence Analysis
+
+| Version | Score | Delta | Notes |
+|---------|-------|-------|-------|
+| v6 | 45.00 | - | Anti-cheat baseline |
+| v7 | 47.78 | +2.78 | |
+| v8 | 46.80 | -0.98 | |
+| v9 | 46.34 | -0.46 | |
+| v10 | 49.84 | +3.50 | Strict evaluator |
+| v11 | 41.73 | **-8.11** | ⚠️ Degraded |
+| **v12** | **51.97** | **+2.13** | ✅ Best! |
+
+**Status**: Breaking convergence! v12 is new champion.
+
+### Key Learnings
+
+1. **v11 失败教训**：过多要求分散注意力，导致质量下降
+2. **v12 成功策略**：Few-Shot 示例引导，不增加复杂度
+3. **Actionability 改进**：L2.7 → L3.1（+0.4）
+
+### v13 Design Direction
+
+继续优化 Actionability：
+1. 优化 examples 的质量
+2. 添加领域特定的最佳实践
+3. 考虑多轮 self-reflection
