@@ -1,0 +1,7 @@
+============================================================
+OpenClaw Harness v6.0 - 防作弊评测架构
+核心：Executor/Evaluator 分离，expected 永不泄漏
+============================================================
+[core_001] Executor(research)... 质量:50 执行Token:2048 延迟:36.5s
+[core_002] Executor(code)... 质量:50 执行Token:2048 延迟:37.7s
+[core_003] Executor(research)... 
