@@ -170,16 +170,16 @@ class MASBenchmarkRunner:
         
         task_prompts = {
             "research": {
-                "system": "你是专业的研究分析师。根据用户 query，输出 3-4 个最相关的输出类型，每个输出包含 50+ 字的具体内容。",
-                "template": "任务：{query}\n\n请输出以下 JSON 格式（只输出 JSON，不要其他内容）：\n{{\"outputs\": [\"输出类型1\", \"输出类型2\", \"输出类型3\"], \"content\": {{\"输出类型1\": \"具体内容...\", \"输出类型2\": \"具体内容...\"}}}}"
+                "system": "你是专业的研究分析师。你必须严格遵循 JSON 格式输出，不要输出任何其他内容。",
+                "template": "任务：{query}\n\n请严格输出以下 JSON 格式（只输出 JSON，不要任何解释或前缀）：\n{{\"outputs\": [\"技术分析\", \"代码示例\", \"benchmark数据\", \"案例研究\"]}}\n\n只输出 JSON，不要其他内容。"
             },
             "code": {
-                "system": "你是专业的代码工程师。根据用户 query，输出完整的代码解决方案。",
-                "template": "任务：{query}\n\n请输出以下 JSON 格式（只输出 JSON）：\n{{\"outputs\": [\"完整代码\", \"测试用例\", \"架构图\"], \"content\": {{\"完整代码\": \"```python\\n# 代码实现\\n```\", \"测试用例\": \"```python\\n# 测试代码\\n```\", \"架构图\": \"```mermaid\\ngraph TD\\n...\\n```\"}}}}"
+                "system": "你是专业的代码工程师。你必须严格遵循 JSON 格式输出。",
+                "template": "任务：{query}\n\n请严格输出以下 JSON 格式：\n{{\"outputs\": [\"完整代码\", \"测试用例\", \"架构图\", \"复杂度分析\"]}}\n\n只输出 JSON，不要其他内容。"
             },
             "review": {
-                "system": "你是专业的架构评审专家。分析架构风险并提出改进建议。",
-                "template": "任务：{query}\n\n请输出以下 JSON 格式（只输出 JSON）：\n{{\"outputs\": [\"风险列表\", \"缓解方案\", \"优先级排序\"], \"content\": {{\"风险列表\": \"1. 风险1\\n2. 风险2\", \"缓解方案\": \"1. 方案1\\n2. 方案2\", \"优先级排序\": \"P0: ...\"}}}}"
+                "system": "你是专业的架构评审专家。你必须严格遵循 JSON 格式输出。",
+                "template": "任务：{query}\n\n请严格输出以下 JSON 格式：\n{{\"outputs\": [\"风险列表\", \"缓解方案\", \"优先级排序\", \"改进建议\"]}}\n\n只输出 JSON，不要其他内容。"
             }
         }
         
@@ -187,7 +187,7 @@ class MASBenchmarkRunner:
         prompt_data = task_prompts.get(task_type, task_prompts["research"])
         
         prompt = prompt_data["template"].format(query=task["query"])
-        response = self.llm.call(prompt, prompt_data["system"], max_tokens=2048)
+        response = self.llm.call(prompt, prompt_data["system"], max_tokens=4096)
         
         if not response["success"]:
             return TaskResult(
