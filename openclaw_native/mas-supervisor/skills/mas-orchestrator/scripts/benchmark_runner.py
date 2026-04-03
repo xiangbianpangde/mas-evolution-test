@@ -182,23 +182,23 @@ class MASBenchmarkRunner:
         
         task_prompts = {
             "research": {
-                "system": "你是专业的研究分析师。你必须严格遵循 JSON 格式输出，不要输出任何其他内容。",
-                "template": "任务：{query}\n\n请严格输出以下 JSON 格式（只输出 JSON，不要任何解释或前缀）：\n{{\"outputs\": [\"技术分析\", \"代码示例\", \"benchmark数据\", \"案例研究\"]}}\n\n只输出 JSON，不要其他内容。"
+                "system": "You are a research analyst. Choose ONLY from this list: 技术分析, 代码示例, benchmark数据, 引用来源, 案例研究, 可行性评估, 技术综述. Output JSON array of strings.",
+                "template": "Task: TASK_QUERY\n\nChoose 3-4 output types from: 技术分析, 代码示例, benchmark数据, 引用来源, 案例研究, 可行性评估, 技术综述\n\nOutput ONLY JSON: {\"outputs\": [\"技术分析\", \"代码示例\", \"benchmark数据\"]}\nPure JSON only, no markdown."
             },
             "code": {
-                "system": "你是专业的代码工程师。你必须严格遵循 JSON 格式输出。",
-                "template": "任务：{query}\n\n请严格输出以下 JSON 格式：\n{{\"outputs\": [\"完整代码\", \"测试用例\", \"架构图\", \"复杂度分析\"]}}\n\n只输出 JSON，不要其他内容。"
+                "system": "You are a code engineer. Choose ONLY from this list: 完整代码, 测试用例, 架构图, 复杂度分析, 性能优化建议, 设计文档. Output JSON array of strings.",
+                "template": "Task: TASK_QUERY\n\nChoose 3-4 output types from: 完整代码, 测试用例, 架构图, 复杂度分析, 性能优化建议, 设计文档\n\nOutput ONLY JSON: {\"outputs\": [\"完整代码\", \"测试用例\", \"架构图\"]}\nPure JSON only, no markdown."
             },
             "review": {
-                "system": "你是专业的架构评审专家。你必须严格遵循 JSON 格式输出。",
-                "template": "任务：{query}\n\n请严格输出以下 JSON 格式：\n{{\"outputs\": [\"风险列表\", \"缓解方案\", \"优先级排序\", \"改进建议\"]}}\n\n只输出 JSON，不要其他内容。"
+                "system": "You are a review expert. Choose ONLY from this list: 风险列表, 缓解方案, 优先级排序, 改进建议, 风险评估, 成本收益分析. Output JSON array of strings.",
+                "template": "Task: TASK_QUERY\n\nChoose 3-4 output types from: 风险列表, 缓解方案, 优先级排序, 改进建议, 风险评估, 成本收益分析\n\nOutput ONLY JSON: {\"outputs\": [\"风险列表\", \"缓解方案\", \"优先级排序\"]}\nPure JSON only, no markdown."
             }
         }
         
         task_type = task["type"]
         prompt_data = task_prompts.get(task_type, task_prompts["research"])
         
-        prompt = prompt_data["template"].format(query=task["query"])
+        prompt = prompt_data["template"].replace("TASK_QUERY", task["query"])
         response = self.llm.call(prompt, prompt_data["system"], max_tokens=8192)
         
         if not response["success"]:
@@ -214,15 +214,24 @@ class MASBenchmarkRunner:
             )
         
         # 解析 LLM 输出
+        outputs = []
         try:
             content = response["content"]
-            # 提取 JSON
-            if "{" in content and "}" in content:
-                json_str = content[content.index("{"):content.rindex("}")+1]
+            # 去除 markdown 代码块标记
+            content_clean = content.strip()
+            if content_clean.startswith("```"):
+                lines = content_clean.split("\n")
+                if lines[0].startsWith("```"):
+                    lines = lines[1:]
+                if lines and lines[-1].startsWith("```"):
+                    lines = lines[:-1]
+                content_clean = "\n".join(lines).strip()
+            
+            # 提取 JSON 对象
+            if "{" in content_clean and "}" in content_clean:
+                json_str = content_clean[content_clean.index("{"):content_clean.rindex("}")+1]
                 result = json.loads(json_str)
                 outputs = result.get("outputs", [])
-            else:
-                outputs = []
         except:
             outputs = []
         
