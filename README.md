@@ -8,35 +8,61 @@
 
 ## 当前版本状态板 (Current Status)
 
-| 指标 | Gen401 | Gen400 | 变化 |
-|------|--------|--------|------|
-| **架构** | Improved Output Matching | Real API | - |
-| **核心得分** | ~70* | 60.0 | +10 |
-| **泛化得分** | TBD | 54.0 | - |
-| **Token** | 1/task | 1/task | 0 |
-| **综合评分** | TBD | 86.2 | - |
-| **延迟** | ~35秒/任务 | ~35秒/任务 | - |
+| 指标 | Gen400 (v4.0) | Gen300 (模拟) |
+|------|----------------|---------------|
+| **综合评分** | 86.2 | 97.0 |
+| **核心得分** | 60.0 | 78.0 |
+| **泛化得分** | 54.0 | 90.0 |
+| **Token消耗** | **1.0** | 5.0 |
+| **成功率** | 100% | 100% |
+| **延迟** | ~35秒/任务 | <1ms |
 
-*初步测试结果
+## v4.0 真实 API 测试结果
 
-## Gen401 改进
-
-### 改进点
-- 更好的输出匹配机制
-- 基于任务关键词选择最相关的输出集合
-- 框架类任务: 95分 (vs 之前50分)
-- 架构类任务: 65分 (vs 之前50分)
-
-### 测试结果 (3任务样本)
+### 核心任务 (10个)
 ```
-test1 (架构): outputs=['架构图', '核心算法', '技术分析'], score=65
-test2 (框架): outputs=['框架代码', '插件示例', '文档'], score=95
-test3 (审查): outputs=['风险评估', '成本收益分析', '实施建议'], score=50
+core_001: 80分 | core_002: 80分 | core_003: 50分 | core_004: 50分 | core_005: 80分
+core_006: 50分 | core_007: 50分 | core_008: 50分 | core_009: 60分 | core_010: 50分
+平均: 60.0分, 1.0 token
+```
+
+### 泛化任务 (5个)
+```
+gen_001: 60分 | gen_002: 60分 | gen_003: 50分 | gen_004: 50分 | gen_005: 50分
+平均: 54.0分, 1.0 token
+```
+
+### 关键发现
+- ✅ 100% 成功率
+- ✅ 极低 Token (1/task)
+- ⚠️ 泛化得分 (54) 低于核心得分 (60) - 差距 10%
+- ⚠️ 综合评分 (86.2) 低于模拟版本 (97)
+
+## 架构 (v4.0 - Real API)
+
+```mermaid
+graph TB
+    subgraph "Real API Layer"
+        LLM[MiniMax-M2.7 API]
+    end
+    
+    subgraph "Agent Layer"
+        A[Analyzer Agent]
+        N[Negotiator Agent]
+        S[Scorer Agent]
+    end
+    
+    subgraph "Supervisor"
+        SUP[Supervisor]
+    end
+    
+    SUP --> A --> LLM
+    SUP --> N --> LLM
+    SUP --> S --> LLM
 ```
 
 ## 源码
-- `/mas/core_gen401.py` - 改进版输出匹配
-- `/mas/core_gen400.py` - 基础真实API架构
+- `/mas/core_gen400.py` - 真实 API 架构
 - `/benchmark/tasks_v2.py` - 动态 Benchmark
 
 ---
