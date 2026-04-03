@@ -1,0 +1,59 @@
+{
+  "architecture": "OpenClaw Native MAS v5.0",
+  "summary": {
+    "total_tasks": 5,
+    "success_rate": 0.2,
+    "avg_score": 14.0,
+    "avg_tokens": 14.6,
+    "total_tokens": 73,
+    "avg_latency_ms": 48978.337717056274,
+    "core_success_rate": 0.3333333333333333,
+    "core_avg_score": 23.333333333333332,
+    "generalization_success_rate": 0.0,
+    "generalization_avg_score": 0.0,
+    "composite_score": 14.666666666666666,
+    "degradation_detected": true
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "score": 0,
+      "tokens": 0,
+      "latency": 60404.18338775635,
+      "outputs": []
+    },
+    {
+      "task_id": "core_002",
+      "score": 0,
+      "tokens": 0,
+      "latency": 60337.29934692383,
+      "outputs": []
+    },
+    {
+      "task_id": "core_003",
+      "score": 70.0,
+      "tokens": 73,
+      "latency": 3493.3547973632812,
+      "outputs": [
+        "\u6280\u672f\u5206\u6790",
+        "\u4ee3\u7801\u793a\u4f8b",
+        "benchmark\u6570\u636e",
+        "\u6848\u4f8b\u7814\u7a76"
+      ]
+    },
+    {
+      "task_id": "gen_001",
+      "score": 0,
+      "tokens": 0,
+      "latency": 60329.38838005066,
+      "outputs": []
+    },
+    {
+      "task_id": "gen_002",
+      "score": 0,
+      "tokens": 0,
+      "latency": 60327.462673187256,
+      "outputs": []
+    }
+  ]
+}

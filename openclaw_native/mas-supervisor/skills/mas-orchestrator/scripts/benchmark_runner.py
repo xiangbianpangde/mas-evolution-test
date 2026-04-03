@@ -41,68 +41,80 @@ class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call(self, prompt: str, system_prompt: str = "", max_tokens: int = 1024) -> Dict[str, Any]:
-        """发起真实 API 调用"""
+    def call(self, prompt: str, system_prompt: str = "", max_tokens: int = 1024, retries: int = 3) -> Dict[str, Any]:
+        """发起真实 API 调用 - 带重试机制"""
         import urllib.request
         import urllib.error
         
         start = time.time()
+        last_error = None
         
-        try:
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-                "anthropic-version": "2023-06-01"
-            }
-            
-            payload = {
-                "model": API_CONFIG["model"],
-                "max_tokens": max_tokens,
-                "system": system_prompt or "You are a helpful AI assistant.",
-                "messages": [{"role": "user", "content": prompt}]
-            }
-            
-            data = json.dumps(payload).encode('utf-8')
-            req = urllib.request.Request(
-                f"{API_CONFIG['base_url']}/v1/messages",
-                data=data,
-                headers=headers,
-                method='POST'
-            )
-            
-            with urllib.request.urlopen(req, timeout=60) as response:
-                result = json.loads(response.read().decode('utf-8'))
-            
-            latency = (time.time() - start) * 1000
-            # MiniMax API: content is array with objects having type + text/thinking
-            raw_content = result.get("content", [])
-            content = ""
-            for item in raw_content:
-                if item.get("type") == "text":
-                    content = item.get("text", "")
-                    break
-                elif item.get("type") == "thinking":
-                    # Skip thinking, get text from next item
-                    continue
-            tokens = result.get("usage", {}).get("output_tokens", 0)
-            
-            return {
-                "success": True,
-                "content": content,
-                "tokens_used": tokens,
-                "latency_ms": latency,
-                "error": None
-            }
-            
-        except Exception as e:
-            latency = (time.time() - start) * 1000
-            return {
-                "success": False,
-                "content": "",
-                "tokens_used": 0,
-                "latency_ms": latency,
-                "error": str(e)
-            }
+        for attempt in range(retries):
+            try:
+                headers = {
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json",
+                    "anthropic-version": "2023-06-01"
+                }
+                
+                payload = {
+                    "model": API_CONFIG["model"],
+                    "max_tokens": max_tokens,
+                    "system": system_prompt or "You are a helpful AI assistant.",
+                    "messages": [{"role": "user", "content": prompt}]
+                }
+                
+                data = json.dumps(payload).encode('utf-8')
+                req = urllib.request.Request(
+                    f"{API_CONFIG['base_url']}/v1/messages",
+                    data=data,
+                    headers=headers,
+                    method='POST'
+                )
+                
+                # 120秒超时，适应MiniMax API较慢的响应
+                with urllib.request.urlopen(req, timeout=120) as response:
+                    result = json.loads(response.read().decode('utf-8'))
+                
+                latency = (time.time() - start) * 1000
+                # MiniMax API: content is array with objects having type + text/thinking
+                raw_content = result.get("content", [])
+                content = ""
+                for item in raw_content:
+                    if item.get("type") == "text":
+                        content = item.get("text", "")
+                        break
+                    elif item.get("type") == "thinking":
+                        # Skip thinking, get text from next item
+                        continue
+                tokens = result.get("usage", {}).get("output_tokens", 0)
+                
+                return {
+                    "success": True,
+                    "content": content,
+                    "tokens_used": tokens,
+                    "latency_ms": latency,
+                    "error": None
+                }
+                
+            except Exception as e:
+                last_error = str(e)
+                latency = (time.time() - start) * 1000
+                # 指数退避等待
+                if attempt < retries - 1:
+                    import math
+                    wait_time = math.pow(2, attempt) * 5
+                    time.sleep(wait_time)
+                continue
+        
+        # 所有重试都失败
+        return {
+            "success": False,
+            "content": "",
+            "tokens_used": 0,
+            "latency_ms": (time.time() - start) * 1000,
+            "error": last_error or "Unknown error"
+        }
 
 class BenchmarkTask:
     """Benchmark 任务定义"""

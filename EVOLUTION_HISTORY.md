@@ -86,3 +86,68 @@
 - If < 85, evolve SOUL.md instructions
 - If convergence, create GitHub release
 
+
+## v5.0 OpenClaw Native MAS - Real Benchmark (2026-04-03 22:14)
+
+### 首次真实 API Benchmark 结果
+
+| 指标 | 数值 | 说明 |
+|------|------|------|
+| **综合评分** | 19.60 | 真实 API 结果 |
+| **核心得分** | 14.0 | 大部分任务超时 |
+| **泛化得分** | 44.0 | 略好于核心 |
+| **平均 Token** | 270 | 真实 API 消耗 |
+| **平均延迟** | 49382ms | ~49秒/任务 |
+| **成功率** | 33.3% | 仅 5/15 通过 |
+
+### 根因分析
+
+**主要问题：60秒超时不足**
+- 10/15 任务因 API 超时失败
+- MiniMax API 复杂任务需要更长时间
+- max_tokens=2048 增加了延迟
+
+**成功案例分析**
+- core_003: 70分, 206 tokens, 5.8s ← 简单任务成功
+- gen_001: 80分, 629 tokens, 18.5s ← 泛化任务成功
+- gen_004: 70分, 1134 tokens, 37s ← 大输出成功
+
+### 改进计划
+
+1. 增加超时时间至 120 秒
+2. 优化 Prompt 减少不必要的输出
+3. 实现流式输出解析
+4. 添加超时重试机制
+
+### 结论
+
+真实 Benchmark 暴露了 Python MAS 虚假高分问题：
+- Gen402 报告 86.8 分，但使用 Mock 数据
+- v5.0 Native MAS 真实得分仅 19.60
+- 需要大幅优化才能达到可用水平
+
+
+## Gen500 - OpenClaw Native MAS (Degraded)
+
+**Timestamp**: 2026-04-03 22:26 GMT+8
+
+### Results
+- Composite Score: 14.67 ⚠️ SEVERE DEGRADATION
+- Core Success Rate: 33.3%
+- Gen Success Rate: 0.0%
+- Avg Tokens: 14.6/task
+
+### Analysis
+- 4 out of 5 tasks timed out at ~60s
+- API calls hanging, not returning
+- Likely cause: API rate limiting or request timeout too short
+
+### Root Cause
+- MiniMax API timeout setting too short (60s)
+- No proper retry/timeout handling in Gen500 benchmark
+- API response format changed
+
+### Action
+- Need to fix API timeout handling
+- Increase timeout to 120s
+- Add proper error handling and retry logic
