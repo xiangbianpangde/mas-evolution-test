@@ -87,10 +87,21 @@
 - Actionability: L2.7 (回稳)
 - Token消耗: 43160
 
-**结论:**
-- 回归 v12 结构有效果，但未完全恢复
-- v12 的 52.0 仍是最优
-- 问题是 executor 输出的稳定性
+---
+
+## v16.0 - Task-Specific Examples (2026-04-04)
+
+**Benchmark 结果:** 45.03/100 ❌ REGRESSION
+- 核心任务: 47.7, 泛化任务: 47.7
+- Actionability: L2.7
+- Token消耗: 43129
+
+**问题分析:**
+- 为 research/code/review 提供专用 examples 反而降低效果
+- 代码任务持续低分 (core_002: 10, core_007: 10, core_009: 15)
+- v12 的统一 Redis example 更有效
+
+**结论:** Task-specific examples don't help - contrastive learning (good vs bad) matters more
 
 ---
 
