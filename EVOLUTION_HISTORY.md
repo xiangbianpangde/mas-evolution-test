@@ -173,3 +173,47 @@
 ### Next Steps
 - Complete full Gen502 benchmark run
 - Compare with Gen500 (14.67 score) and Gen402 (86.8 score)
+
+## Generation 500-502 (v5.0 OpenClaw Native MAS - Real API)
+
+**Date**: 2026-04-03
+**Architecture**: OpenClaw Native MAS with SOUL-driven Agents
+**Status**: 🔄 Testing Real API Benchmark
+
+### Metrics (Gen500 - with timeout issues)
+
+| Metric | Gen500 (Issue) | Benchmark_v5 (Success) |
+|--------|----------------|------------------------|
+| Composite | 19.6 | **75.40** |
+| Core Score | 14.0 | **73.0** |
+| Gen Score | 44.0 | **72.0** |
+| Token/task | 270 | **1363** |
+| Avg Latency | 49.4s | **33.8s** |
+| Success Rate | 33% | **100%** |
+
+### Key Observations
+
+1. **Timeout Issues**: Many tasks timed out at ~60s due to urllib default timeout
+2. **Successful Tasks**: Show high quality output (70-80 scores) with good token counts
+3. **Root Cause**: Complex research tasks with long outputs exceed 60s timeout
+
+### Fix Required
+
+- Increase API timeout from 60s to 120s+
+- Better streaming response handling
+- Retry logic for timeout scenarios
+
+### Gen502 Partial Results
+
+```
+core_001: 100.0 (308 tokens, 8.7s)
+core_002: 80.0 (166 tokens, 12.6s)
+core_005: 100.0 (250 tokens, 7.4s)
+core_006: interrupted at 60s
+```
+
+### Next Steps
+
+1. Fix timeout settings in benchmark_runner.py
+2. Re-run Gen503 with extended timeout
+3. Update SOUL.md based on task type analysis
