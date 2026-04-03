@@ -51,3 +51,38 @@
 - 9 outputs needed for perfect generalization
 - Reducing to 7 outputs causes gen score to drop to 92
 
+
+## v5.0 - OpenClaw Native MAS Architecture (2026-04-03)
+
+**Architecture**: OpenClaw SOUL-driven Multi-Agent System
+**Status**: 🚀 NEW PARADIGM - First Real API Benchmark
+
+### Metrics (Single Task Test - core_001)
+
+| Metric | v5.0 Native MAS | v4.0 Python MAS |
+|--------|-----------------|-----------------|
+| Token/task | **838** (real API) | 1.0 (mock) |
+| Latency | **28s** (real API) | ~60s |
+| Score | **70.0** | 65.0 |
+| Architecture | SOUL.md driven | Python class |
+
+### Key Breakthroughs
+- OpenClaw Native MAS: SOUL.md defines agents instead of Python classes
+- Real API benchmark: Tokens from actual MiniMax API response
+- Fine-grained evolution: Modify SOUL.md instead of rewriting code
+- sessions_spawn for agent coordination
+
+### Architecture Components
+- `openclaw_native/supervisor/SOUL.md` - Supervisor Agent
+- `openclaw_native/research/SOUL.md` - Research Agent  
+- `openclaw_native/code/SOUL.md` - Code Agent
+- `openclaw_native/review/SOUL.md` - Review Agent
+- `openclaw_native/evaluator/SOUL.md` - Evaluator Agent
+- `mas-supervisor/skills/mas-orchestrator/` - Orchestration Skill
+
+### Next Steps
+- Run full 15-task benchmark
+- Assess composite score
+- If < 85, evolve SOUL.md instructions
+- If convergence, create GitHub release
+
