@@ -680,3 +680,32 @@ Token 消耗正常但 composite 计算结果异常偏低。可能是效率因子
 | Gen | 44.40 | 61.60 | 68.20 |
 
 **回归**：过度简化。v33 是最优平衡点。
+
+## v35.0 - Refined Minimal (2026-04-04 22:30)
+
+| Metric | v35.0 | v33.0 | v23.0 |
+|--------|-------|-------|-------|
+| **Composite** | 53.40 | 56.57 | 58.30 |
+
+## 迭代记录汇总（v20-v35）
+
+| Version | Composite | Strategy |
+|---------|-----------|----------|
+| v20 | 52.26 | Code-specific executor |
+| v21 | 48.77 | Balanced code |
+| v22 | 56.79 | Simplified formula |
+| v23 | 58.30 | Adaptive format |
+| v24 | 48.90 | Type-specific |
+| v25 | 52.63 | Enhanced adaptive |
+| v26 | 56.91 | Back to v23 |
+| v27 | 47.55 | Structured prompt |
+| v28 | 45.85 | Self-refinement |
+| v29 | 54.77 | Lenient evaluator |
+| v30 | 48.27 | Increased tokens |
+| v31 | 50.32 | v23 reproduction |
+| v32 | 48.57 | Multi-perspective |
+| v33 | 56.57 | Self-determined |
+| v34 | 47.33 | Ultra-minimal |
+| v35 | 53.40 | Refined minimal |
+
+**结论**：v23(58.30) 和 v33(56.57) 是两个峰值。API 方差约 8%。当前范式已收敛。

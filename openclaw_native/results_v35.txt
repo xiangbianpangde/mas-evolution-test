@@ -1,0 +1,24 @@
+============================================================
+Harness v35.0 - Refined Minimal
+============================================================
+[core_001] Executor(research)... Score: 72.0
+[core_002] Executor(code)... Score: 38.0
+[core_003] Executor(research)... Score: 52.0
+[core_004] Executor(code)... Score: 45.0
+[core_005] Executor(review)... Score: 75.0
+[core_006] Executor(research)... Score: 68.0
+[core_007] Executor(code)... Score: 45.0
+[core_008] Executor(research)... Score: 82.0
+[core_009] Executor(code)... Score: 45.0
+[core_010] Executor(review)... Score: 50.0
+[gen_001] Executor(research)... Score: 55.0
+[gen_002] Executor(code)... Score: 58.0
+[gen_003] Executor(review)... Score: 78.0
+[gen_004] Executor(research)... Score: 48.0
+[gen_005] Executor(code)... Score: 35.0
+
+============================================================
+v35.0: Core=57.20 Gen=54.80 Composite=53.40
+============================================================
+
+Test completed successfully. Results saved to: /root/.openclaw/workspace/mas_repo/openclaw_native/results_v35.txt
