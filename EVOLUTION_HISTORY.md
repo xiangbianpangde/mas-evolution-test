@@ -777,3 +777,30 @@ Core research tasks need improvement. Next iteration should:
 1. Strengthen initial response quality for research tasks
 2. Optimize critique to be more specific
 3. Target: Beat v23 (58.30) composite
+
+---
+
+## 🆕 v2.1 - Hybrid: v23 Format + Self-Reflection (2026-04-05 06:08)
+
+**Strategy**: Combine v23's proven format with v2.0's self-reflection
+
+### Hypothesis
+- v23 format → better Core research scores
+- v2.0 self-reflection → good Gen generalization
+- Combined should beat both
+
+### Changes from v2.0
+1. Use v23's adaptive format prompt (better structure)
+2. Simplified critique prompt (fewer iterations)
+3. Stronger emphasis on depth/actionability in critique
+
+### Test Status
+- 🚀 RUNNING: Started 2026-04-05 06:08 UTC
+- Expected: ~40 minutes for 15 tasks
+
+### Changes from v2.0
+| Aspect | v2.0 | v2.1 |
+|--------|------|------|
+| Initial prompt | Generic | v23 adaptive format |
+| Critique | 3 generic issues | 3 targeted (depth/completeness/action) |
+| Revision | Generic | Maintains format + fixes issues |
