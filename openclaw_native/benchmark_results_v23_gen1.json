@@ -1,0 +1,153 @@
+{
+  "harness_version": "v23.0",
+  "architecture": "Adaptive Format Selection",
+  "timestamp": "2026-04-04T17:33:48",
+  "elapsed_seconds": 1063.5087728500366,
+  "summary": {
+    "total_tasks": 15,
+    "core_avg_score": 54.4,
+    "gen_avg_score": 68.2,
+    "avg_depth_level": 3.466666666666667,
+    "avg_completeness_level": 3.1333333333333333,
+    "avg_actionability_level": 3.1333333333333333,
+    "total_tokens": 44975,
+    "composite_score": 58.303333333333335
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "task_type": "research",
+      "quality_score": 48,
+      "depth_score": 3,
+      "completeness_score": 3,
+      "actionability_score": 2,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_002",
+      "task_type": "code",
+      "quality_score": 35,
+      "depth_score": 2,
+      "completeness_score": 2,
+      "actionability_score": 3,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_003",
+      "task_type": "research",
+      "quality_score": 62,
+      "depth_score": 4,
+      "completeness_score": 3,
+      "actionability_score": 3,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_004",
+      "task_type": "code",
+      "quality_score": 45,
+      "depth_score": 2,
+      "completeness_score": 3,
+      "actionability_score": 3,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_005",
+      "task_type": "review",
+      "quality_score": 60,
+      "depth_score": 3,
+      "completeness_score": 3,
+      "actionability_score": 3,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_006",
+      "task_type": "research",
+      "quality_score": 68,
+      "depth_score": 4,
+      "completeness_score": 3,
+      "actionability_score": 3,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_007",
+      "task_type": "code",
+      "quality_score": 28,
+      "depth_score": 2,
+      "completeness_score": 2,
+      "actionability_score": 3,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_008",
+      "task_type": "research",
+      "quality_score": 96,
+      "depth_score": 5,
+      "completeness_score": 5,
+      "actionability_score": 5,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_009",
+      "task_type": "code",
+      "quality_score": 30,
+      "depth_score": 3,
+      "completeness_score": 3,
+      "actionability_score": 2,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_010",
+      "task_type": "review",
+      "quality_score": 72,
+      "depth_score": 4,
+      "completeness_score": 3,
+      "actionability_score": 4,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_001",
+      "task_type": "research",
+      "quality_score": 68,
+      "depth_score": 4,
+      "completeness_score": 3,
+      "actionability_score": 3,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_002",
+      "task_type": "code",
+      "quality_score": 82,
+      "depth_score": 5,
+      "completeness_score": 4,
+      "actionability_score": 4,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_003",
+      "task_type": "review",
+      "quality_score": 68,
+      "depth_score": 4,
+      "completeness_score": 3,
+      "actionability_score": 2,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_004",
+      "task_type": "research",
+      "quality_score": 78,
+      "depth_score": 4,
+      "completeness_score": 4,
+      "actionability_score": 4,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_005",
+      "task_type": "code",
+      "quality_score": 45,
+      "depth_score": 3,
+      "completeness_score": 3,
+      "actionability_score": 3,
+      "is_suspicious": false
+    }
+  ]
+}

@@ -548,3 +548,15 @@ Token 消耗正常但 composite 计算结果异常偏低。可能是效率因子
 方向：同时提升 Core 和 Gen
 1. 研究 v22 中 Gen 任务得分低的原因（可能是 prompt 风格问题）
 2. 考虑让 Executor 根据任务类型自适应选择 prompt 风格
+
+## v23.0 - Adaptive Format Selection (2026-04-04 17:34)
+
+**Status**: 🏆 NEW CHAMPION!
+
+| Metric | v23.0 | v22.0 | Change |
+|--------|-------|-------|--------|
+| **Composite** | **58.30** | 56.79 | **+1.51** |
+| Core | 54.40 | 66.50 | -12.10 |
+| Gen | 68.20 | 52.00 | **+16.20** |
+
+**Pattern reversal**: Gen 超过 Core（68.20 vs 54.40）
