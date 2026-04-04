@@ -1,0 +1,24 @@
+v33.0 Test Results - Self-Determined Format
+Date: 2026-04-04 21:23 GMT+8
+============================================================
+
+Individual Task Scores:
+[core_001] Executor(research)... Score: 52.0
+[core_002] Executor(code)... Score: 45.0
+[core_003] Executor(research)... Score: 50.0
+[core_004] Executor(code)... Score: 55.0
+[core_005] Executor(review)... Score: 75.0
+[core_006] Executor(research)... Score: 50.0
+[core_007] Executor(code)... Score: 58.0
+[core_008] Executor(research)... Score: 82.0
+[core_009] Executor(code)... Score: 38.0
+[core_010] Executor(review)... Score: 68.0
+[gen_001] Executor(research)... Score: 58.0
+[gen_002] Executor(code)... Score: 48.0
+[gen_003] Executor(review)... Score: 62.0
+[gen_004] Executor(research)... Score: 82.0
+[gen_005] Executor(code)... Score: 58.0
+
+============================================================
+v33.0: Core=57.30 Gen=61.60 Composite=56.57
+============================================================
