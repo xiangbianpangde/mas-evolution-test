@@ -887,3 +887,36 @@ Core research tasks need improvement. Next iteration should:
 3. Use different model (M2.2 returns 400 Bad Request)
 
 **v2.0 remains the best result** for v2 paradigm testing.
+
+## v5.1 - Self-Reflection + v23 Format Test (FAILED)
+
+**Date**: 2026-04-05 ~07:15 UTC
+**Strategy**: Single task test combining v23 format with self-reflection
+
+### Results
+| Metric | Value |
+|--------|-------|
+| Task | core_001 research |
+| Initial Response | 6651 chars ✅ |
+| Self-Critique | Found issues ✅ |
+| Revision | **60 chars** ❌ |
+| Final Score | **15** ❌ |
+| Time | 173s |
+
+### Analysis
+Self-reflection **fails** when combined with v23 format:
+- Initial response was good (6651 chars)
+- Self-critique found issues correctly
+- Revision produced only 60 chars (API error or truncation)
+- Final score 15/100
+
+**Root Cause Hypothesis**: When feeding output+critique back to API for revision, the context is too long or malformed. The revision prompt may not work well with detailed technical content.
+
+## v6.0 - v23 Format Only (Control Test) RUNNING
+
+**Started**: 2026-04-05 07:31 UTC
+**Strategy**: v23 adaptive format WITHOUT self-reflection
+**Purpose**: Confirm if v23 (58.30) was real or lucky
+
+If v6.0 scores ~58+: v23 was genuinely good
+If v6.0 scores <50: v23 was lucky, current approach needs rethinking
