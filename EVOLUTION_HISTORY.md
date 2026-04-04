@@ -717,3 +717,33 @@ Token 消耗正常但 composite 计算结果异常偏低。可能是效率因子
 | **Composite** | 43.60 | 58.30 |
 
 **确认**：v1 范式已收敛。Multi-agent 协商在真实 API 环境下无效。
+
+---
+
+## 🆕 PARADIGM v2.0 - Self-Reflection Architecture (2026-04-05)
+
+**Architecture**: Self-Reflection Loop
+**Status**: 🚀 TESTING IN PROGRESS
+
+### Key Insight from v1 Failure
+- v36 (43.60) regressed from v23 (58.30) due to multi-agent voting
+- Problem: Voting selector lacks expertise to pick best output
+- Solution: Let ONE expert agent critique and improve its own work
+
+### v2.0 Strategy
+1. Agent generates initial response
+2. Agent self-critiques: identifies 1-3 key weaknesses
+3. Agent revises response to fix issues
+4. Evaluate revised output
+
+### Expected Benefits
+- Eliminates voting selector bottleneck
+- Self-critique is more targeted than external voting
+- Iterative improvement within single agent expertise
+
+### Test Status
+- Started: 2026-04-05 04:29 UTC
+- Running in background (nohup)
+- Expected duration: ~20-30 minutes for 15 tasks
+
+### Preliminary Results (pending)
