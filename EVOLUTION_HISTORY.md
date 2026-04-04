@@ -815,3 +815,29 @@ Core research tasks need improvement. Next iteration should:
 - Create v2.2 with better error handling and retry logic
 - Add API call retry (3 attempts before failing)
 - Increase timeout from 180s to 300s
+
+### v2.0 Results - Self-Reflection (2026-04-05)
+
+| Metric | v2.0 | v36 | v23 |
+|--------|------|-----|-----|
+| **Composite** | **54.64** | 43.60 | 58.30 |
+| Core | 50.00 | 46.90 | 54.40 |
+| Gen | 65.20 | 44.80 | 68.20 |
+
+**Key Observations:**
+- Self-reflection loop works: Gen improved from 44.8 (v36) to 65.2
+- Core still below v23 (50.0 vs 54.4) - research prompts need work
+- API variance confirmed: v2.0 ran 40min for 15 tasks
+- All 15 tasks used 2 iterations (self-critique found issues)
+
+**Score Breakdown:**
+- core_005 review: 72.0 (excellent)
+- core_003 research: 52.0
+- gen_003 review: 88.0 (excellent)
+- gen_005 code: 93.0 (excellent)
+
+**v2.1 Status:** Killed during gen_002. Partial results suggest hybrid format might work.
+
+**v2.2 Status:** Killed during core_003. Had retry logic but still timed out.
+
+**Next Step:** Create v3.0 with combined insights + checkpointing for long runs.

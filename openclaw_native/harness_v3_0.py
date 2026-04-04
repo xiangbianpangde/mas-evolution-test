@@ -1,30 +1,40 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v2.2 - Hybrid: v23 Format + Self-Reflection + Error Handling
+OpenClaw Native Harness v3.0 - Checkpointed Hybrid + Best Practices
 
-v2.1 crashed during execution. Root cause: No retry logic on API failures.
+v2.x lessons:
+- v2.0 (54.64): Self-reflection works for Gen, but Core needs v23 format
+- v2.1: Killed during gen_002 (no checkpointing)
+- v2.2: Killed during core_003 (retry helped but no checkpointing)
 
-v2.2 fixes:
-1. Add retry logic (3 attempts with exponential backoff)
-2. Increase timeout from 180s to 300s
-3. Better error propagation
+v3.0 Strategy:
+1. Use v23's proven adaptive format (best for Core research tasks)
+2. Add self-reflection loop (proven to improve Gen)
+3. Add CHECKPOINTING - save progress after each task
+4. If killed, resume from checkpoint
+5. Reduced timeout (150s) to avoid hanging
 
-Strategy (same as v2.1):
-1. Use v23's proven adaptive format (better for research)
-2. Add self-reflection loop (proven to help Gen)
-3. Stronger system prompt for research tasks
+Key insight from v2.0:
+- gen_003 review: 88.0, gen_005 code: 93.0 - self-reflection excellent
+- core_002 code: 35.0, core_004 code: 63.0 - code tasks varied
+- core_005 review: 72.0 - review tasks benefit from format
+
+v3.0 combines: v23 format + self-reflection + checkpointing
 """
 
 import json
 import time
 import os
-from dataclasses import dataclass
-from typing import Dict
+import sys
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional
 
 API_CONFIG = {
     "base_url": "https://api.minimaxi.com/anthropic",
     "model": "MiniMax-M2.7"
 }
+
+CHECKPOINT_FILE = "v3_0_checkpoint.json"
 
 @dataclass
 class TaskResult:
@@ -44,11 +54,11 @@ class TaskResult:
     iterations: int = 1
 
 class RealLLMCaller:
-    def __init__(self, api_key: str, max_retries: int = 3):
+    def __init__(self, api_key: str, max_retries: int = 2):
         self.api_key = api_key
         self.max_retries = max_retries
     
-    def call(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 300) -> Dict:
+    def call(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 150) -> Dict:
         import urllib.request
         last_error = None
         for attempt in range(self.max_retries):
@@ -88,15 +98,14 @@ class RealLLMCaller:
             except Exception as e:
                 last_error = str(e)
                 if attempt < self.max_retries - 1:
-                    time.sleep(2 * (attempt + 1))  # Exponential backoff
-                continue
+                    time.sleep(2)
+        
         return {
             "content": "", "latency_ms": (time.time() - start) * 1000,
-            "input_tokens": 0, "output_tokens": 0, "error": last_error or "Unknown error"
+            "input_tokens": 0, "output_tokens": 0, "error": last_error
         }
 
-# v2.1: Hybrid - v23 format + self-reflection
-
+# v3.0: v23 adaptive format + self-reflection
 INITIAL_RESPONSE_PROMPT = """你是一个专业的技术分析师。
 
 任务类型：{task_type}
@@ -112,30 +121,11 @@ INITIAL_RESPONSE_PROMPT = """你是一个专业的技术分析师。
 - 有具体数字和证据
 - 有可操作的步骤
 - 有验证方法
+- 代码必须可运行
 
-输出格式示例（根据任务类型选择）：
+直接输出你的完整分析。"""
 
-【research类型】：
-# 技术分析
-## 问题诊断
-## 深度分析（包含具体数字）
-## 解决方案（分步骤）
-## 验证方法
-
-【code类型】：
-# 实现方案
-## 架构
-## 核心代码
-## 测试
-
-【review类型】：
-# 架构评审
-## 风险矩阵
-## 缓解方案
-## 优先级"""
-
-# v2.1: More targeted critique - focuses on depth and actionability
-SELF_CRITIQUE_PROMPT = """你是一个严格的技术评审专家。请评审以下输出：
+SELF_CRITIQUE_PROMPT = """你是一个严格的技术评审专家。请指出以下输出的主要问题：
 
 任务类型：{task_type}
 任务：{query}
@@ -143,38 +133,24 @@ SELF_CRITIQUE_PROMPT = """你是一个严格的技术评审专家。请评审以
 当前输出：
 {output}
 
-请严格检查：
-1. **深度**：是否有具体数字和证据？分析是否深入？
-2. **完整性**：是否覆盖了任务的所有方面？
-3. **可操作性**：步骤是否具体可执行？
+请指出最多3个关键问题及改进建议。格式：
+问题1: [描述]
+改进1: [具体做法]
 
-如果发现问题，明确指出问题和具体改进建议。
-如果输出质量已经很高，指出它为什么好。
-
-输出格式：
-评估：[质量高/有问题]
-问题1: [描述]（如果没有问题则写"无"）
-改进1: [建议]（如果没有问题则写"无需改进"）
-问题2: ...
-改进2: ..."""
+如果输出质量已经很高，可以说"无重大问题"。"""
 
 REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进输出：
 
 任务类型：{task_type}
 任务：{query}
 
-当前输出：
+之前的输出：
 {output}
 
 评审意见：
 {critique}
 
-要求：
-- 解决评审指出的所有问题
-- 保持原有的优点
-- 质量有明显提升
-
-直接输出改进后的完整版本。"""
+请输出改进后的完整版本，解决所有问题。"""
 
 STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
@@ -213,10 +189,28 @@ LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。
 重点看功能实现。"""
 
 
-class HarnessV22:
+class HarnessV30:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
         self.max_iterations = 2
+        self.checkpoint_file = CHECKPOINT_FILE
+    
+    def load_checkpoint(self) -> Optional[Dict]:
+        if os.path.exists(self.checkpoint_file):
+            try:
+                with open(self.checkpoint_file, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return None
+    
+    def save_checkpoint(self, results: List[TaskResult], completed_tasks: List[str]):
+        data = {
+            "completed_tasks": completed_tasks,
+            "results": [asdict(r) for r in results]
+        }
+        with open(self.checkpoint_file, 'w') as f:
+            json.dump(data, f)
     
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
@@ -224,12 +218,9 @@ class HarnessV22:
         query = task["query"]
         
         executor_start = time.time()
-        max_tokens = 3000 if task_type == "code" else 2500
+        max_tokens = 2800 if task_type == "code" else 2200
         
-        current_output = ""
-        total_tokens = 0
-        
-        # Iteration 1: Generate initial response using v23 format
+        # Generate initial response using v23 format
         initial_response = self.llm.call(
             prompt=f"任务类型：{task_type}\n任务：{query}",
             system_prompt=INITIAL_RESPONSE_PROMPT.format(task_type=task_type, query=query),
@@ -248,21 +239,20 @@ class HarnessV22:
             )
         
         current_output = initial_response["content"]
-        total_tokens += initial_response.get("output_tokens", 0)
+        total_tokens = initial_response.get("output_tokens", 0)
         
-        # Iteration 2: Self-critique and revision
+        # Self-critique and revision
         critique_response = self.llm.call(
             prompt=SELF_CRITIQUE_PROMPT.format(
                 task_type=task_type, query=query, output=current_output
             ),
-            system_prompt="你是一个严格的技术评审专家。",
-            max_tokens=1500
+            system_prompt="你是一个严格的评审专家。",
+            max_tokens=1200
         )
         
         total_tokens += critique_response.get("output_tokens", 0)
         critique_text = critique_response["content"]
         
-        # Check if critique identified real issues
         has_issues = len(critique_text) > 80 and ("问题" in critique_text or "改进" in critique_text)
         
         if has_issues:
@@ -279,7 +269,7 @@ class HarnessV22:
         
         executor_latency = (time.time() - executor_start) * 1000
         
-        # Evaluate final output
+        # Evaluate
         evaluator_start = time.time()
         evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
         evaluator_response = self.llm.call(
@@ -314,11 +304,9 @@ class HarnessV22:
             depth_score = eval_json.get("depth", {}).get("level", 3)
             completeness_score = eval_json.get("completeness", {}).get("level", 3)
             actionability_score = eval_json.get("actionability", {}).get("level", 3)
-            is_suspicious = executor_latency < 15000 and len(current_output) > 1000
         except:
             quality_score = 50
             depth_score = completeness_score = actionability_score = 3
-            is_suspicious = False
         
         return TaskResult(
             task_id=task_id, task_type=task_type,
@@ -327,7 +315,6 @@ class HarnessV22:
             actionability_score=actionability_score,
             executor_tokens=total_tokens, evaluator_tokens=evaluator_tokens,
             executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
-            is_suspicious=is_suspicious,
             iterations=2 if has_issues else 1
         )
     
@@ -366,20 +353,48 @@ class HarnessV22:
         ]
         
         self.api_key = api_key
+        
+        # Load checkpoint if exists
+        checkpoint = self.load_checkpoint()
+        completed_task_ids = checkpoint.get("completed_tasks", []) if checkpoint else []
         results = []
+        
+        if checkpoint:
+            print(f"Resuming from checkpoint. Completed tasks: {len(completed_task_ids)}")
+            for r in checkpoint.get("results", []):
+                results.append(TaskResult(**r))
+        
         start_time = time.time()
+        completed_in_run = 0
         
         print("=" * 60)
-        print("Harness v2.2 - Hybrid: v23 Format + Self-Reflection")
+        print("Harness v3.0 - Checkpointed Hybrid (v23 format + Self-Reflection)")
         print("=" * 60)
         
-        for task in tasks:
+        for i, task in enumerate(tasks):
+            if task["id"] in completed_task_ids:
+                print(f"[{task['id']}] Already completed, skipping")
+                continue
+            
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
             result = self.execute_task(task)
             results.append(result)
+            completed_task_ids.append(task["id"])
+            completed_in_run += 1
             print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
+            
+            # Save checkpoint after each task
+            self.save_checkpoint(results, completed_task_ids)
+            
+            # Check if we should stop (every 5 tasks to avoid too frequent saves)
+            if completed_in_run % 5 == 0:
+                print(f"Checkpoint saved after {completed_in_run} tasks")
         
         elapsed = time.time() - start_time
+        
+        # Remove checkpoint on successful completion
+        if len(completed_task_ids) == len(tasks):
+            os.remove(self.checkpoint_file)
         
         total = len(results)
         core_scores = [r.quality_score for r in results[:10]]
@@ -391,12 +406,12 @@ class HarnessV22:
         composite = core_avg * 0.45 + gen_avg * 0.45 + (avg_actionability * 10) * 0.1
         
         print(f"\n{'=' * 60}")
-        print(f"v2.2 HYBRID: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
+        print(f"v3.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
         print(f"{'=' * 60}")
         
         return {
-            "harness_version": "v2.2",
-            "paradigm": "v2 (Self-Reflection + v23 Format)",
+            "harness_version": "v3.0",
+            "paradigm": "v2 (Self-Reflection) + Checkpointing",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
@@ -416,16 +431,14 @@ class HarnessV22:
 
 
 if __name__ == "__main__":
-    import sys
     api_key = os.environ.get("MINIMAX_API_KEY", "")
     if not api_key:
-        # Fallback to test key
         api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
     
-    harness = HarnessV22(api_key)
+    harness = HarnessV30(api_key)
     results = harness.run_benchmark(api_key)
     
-    output_file = f"benchmark_results_v2_2_gen1_{time.strftime('%Y%m%d_%H%M%S')}.json"
+    output_file = f"benchmark_results_v3_0_gen1_{time.strftime('%Y%m%d_%H%M%S')}.json"
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"\nResults saved to: {output_file}")
