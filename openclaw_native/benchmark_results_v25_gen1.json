@@ -1,0 +1,104 @@
+{
+  "harness_version": "v25.0",
+  "timestamp": "2026-04-04T18:14:13",
+  "elapsed_seconds": 1052.4708034992218,
+  "summary": {
+    "total_tasks": 15,
+    "core_avg_score": 54.0,
+    "gen_avg_score": 56.0,
+    "avg_actionability_level": 3.1333333333333333,
+    "composite_score": 52.63333333333333
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "task_type": "research",
+      "quality_score": 68,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_002",
+      "task_type": "code",
+      "quality_score": 50,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_003",
+      "task_type": "research",
+      "quality_score": 78,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_004",
+      "task_type": "code",
+      "quality_score": 27,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_005",
+      "task_type": "review",
+      "quality_score": 62,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_006",
+      "task_type": "research",
+      "quality_score": 50,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_007",
+      "task_type": "code",
+      "quality_score": 35,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_008",
+      "task_type": "research",
+      "quality_score": 75,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_009",
+      "task_type": "code",
+      "quality_score": 45,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "core_010",
+      "task_type": "review",
+      "quality_score": 50,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_001",
+      "task_type": "research",
+      "quality_score": 48,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_002",
+      "task_type": "code",
+      "quality_score": 82,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_003",
+      "task_type": "review",
+      "quality_score": 50,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_004",
+      "task_type": "research",
+      "quality_score": 58,
+      "is_suspicious": false
+    },
+    {
+      "task_id": "gen_005",
+      "task_type": "code",
+      "quality_score": 42,
+      "is_suspicious": false
+    }
+  ]
+}

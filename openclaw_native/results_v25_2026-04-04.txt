@@ -1,0 +1,22 @@
+============================================================
+Harness v25.0 - Enhanced Adaptive
+============================================================
+[core_001] Executor(research)... Score: 68.0
+[core_002] Executor(code)... Score: 50.0
+[core_003] Executor(research)... Score: 78.0
+[core_004] Executor(code)... Score: 27.0
+[core_005] Executor(review)... Score: 62.0
+[core_006] Executor(research)... Score: 50.0
+[core_007] Executor(code)... Score: 35.0
+[core_008] Executor(research)... Score: 75.0
+[core_009] Executor(code)... Score: 45.0
+[core_010] Executor(review)... Score: 50.0
+[gen_001] Executor(research)... Score: 48.0
+[gen_002] Executor(code)... Score: 82.0
+[gen_003] Executor(review)... Score: 50.0
+[gen_004] Executor(research)... Score: 58.0
+[gen_005] Executor(code)... Score: 42.0
+
+============================================================
+v25.0: Core=54.00 Gen=56.00 Composite=52.63
+============================================================
