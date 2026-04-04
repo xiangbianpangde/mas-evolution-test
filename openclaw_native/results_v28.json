@@ -1,0 +1,29 @@
+{
+  "version": "v28.0",
+  "timestamp": "2026-04-04T18:54:00+08:00",
+  "description": "Self-Refinement on v26 Base",
+  "results": {
+    "core": {
+      "core_001": {"executor": "research", "score": 68.0},
+      "core_002": {"executor": "code", "score": 45.0},
+      "core_003": {"executor": "research", "score": 50.0},
+      "core_004": {"executor": "code", "score": 55.0},
+      "core_005": {"executor": "review", "score": 67.0},
+      "core_006": {"executor": "research", "score": 60.0},
+      "core_007": {"executor": "code", "score": 38.0},
+      "core_008": {"executor": "research", "score": 65.0},
+      "core_009": {"executor": "code", "score": 25.0},
+      "core_010": {"executor": "review", "score": 50.0},
+      "mean": 52.30
+    },
+    "gen": {
+      "gen_001": {"executor": "research", "score": 68.0},
+      "gen_002": {"executor": "code", "score": 25.0},
+      "gen_003": {"executor": "review", "score": 50.0},
+      "gen_004": {"executor": "research", "score": 48.0},
+      "gen_005": {"executor": "code", "score": 28.0},
+      "mean": 43.80
+    },
+    "composite": 45.85
+  }
+}
