@@ -1,0 +1,24 @@
+v36.0 Multi-Agent Voting Test Results (2026-04-04 23:30 GMT+8)
+============================================================
+Core Benchmark Scores:
+  core_001 research:  48.0
+  core_002 code:      28.0
+  core_003 research:  72.0
+  core_004 code:      28.0
+  core_005 review:    42.0
+  core_006 research:  48.0
+  core_007 code:      28.0
+  core_008 research:  68.0
+  core_009 code:      25.0
+  core_010 review:    82.0
+  Core Average:       46.90
+
+Gen Benchmark Scores:
+  gen_001 research:   58.0
+  gen_002 code:        0.0
+  gen_003 review:     50.0
+  gen_004 research:   88.0
+  gen_005 code:       28.0
+  Gen Average:        44.80
+
+Composite Score: 43.60
