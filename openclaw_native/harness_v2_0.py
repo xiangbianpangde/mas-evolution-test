@@ -236,7 +236,7 @@ class HarnessV20:
         )
         
         total_tokens += critique_response.get("output_tokens", 0)
-        critique_text = critique_response["content"]
+        critique_text = critique_response.get("content", "") or ""
         
         # Check if critique identified real issues
         has_issues = len(critique_text) > 100 and "问题" in critique_text
@@ -251,7 +251,8 @@ class HarnessV20:
                 max_tokens=max_tokens
             )
             total_tokens += revision_response.get("output_tokens", 0)
-            current_output = revision_response["content"]
+            if revision_response.get("content"):
+                current_output = revision_response["content"]
         
         executor_latency = (time.time() - executor_start) * 1000
         
@@ -351,9 +352,21 @@ class HarnessV20:
         
         for task in tasks:
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
-            result = self.execute_task(task)
-            results.append(result)
-            print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
+            try:
+                result = self.execute_task(task)
+                results.append(result)
+                print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
+            except Exception as e:
+                print(f"ERROR: {str(e)}")
+                # Append a failed result
+                results.append(TaskResult(
+                    task_id=task["id"], task_type=task["type"],
+                    executor_output="", quality_score=0,
+                    depth_score=0, completeness_score=0, actionability_score=0,
+                    executor_tokens=0, evaluator_tokens=0,
+                    executor_latency_ms=0, evaluator_latency_ms=0,
+                    error=str(e)
+                ))
         
         elapsed = time.time() - start_time
         
