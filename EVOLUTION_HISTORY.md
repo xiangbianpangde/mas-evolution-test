@@ -920,3 +920,38 @@ Self-reflection **fails** when combined with v23 format:
 
 If v6.0 scores ~58+: v23 was genuinely good
 If v6.0 scores <50: v23 was lucky, current approach needs rethinking
+
+## v6.0 - v23 Format Only (Control Test) - FAILED
+
+**Started**: 2026-04-05 07:31 UTC
+**Strategy**: v23 adaptive format WITHOUT self-reflection
+**Status**: ❌ FAILED - Process died at core_002
+
+### Results
+- core_001: 50.0 (completed)
+- core_002: incomplete (process died)
+
+### Conclusion
+API is extremely unstable. Even simple v23 format requests are timing out.
+The API is not suitable for testing at this time.
+
+## Summary: v2 Paradigm Testing Status
+
+| Version | Strategy | Result | Notes |
+|---------|----------|--------|-------|
+| v2.0 | Self-reflection + generic prompts | **54.64** ✅ | Best result |
+| v3.0 | v23 + self-reflection + checkpointing | ❌ Crashed | |
+| v4.0 | Same as v3 | ❌ Hung | |
+| v5.0 | Same as v3 + retry | ❌ Hung | |
+| v5.1 | Single task test | 15 ❌ | Revision failed |
+| v6.0 | v23 format only | ❌ Failed | API unstable |
+
+**Best Overall**: v23.0 at 58.30 (from v1 paradigm)
+**Best v2 Paradigm**: v2.0 at 54.64 (self-reflection with generic prompts)
+
+**Key Learnings**:
+1. Self-reflection improves Gen scores significantly (44.8 → 65.2)
+2. But combining with v23 format causes revision to fail
+3. API is currently too unstable for reliable testing
+
+**Next Action**: Wait for API to stabilize, or switch to faster/simpler prompts
