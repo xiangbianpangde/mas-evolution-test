@@ -841,3 +841,49 @@ Core research tasks need improvement. Next iteration should:
 **v2.2 Status:** Killed during core_003. Had retry logic but still timed out.
 
 **Next Step:** Create v3.0 with combined insights + checkpointing for long runs.
+
+## v3.0 - Checkpointed Hybrid (CRASHED)
+
+**Strategy**: v23 format + self-reflection + checkpointing
+**Started**: 2026-04-05 06:42 UTC
+**Status**: ❌ CRASHED at core_003
+- core_001: 68.0 (iter=2)
+- core_002: 0.0 (iter=2) - code task failed
+- core_003: incomplete
+
+## v4.0 - Checkpointed v23 + Self-Reflection (HUNG)
+
+**Strategy**: v23 adaptive format + self-critique + checkpointing
+**Started**: 2026-04-05 07:06 UTC
+**Status**: ❌ HUNG - Killed after 2+ minutes on core_001
+- No checkpoint created
+- API test shows complex prompts timeout (>60s)
+
+## v5.0 - v23 Format + Self-Reflection + Retry (HUNG)
+
+**Strategy**: Same as v4 + retry logic + shorter timeout (120s)
+**Started**: 2026-04-05 07:10 UTC
+**Status**: ❌ HUNG - Still on core_001 after 2+ minutes
+
+**API Diagnosis:**
+- Simple prompts work: ~1.4s latency
+- Complex prompts (>2000 tokens): timeout after 60s+
+- Network is fine: 82ms RTT, no packet loss
+
+**Root Cause**: MiniMax API is slow/unstable for complex requests during certain periods. v2.0 succeeded because it ran during a period when the API was responsive.
+
+## Current Status (2026-04-05 07:12 UTC)
+
+| Version | Status | Composite | Notes |
+|---------|--------|-----------|-------|
+| v2.0 | ✅ Completed | 54.64 | Best available |
+| v3.0 | ❌ Crashed | N/A | Failed at core_003 |
+| v4.0 | ❌ Hung | N/A | Stuck on core_001 |
+| v5.0 | ❌ Hung | N/A | Stuck on core_001 |
+
+**Conclusion**: API is currently unstable. Need to either:
+1. Wait for API to stabilize
+2. Use much shorter prompts (reduce complexity)
+3. Use different model (M2.2 returns 400 Bad Request)
+
+**v2.0 remains the best result** for v2 paradigm testing.
