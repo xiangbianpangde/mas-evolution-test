@@ -804,3 +804,14 @@ Core research tasks need improvement. Next iteration should:
 | Initial prompt | Generic | v23 adaptive format |
 | Critique | 3 generic issues | 3 targeted (depth/completeness/action) |
 | Revision | Generic | Maintains format + fixes issues |
+
+### Test Status
+- ❌ CRASHED at gen_002 (12/15 tasks completed)
+- Process exited without completing
+- Likely API timeout or error handling issue
+- Partial results not saved
+
+### Next Action
+- Create v2.2 with better error handling and retry logic
+- Add API call retry (3 attempts before failing)
+- Increase timeout from 180s to 300s
