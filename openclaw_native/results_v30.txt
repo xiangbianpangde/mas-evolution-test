@@ -1,0 +1,23 @@
+============================================================
+Harness v30.0 - Increased Output Length
+============================================================
+[core_001] Executor(research)... Score: 50.0
+[core_002] Executor(code)... Score: 25.0
+[core_003] Executor(research)... Score: 70.0
+[core_004] Executor(code)... Score: 20.0
+[core_005] Executor(review)... Score: 78.0
+[core_006] Executor(research)... Score: 68.0
+[core_007] Executor(code)... Score: 42.0
+[core_008] Executor(research)... Score: 68.0
+[core_009] Executor(code)... Score: 38.0
+[core_010] Executor(review)... Score: 50.0
+[gen_001] Executor(research)... Score: 50.0
+[gen_002] Executor(code)... Score: 48.0
+[gen_003] Executor(review)... Score: 52.0
+[gen_004] Executor(research)... Score: 50.0
+[gen_005] Executor(code)... Score: 50.0
+
+============================================================
+v30.0: Core=50.90 Gen=50.00 Composite=48.27
+============================================================
+Test completed successfully.
