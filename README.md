@@ -166,8 +166,12 @@ AutoMAS (Automated Multi-Agent System) is an **autonomous** benchmarking and evo
 - Closed-loop autonomous evolution
 
 **Current Champions:**
-- OpenClaw Native: v23.0 at **58.30** composite (with ~8% API variance)
-- Python MAS: Gen404 at **94.90** composite
+- OpenClaw Native: v23.0 at **58.30** composite (v1 paradigm)
+- OpenClaw Native: v2.0 at **54.64** composite (v2 paradigm - testing)
+
+**Paradigm Status:**
+- **v1 (v6-v36)**: CONVERGED at v36 (43.60) - multi-agent voting failed
+- **v2 (Self-Reflection)**: IN TESTING - v2.1 hybrid running now
 
 ---
 
