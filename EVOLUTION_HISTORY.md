@@ -560,3 +560,13 @@ Token 消耗正常但 composite 计算结果异常偏低。可能是效率因子
 | Gen | 68.20 | 52.00 | **+16.20** |
 
 **Pattern reversal**: Gen 超过 Core（68.20 vs 54.40）
+
+## v24.0 - Balanced Type-Specific (2026-04-04 17:55)
+
+| Metric | v24.0 | v23.0 |
+|--------|-------|-------|
+| **Composite** | 48.90 | 58.30 |
+| Core | 54.20 | 54.40 |
+| Gen | 47.80 | 68.20 |
+
+**回归**：去掉 adaptive flexibility 导致 Gen 大幅下降。
