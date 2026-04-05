@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v10.0 - Type-Directed + Code Self-Reflection
+OpenClaw Native Harness v10.0 - Enhanced Type-Directed with Code Reflection
 
-v9.0 (56.73): Type-directed - Research=CoT, Code=adaptive, Review=adaptive
-  - core_001 research: 91.0 (excellent!)
-  - core_008 research: 88.0 (excellent)
-  - gen_004 research: 88.0 (excellent)
-  - core_009 code: 15.0 (VERY POOR - Raft共识算法太复杂)
-  - core_002 code: 38.0 (poor)
+v9.0 (56.73): CoT research + v23 code/review (no code reflection)
+- core_001 research: 91 (excellent!)
+- core_002 code: 38 (weak!)
+- Gen code tasks: 58-82 range
 
-Key insight: Research tasks excel with CoT, but code tasks need help.
+v2.0 (54.64): Generic prompts + self-reflection on all
+- Gen code: gen_005=93 (excellent!)
+- But Core dropped to 50
+
+Key insight: v9.0's CoT research is great, but code needs self-reflection!
+
 v10.0 Strategy:
-- Research: Keep v9's CoT (proven: 91, 88, 88)
-- Code: Add self-reflection (only for code, not research)
-- Review: Keep v9's adaptive (working well: 62, 72)
+- Research: CoT (from v9.0 - proven excellent: 91, 78)
+- Code: v23 adaptive + self-reflection (like v2.0's successful approach)
+- Review: v23 adaptive + self-reflection (from v9.0)
 
-Hypothesis: Self-reflection can boost code scores from ~30 to ~50+
+Hypothesis: Combining v9.0's CoT research with v2.0's code reflection
+should improve code tasks while maintaining research strength.
 """
 
 import json
@@ -94,9 +98,7 @@ class RealLLMCaller:
                 "input_tokens": 0, "output_tokens": 0, "error": str(e)
             }
 
-# v10.0: Type-Directed + Code Self-Reflection
-
-# Research tasks: CoT format (proven from v9)
+# Research tasks: CoT format (from v9.0 - proven: core_001=91, core_003=78)
 COT_RESEARCH_PROMPT = """你是一个专业的技术分析师。
 
 任务类型：research
@@ -124,7 +126,7 @@ Step 5 - 验证方法：
 
 直接输出你的完整分析。"""
 
-# Code tasks: v23 adaptive + self-reflection
+# Code tasks: v23 adaptive format + self-reflection
 ADAPTIVE_CODE_PROMPT = """你是一个专业的技术分析师。
 
 任务类型：code
@@ -141,34 +143,22 @@ ADAPTIVE_CODE_PROMPT = """你是一个专业的技术分析师。
 
 直接输出你的分析。"""
 
-CODE_CRITIQUE_PROMPT = """你是一个代码质量评审专家。请评审以下代码实现，找出关键问题：
+# Code self-critique
+CODE_SELF_CRITIQUE = """你是一个严格的代码评审专家。请评审以下输出，找出关键问题：
 
+任务类型：code
 任务：{query}
 
-当前代码实现：
+当前输出：
 {output}
 
-请严格指出最多3个最重要的问题：
+请严格指出最多2个最重要的问题：
 
-输出格式：
-问题1: [描述]
-改进1: [具体怎么做]
-问题2: ...
-问题3: ..."""
+问题1: [描述问题]
+改进1: [具体建议]
+（如果没有严重问题，回复"无需修改"）"""
 
-CODE_REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进你的代码实现：
-
-任务：{query}
-
-之前的代码：
-{output}
-
-评审意见：
-{critique}
-
-请输出改进后的完整版本。保持原有优点，解决评审指出的问题。"""
-
-# Review tasks: v23 format (from v9)
+# Review tasks: v23 format + self-reflection
 ADAPTIVE_REVIEW_PROMPT = """你是一个专业的技术分析师。
 
 任务类型：review
@@ -179,11 +169,34 @@ ADAPTIVE_REVIEW_PROMPT = """你是一个专业的技术分析师。
 **review**: 风险矩阵 → 影响分析 → 缓解步骤 → 优先级 → 验证方法
 
 要求：
-- 有具体的风险评估
+- 有具体的风险评分
 - 有可操作的缓解步骤
-- 有明确的优先级
+- 有验证方法
 
-直接输出你的评审。"""
+直接输出你的分析。"""
+
+# Review self-critique
+REVIEW_SELF_CRITIQUE = """你是一个严格的技术评审专家。请评审以下输出：
+
+当前输出：
+{output}
+
+请指出最多2个最重要的问题（如果有）：
+
+问题1: [描述问题]
+改进1: [具体建议]
+（如果没有严重问题，回复"无需修改"）"""
+
+# Revision prompt
+REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进：
+
+之前的输出：
+{output}
+
+评审意见：
+{critique}
+
+请输出改进后的版本。"""
 
 STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
@@ -227,28 +240,19 @@ class HarnessV100:
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
     
-    def load_checkpoint(self) -> Dict:
-        if os.path.exists(CHECKPOINT_FILE):
-            try:
-                with open(CHECKPOINT_FILE, 'r') as f:
-                    return json.load(f)
-            except:
-                pass
-        return {"tasks_completed": [], "results": []}
-    
-    def save_checkpoint(self, checkpoint: Dict):
-        with open(CHECKPOINT_FILE, 'w') as f:
-            json.dump(checkpoint, f, ensure_ascii=False)
-    
-    def get_prompt_for_task(self, task_type: str, query: str) -> tuple:
-        """Returns (system_prompt, user_prompt) based on task type"""
+    def get_prompt_for_task(self, task: Dict) -> tuple:
+        """Get the appropriate prompt based on task type"""
+        task_type = task["type"]
+        query = task["query"]
+        
         if task_type == "research":
-            return ("你是一个专业的技术分析师。", COT_RESEARCH_PROMPT.format(query=query))
+            # Use CoT format for research (v9.0's proven strength)
+            prompt = COT_RESEARCH_PROMPT.format(query=query)
+            return prompt, "research", False  # No self-reflection for research
         elif task_type == "code":
-            return ("你是一个专业的技术分析师。", ADAPTIVE_CODE_PROMPT.format(query=query))
-        elif task_type == "review":
-            return ("你是一个专业的技术分析师。", ADAPTIVE_REVIEW_PROMPT.format(query=query))
-        return ("你是一个专业的技术分析师。", f"任务：{query}")
+            return ADAPTIVE_CODE_PROMPT.format(query=query), "code", True  # Self-reflection for code
+        else:  # review
+            return ADAPTIVE_REVIEW_PROMPT.format(query=query), "review", True  # Self-reflection for review
     
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
@@ -256,13 +260,14 @@ class HarnessV100:
         query = task["query"]
         
         executor_start = time.time()
-        max_tokens = 3500 if task_type == "code" else 2500
+        max_tokens = 3000 if task_type == "code" else 2500
         
-        system_prompt, user_prompt = self.get_prompt_for_task(task_type, query)
+        # Get appropriate prompt based on task type
+        system_prompt, output_type, use_reflection = self.get_prompt_for_task(task)
         
-        # Step 1: Generate initial response
+        # Generate initial response
         initial_response = self.llm.call(
-            prompt=user_prompt,
+            prompt=f"任务类型：{task_type}\n任务：{query}",
             system_prompt=system_prompt,
             max_tokens=max_tokens
         )
@@ -282,23 +287,21 @@ class HarnessV100:
         total_tokens = initial_response.get("output_tokens", 0)
         iterations = 1
         
-        # Step 2: Self-reflection ONLY for code tasks
-        if task_type == "code":
+        # Self-reflection for code and review tasks
+        if use_reflection:
+            critique_prompt = CODE_SELF_CRITIQUE if task_type == "code" else REVIEW_SELF_CRITIQUE
             critique_response = self.llm.call(
-                prompt=CODE_CRITIQUE_PROMPT.format(query=query, output=current_output),
-                system_prompt="你是一个严格的代码评审专家。",
-                max_tokens=1500
+                prompt=critique_prompt.format(query=query, output=current_output),
+                system_prompt="你是一个严格的评审专家。",
+                max_tokens=1200
             )
             total_tokens += critique_response.get("output_tokens", 0)
             critique_text = critique_response["content"]
             
-            has_issues = len(critique_text) > 100 and "问题" in critique_text
-            
-            if has_issues and not critique_response.get("error"):
+            # Only revise if critique found real issues
+            if "无需修改" not in critique_text and len(critique_text) > 100:
                 revision_response = self.llm.call(
-                    prompt=CODE_REVISION_PROMPT.format(
-                        query=query, output=current_output, critique=critique_text
-                    ),
+                    prompt=REVISION_PROMPT.format(output=current_output, critique=critique_text),
                     system_prompt="你是一个专业的技术分析师。",
                     max_tokens=max_tokens
                 )
@@ -309,7 +312,7 @@ class HarnessV100:
         
         executor_latency = (time.time() - executor_start) * 1000
         
-        # Step 3: Evaluate
+        # Evaluate
         evaluator_start = time.time()
         evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
         evaluator_response = self.llm.call(
@@ -395,47 +398,20 @@ class HarnessV100:
              "query": "实现去中心化身份认证（DID）系统"}
         ]
         
-        checkpoint = self.load_checkpoint()
-        completed_ids = set(checkpoint["tasks_completed"])
-        
         results = []
-        for r in checkpoint.get("results", []):
-            results.append(TaskResult(**r))
-        
         start_time = time.time()
+        
+        print("=" * 60)
+        print("Harness v10.0 - Enhanced Type-Directed with Code Reflection")
+        print("=" * 60)
+        
         for task in tasks:
-            if task["id"] in completed_ids:
-                print(f"[{task['id']}] SKIP (checkpoint)")
-                continue
-            
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
             result = self.execute_task(task)
             results.append(result)
             print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
-            
-            checkpoint["tasks_completed"].append(task["id"])
-            checkpoint["results"].append({
-                "task_id": result.task_id,
-                "task_type": result.task_type,
-                "executor_output": result.executor_output,
-                "quality_score": result.quality_score,
-                "depth_score": result.depth_score,
-                "completeness_score": result.completeness_score,
-                "actionability_score": result.actionability_score,
-                "executor_tokens": result.executor_tokens,
-                "evaluator_tokens": result.evaluator_tokens,
-                "executor_latency_ms": result.executor_latency_ms,
-                "evaluator_latency_ms": result.evaluator_latency_ms,
-                "is_suspicious": result.is_suspicious,
-                "error": result.error,
-                "iterations": result.iterations
-            })
-            self.save_checkpoint(checkpoint)
         
         elapsed = time.time() - start_time
-        
-        if os.path.exists(CHECKPOINT_FILE):
-            os.remove(CHECKPOINT_FILE)
         
         total = len(results)
         core_scores = [r.quality_score for r in results[:10] if r.quality_score > 0]
@@ -452,7 +428,7 @@ class HarnessV100:
         
         return {
             "harness_version": "v10.0",
-            "paradigm": "v2 (Type-Directed + Code Self-Reflection)",
+            "paradigm": "Type-Directed + Code Reflection",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
