@@ -1692,3 +1692,31 @@ What if we REMOVE all structure and just ask questions directly?
 3. Code tasks still struggling (38-50 range)
 4. Self-reflection helps Gen but not Core
 
+---
+
+## v10.0 - Enhanced Type-Directed + Code Reflection (2026-04-05 20:52 UTC)
+
+**Strategy**: v9.0's CoT research + self-reflection for code
+**Status**: ❌ HANGED at core_002
+
+### Issue
+- v10.0 adds self-reflection to code tasks (like v2.0's successful approach)
+- But hangs after core_001 (52.0) when trying core_002 self-reflection
+- Likely timeout or API issue with code self-reflection loop
+
+### Partial Results
+| Task | Score | Notes |
+|------|-------|-------|
+| core_001 | 52.0 | research, iter=1 (CoT worked) |
+| core_002 | - | code, self-reflection hang |
+
+**Root Cause**: Code self-reflection adds 2 extra API calls:
+1. Initial code response (OK)
+2. Self-critique call (hangs?)
+3. Revision call (if critique finds issues)
+
+### Next Steps
+- Debug code self-reflection timeout issue
+- Try v9.0 again with different random seed
+- Or try selective self-reflection (only for gen code tasks)
+
