@@ -1574,3 +1574,32 @@ What if we REMOVE all structure and just ask questions directly?
 - Self-reflection not helping code tasks
 - v12.0 lineage seems stronger
 
+---
+
+## Paradigm v2 Convergence Analysis (2026-04-05)
+
+### Current Status
+| Version | Composite | Core | Gen | Status |
+|---------|-----------|------|-----|--------|
+| **v12.0** | **58.01** | 58.7 | 63.4 | ✅ Best v2 |
+| v23.0 | 58.30 | 54.4 | 68.2 | Champion v1 |
+
+**Conclusion**: v12.0 (v2 paradigm) essentially matches v23.0 (v1 paradigm) - within API variance.
+
+### Failed Attempts After v12.0
+- v13_0: Crashed at core_003
+- v14_0: Crashed at core_001
+- v15_0: Crashed at core_002
+- v6.0: Crashed at core_006
+- v17.0: 49.36 (regression)
+
+### Convergence判定
+- v12.0 (58.01) vs v23.0 (58.30): Δ = 0.29 (< 1%)
+- Both paradigms have converged at ~58 composite
+- API variance is ~8%, so scores within 58±5 are essentially equivalent
+
+### Next Steps
+1. v12.0 lineage appears strongest for v2 paradigm
+2. Focus on: improving Gen tasks (currently 63.4 vs 68.2 in v23)
+3. Alternative: Ensemble v12.0 Core + v23 Gen strategies
+
