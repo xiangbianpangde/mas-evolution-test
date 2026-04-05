@@ -50,6 +50,7 @@ class TaskResult:
     evaluator_latency_ms: float
     is_suspicious: bool = False
     error: str = ""
+    iterations: int = 1
 
 class RealLLMCaller:
     def __init__(self, api_key: str):
