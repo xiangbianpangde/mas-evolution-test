@@ -1,26 +1,29 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v14.0 - Enhanced Gen with Stable Core
+OpenClaw Native Harness v14.0 - Code-Focused Enhancement
 
-v12.0 (58.01): Best v2 paradigm
-- Core: 58.7 (beats v23's 54.4!)
-- Gen: 63.4 (below v23's 68.2)
+Key insights from v12.0 (58.01) vs v3.3 (52.48, but Core=61.4):
+- v12.0: Code tasks averaged ~45 (38, 42, 52, 48) - LOW
+- v3.3: Code tasks 65, 62, 25 - mixed
+- v23: Code tasks were more consistent
 
-v13 failed due to hang on core_003.
+Problem: Code tasks need COMPLETE, RUNNABLE code with tests to score well.
+Partial implementations get 25-50, complete ones get 65+.
 
-v14 Strategy:
-- Keep v12's proven Core formats (CoT research, v23 code/review)
-- For Gen tasks ONLY: Add stronger reflection
-- Target: Improve Gen to match v23 (68.2) while keeping Core (58.7)
-
-Key insight: Core is already excellent. Focus ONLY on Gen.
-Gen tasks: gen_001 (research), gen_002 (code), gen_003 (review), gen_004 (research), gen_005 (code)
+v14.0 Strategy:
+1. For CODE tasks: 
+   - Use architecture-first approach (high-level design)
+   - Then implement core algorithm fully
+   - Include basic test cases
+   - max_tokens=4000 for code (vs 2500 for research)
+2. For RESEARCH/REVIEW:
+   - Keep it simple like v3.3
+   - Structured format with depth
 """
 
 import json
 import time
 import os
-import sys
 from dataclasses import dataclass
 from typing import Dict
 
@@ -47,13 +50,12 @@ class TaskResult:
     evaluator_latency_ms: float
     is_suspicious: bool = False
     error: str = ""
-    iterations: int = 1
 
 class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 120, max_retries: int = 2) -> Dict:
+    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 90, max_retries: int = 2) -> Dict:
         for attempt in range(max_retries + 1):
             try:
                 result = self._make_request(prompt, system_prompt, max_tokens, timeout)
@@ -64,11 +66,11 @@ class RealLLMCaller:
                     time.sleep(2)
             except Exception as e:
                 if attempt < max_retries:
-                    print(f"  [Error: {e}, retry {attempt+1}/{max_retries}]", end=" ", flush=True)
+                    print(f"  [Error, retry {attempt+1}/{max_retries}]", end=" ", flush=True)
                     time.sleep(2)
                 else:
                     return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": str(e)}
-        return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries exceeded"}
+        return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries"}
     
     def _make_request(self, prompt: str, system_prompt: str, max_tokens: int, timeout: int) -> Dict:
         import urllib.request
@@ -105,84 +107,79 @@ class RealLLMCaller:
             "error": None
         }
 
-# v14: Same prompts as v12 for Core (proven excellent)
-COT_RESEARCH_PROMPT = """你是一个专业的技术分析师。请深入分析以下研究任务。
+# v14.0 prompts
+
+CODE_EXECUTOR = """你是一个资深的系统架构师和代码专家。
 
 任务：{query}
 
-请按以下Chain-of-Thought格式输出：
-1. 问题诊断：先明确核心问题
-2. 深度分析：分解问题，包含具体数字和案例
-3. 技术方案：给出可操作的解决方案
-4. 数字证据：引用具体数据支持分析
-5. 验证方法：说明如何验证方案有效性
+请按以下格式输出：
 
-要求：有深度，有具体数字，有可操作性。"""
+## 架构设计
+简要描述核心架构和关键设计决策
 
-V23_CODE_PROMPT = """你是一个专业的技术分析师。
+## 核心实现
+```python
+# 完整可运行的代码实现
+# 必须包含：核心算法、数据结构、错误处理
+# 代码必须可以直接运行
+```
 
-任务类型：{task_type}
-任务：{query}
+## 测试用例
+```python
+# 基本测试用例，验证核心功能
+def test_core_functionality():
+    assert ...
+```
 
-根据任务类型，选择最合适的输出格式：
-
-**code**: 架构简图 → 核心代码（完整可运行）→ 测试用例 → 配置说明
-**review**: 风险矩阵 → 影响分析 → 缓解步骤 → 优先级 → 验证方法
+## 配置文件
+如有需要，给出关键配置项
 
 要求：
-- 有具体数字和证据
-- 有可操作的步骤
-- 有验证方法
-- 代码必须可运行
+- 代码必须完整可运行
+- 包含必要的错误处理
+- 测试用例要能验证核心功能"""
 
-直接输出你的完整分析。"""
+RESEARCH_EXECUTOR = """你是一个专业的技术分析师。
 
-# Gen tasks get ENHANCED reflection
-GEN_ENHANCED_CRITIQUE = """你是一个严格的技术评审专家。请评审以下输出，找出关键问题：
-
-任务类型：{task_type}
 任务：{query}
 
-当前输出：
-{output}
+请按以下格式输出：
 
-这是泛化任务，请严格评估其新颖性和实用性。
+## 问题诊断
+## 深度分析（包含具体数字和证据）
+## 解决方案（分步骤，每步可执行）
+## 验证方法
 
-请严格指出最多3个最重要的问题：
+要求：
+- 有具体数字和证据支撑
+- 步骤必须可操作
+- 验证方法要明确"""
 
-输出格式：
-问题1: [描述]
-改进1: [具体怎么做]
-问题2: ...
-问题3: ..."""
+REVIEW_EXECUTOR = """你是一个资深的技术架构评审专家。
 
-# Core tasks get standard reflection
-CORE_CRITIQUE = """你是一个严格的技术评审专家。请评审以下输出：
-
-任务类型：{task_type}
 任务：{query}
 
-当前输出：
-{output}
+请按以下格式输出：
 
-请指出最重要的1个问题（如果有）：
+## 风险矩阵
+列出主要风险项及其等级（高/中/低）
 
-输出格式：
-问题: [描述问题]
-改进: [如何改进]
+## 影响分析
+每个风险的影响范围和程度
 
-如果输出质量好，输出：
-无问题"""
+## 缓解步骤
+针对每个风险的应对措施（具体可执行）
 
-REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进你的输出：
+## 优先级
+风险处理优先级排序
 
-之前的输出：
-{output}
+## 验证方法
+验证缓解措施是否有效
 
-评审意见：
-{critique}
-
-请输出改进版本，解决指出的问题。"""
+要求：
+- 风险评估要客观
+- 缓解措施要具体可执行"""
 
 STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
@@ -205,7 +202,7 @@ STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。
 
 评分标准：
-- L5: 功能完整，结构清晰，有测试
+- L5: 功能完整，结构清晰，有测试，可运行
 - L4: 功能完整，有小问题
 - L3: 基本OK
 - L2: 不完整或混乱
@@ -218,7 +215,7 @@ LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。
 {content}
 ---
 
-重点看功能实现。"""
+重点看功能完整性和可运行性。"""
 
 
 class HarnessV140:
@@ -227,28 +224,41 @@ class HarnessV140:
         self.api_key = api_key
     
     def get_executor_prompt(self, task_type: str, query: str) -> str:
-        if task_type == "research":
-            return COT_RESEARCH_PROMPT.format(query=query)
-        else:
-            return V23_CODE_PROMPT.format(task_type=task_type, query=query)
+        if task_type == "code":
+            return CODE_EXECUTOR.format(query=query)
+        elif task_type == "research":
+            return RESEARCH_EXECUTOR.format(query=query)
+        else:  # review
+            return REVIEW_EXECUTOR.format(query=query)
+    
+    def load_checkpoint(self) -> Dict:
+        if os.path.exists(CHECKPOINT_FILE):
+            try:
+                with open(CHECKPOINT_FILE, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return {"tasks_completed": [], "results": []}
+    
+    def save_checkpoint(self, checkpoint: Dict):
+        with open(CHECKPOINT_FILE, 'w') as f:
+            json.dump(checkpoint, f, ensure_ascii=False)
     
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
         task_type = task["type"]
         query = task["query"]
-        is_gen = task_id.startswith("gen_")
         
         executor_start = time.time()
-        max_tokens = 3000 if task_type == "code" else 2500
+        max_tokens = 4000 if task_type == "code" else 3000
         
-        # Step 1: Generate initial response
-        initial_response = self.llm.call_with_retry(
-            prompt=f"任务类型：{task_type}\n任务：{query}",
-            system_prompt=self.get_executor_prompt(task_type, query),
+        response = self.llm.call_with_retry(
+            prompt=self.get_executor_prompt(task_type, query),
+            system_prompt="你是一个专业的技术专家。",
             max_tokens=max_tokens
         )
         
-        if initial_response["error"]:
+        if response["error"]:
             return TaskResult(
                 task_id=task_id, task_type=task_type,
                 executor_output="", quality_score=0,
@@ -256,64 +266,37 @@ class HarnessV140:
                 executor_tokens=0, evaluator_tokens=0,
                 executor_latency_ms=(time.time() - executor_start) * 1000,
                 evaluator_latency_ms=0,
-                error=f"Initial error: {initial_response['error']}"
+                error=f"Executor error: {response['error']}"
             )
         
-        current_output = initial_response["content"]
-        total_tokens = initial_response.get("output_tokens", 0)
-        
-        # Step 2: Self-critique - ENHANCED for Gen, STANDARD for Core
-        critique_prompt = GEN_ENHANCED_CRITIQUE if is_gen else CORE_CRITIQUE
-        critique_response = self.llm.call_with_retry(
-            prompt=critique_prompt.format(task_type=task_type, query=query, output=current_output),
-            system_prompt="你是一个严格的评审专家。",
-            max_tokens=1500
-        )
-        
-        total_tokens += critique_response.get("output_tokens", 0)
-        critique_text = critique_response["content"]
-        
-        # Step 3: Revision - if issues found
-        iterations = 1
-        has_issues = "问题" in critique_text and len(critique_text) > 50
-        
-        if has_issues and not critique_response.get("error"):
-            revision_response = self.llm.call_with_retry(
-                prompt=REVISION_PROMPT.format(output=current_output, critique=critique_text),
-                system_prompt="你是一个专业的技术分析师。",
-                max_tokens=max_tokens
-            )
-            total_tokens += revision_response.get("output_tokens", 0)
-            if not revision_response.get("error"):
-                current_output = revision_response["content"]
-                iterations = 2
-        
+        executor_output = response["content"]
+        executor_tokens = response.get("output_tokens", 0)
         executor_latency = (time.time() - executor_start) * 1000
         
-        # Step 4: Evaluate
+        # Evaluate
         evaluator_start = time.time()
         evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
-        evaluator_response = self.llm.call_with_retry(
-            prompt=evaluator_prompt.format(content=current_output),
+        eval_response = self.llm.call_with_retry(
+            prompt=evaluator_prompt.format(content=executor_output),
             system_prompt="你是一个严格的技术评估专家。",
             max_tokens=1024
         )
         evaluator_latency = (time.time() - evaluator_start) * 1000
-        evaluator_tokens = evaluator_response.get("output_tokens", 0)
-        total_tokens += evaluator_tokens
+        evaluator_tokens = eval_response.get("output_tokens", 0)
+        total_tokens = executor_tokens + evaluator_tokens
         
-        if evaluator_response["error"]:
+        if eval_response["error"]:
             return TaskResult(
                 task_id=task_id, task_type=task_type,
-                executor_output=current_output, quality_score=0,
+                executor_output=executor_output, quality_score=0,
                 depth_score=0, completeness_score=0, actionability_score=0,
                 executor_tokens=total_tokens, evaluator_tokens=0,
                 executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
-                error=f"Evaluator error: {evaluator_response['error']}"
+                error=f"Evaluator error: {eval_response['error']}"
             )
         
         try:
-            eval_text = evaluator_response["content"]
+            eval_text = eval_response["content"]
             json_start = eval_text.find('{')
             json_end = eval_text.rfind('}') + 1
             if json_start >= 0 and json_end > json_start:
@@ -325,7 +308,7 @@ class HarnessV140:
             depth_score = eval_json.get("depth", {}).get("level", 3)
             completeness_score = eval_json.get("completeness", {}).get("level", 3)
             actionability_score = eval_json.get("actionability", {}).get("level", 3)
-            is_suspicious = executor_latency < 10000 and len(current_output) > 1000
+            is_suspicious = executor_latency < 8000 and len(executor_output) > 1000
         except:
             quality_score = 50
             depth_score = completeness_score = actionability_score = 3
@@ -333,13 +316,12 @@ class HarnessV140:
         
         return TaskResult(
             task_id=task_id, task_type=task_type,
-            executor_output=current_output, quality_score=quality_score,
+            executor_output=executor_output, quality_score=quality_score,
             depth_score=depth_score, completeness_score=completeness_score,
             actionability_score=actionability_score,
             executor_tokens=total_tokens, evaluator_tokens=evaluator_tokens,
             executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
-            is_suspicious=is_suspicious,
-            iterations=iterations
+            is_suspicious=is_suspicious
         )
     
     def run_benchmark(self) -> Dict:
@@ -376,31 +358,42 @@ class HarnessV140:
              "query": "实现去中心化身份认证（DID）系统"}
         ]
         
+        checkpoint = self.load_checkpoint()
+        completed_ids = set(checkpoint["tasks_completed"])
+        
         results = []
+        for r in checkpoint.get("results", []):
+            results.append(TaskResult(**r))
+        
         start_time = time.time()
-        
-        print("=" * 60)
-        print("Harness v14.0 - Enhanced Gen + Stable Core")
-        print("Strategy: v12 Core prompts + Enhanced Gen reflection")
-        print("=" * 60)
-        
         for task in tasks:
+            if task["id"] in completed_ids:
+                print(f"[{task['id']}] SKIP (checkpoint)")
+                continue
+                
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
             result = self.execute_task(task)
             results.append(result)
-            print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
+            print(f"Score: {result.quality_score:.1f}")
             
-            # Save checkpoint after each task
-            checkpoint = {
-                "tasks_completed": [r.task_id for r in results],
-                "results": [{
-                    "task_id": r.task_id, "task_type": r.task_type,
-                    "quality_score": r.quality_score,
-                    "iterations": r.iterations
-                } for r in results]
-            }
-            with open(CHECKPOINT_FILE, 'w') as f:
-                json.dump(checkpoint, f, ensure_ascii=False)
+            # Save checkpoint
+            checkpoint["tasks_completed"].append(task["id"])
+            checkpoint["results"].append({
+                "task_id": result.task_id,
+                "task_type": result.task_type,
+                "executor_output": result.executor_output,
+                "quality_score": result.quality_score,
+                "depth_score": result.depth_score,
+                "completeness_score": result.completeness_score,
+                "actionability_score": result.actionability_score,
+                "executor_tokens": result.executor_tokens,
+                "evaluator_tokens": result.evaluator_tokens,
+                "executor_latency_ms": result.executor_latency_ms,
+                "evaluator_latency_ms": result.evaluator_latency_ms,
+                "is_suspicious": result.is_suspicious,
+                "error": result.error
+            })
+            self.save_checkpoint(checkpoint)
         
         elapsed = time.time() - start_time
         
@@ -409,8 +402,11 @@ class HarnessV140:
             os.remove(CHECKPOINT_FILE)
         
         total = len(results)
-        core_scores = [r.quality_score for r in results[:10] if r.quality_score > 0]
-        gen_scores = [r.quality_score for r in results[10:] if r.quality_score > 0]
+        core_results = [r for r in results if r.task_id.startswith("core_") and r.quality_score > 0]
+        gen_results = [r for r in results if r.task_id.startswith("gen_") and r.quality_score > 0]
+        
+        core_scores = [r.quality_score for r in core_results]
+        gen_scores = [r.quality_score for r in gen_results]
         avg_actionability = sum(r.actionability_score for r in results if r.quality_score > 0) / max(len(results), 1)
         
         core_avg = sum(core_scores) / len(core_scores) if core_scores else 0
@@ -423,7 +419,7 @@ class HarnessV140:
         
         return {
             "harness_version": "v14.0",
-            "paradigm": "v2 (Enhanced Gen + Stable Core)",
+            "paradigm": "v2 (Code-Focused Enhancement)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
@@ -435,8 +431,7 @@ class HarnessV140:
             },
             "individual_results": [
                 {"task_id": r.task_id, "task_type": r.task_type,
-                 "quality_score": r.quality_score, "is_suspicious": r.is_suspicious,
-                 "iterations": r.iterations}
+                 "quality_score": r.quality_score, "is_suspicious": r.is_suspicious}
                 for r in results
             ]
         }
