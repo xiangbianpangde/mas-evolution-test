@@ -4,4 +4,14 @@ Strategy: v12 Core prompts + Enhanced Gen reflection
 ============================================================
 [core_001] Executor(research)... Score: 50.0 (iter=2)
 [core_002] Executor(code)... Score: 15.0 (iter=2)
-[core_003] Executor(research)... 
+[core_003] Executor(research)... Score: 68.0 (iter=2)
+[core_004] Executor(code)... Score: 50.0 (iter=2)
+[core_005] Executor(review)... Score: 58.0 (iter=2)
+[core_006] Executor(research)... Score: 78.0 (iter=2)
+[core_007] Executor(code)... Score: 50.0 (iter=2)
+[core_008] Executor(research)... Score: 58.0 (iter=2)
+[core_009] Executor(code)... Score: 42.0 (iter=2)
+[core_010] Executor(review)... Score: 65.0 (iter=1)
+[gen_001] Executor(research)... Score: 50.0 (iter=2)
+[gen_002] Executor(code)... Score: 45.0 (iter=2)
+[gen_003] Executor(review)... 
