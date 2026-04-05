@@ -1,2 +1,3 @@
 [core_001] Executor(research)...   [Agent1]   [Agent2]   [Agent3] Score: 50.0 (agents=3)
-[core_002] Executor(code)...   [Agent1] 
+[core_002] Executor(code)...   [Agent1]   [Agent2]   [Agent3] Score: 35.0 (agents=3)
+[core_003] Executor(research)...   [Agent1] 
