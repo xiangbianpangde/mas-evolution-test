@@ -984,16 +984,30 @@ The API is not suitable for testing at this time.
 | gen_003 | 70.0 | review - good |
 | core_002/004/009 | 38.0 | code - weak |
 
-## v8.0 - Chain-of-Thought Enhanced (RUNNING)
+## v8.0 - Chain-of-Thought Enhanced (COMPLETED)
 
 **Strategy**: Single-shot v23 format + CoT prompts (NO self-reflection)
-**Started**: 2026-04-05 09:50 UTC
+**Status**: ✅ Completed at 52.27 composite
 
-**Hypothesis**: v23's success came from adaptive format. Add CoT to strengthen initial analysis without iteration overhead.
+### Results
 
-**Early Result**:
-- core_001: **87.0** (excellent!)
+| Metric | v8.0 | v7.0 | v23 |
+|--------|------|------|-----|
+| **Composite** | **52.27** | 51.38 | 58.30 |
+| Core | **60.0** | 50.2 | 54.4 |
+| Gen | 49.2 | 57.6 | 68.2 |
 
-**If v8.0 > 58.30**: CoT is the key enhancement
-**If v8.0 ≈ 58.30**: v23 is near optimal
-**If v8.0 < 58.30**: API variance explains v23's score
+**Key Finding**: v8.0 achieved the HIGHEST Core score (60.0) but Gen dropped significantly (49.2).
+
+**Score Breakdown**:
+| Task | Score | Notes |
+|------|-------|-------|
+| core_001 | 87.0 | research - excellent |
+| core_003 | 87.0 | research - excellent |
+| core_005 | 82.0 | review - excellent |
+| core_009 | 28.0 | code - weak |
+| gen_003 | 58.0 | review - average |
+
+**Interpretation**: CoT format significantly improved research/review tasks but weakened code and generalization tasks. Trade-off between Core and Gen.
+
+**Next Question**: Can we combine v8.0's Core strength with v2.0's Gen strength?
