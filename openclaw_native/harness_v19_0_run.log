@@ -1,4 +1,5 @@
 [core_001] Executor(research)... Score: 55.0 (iter=2)
 [core_002] Executor(code)... Score: 55.0 (iter=2)
 [core_003] Executor(research)... Score: 42.0 (iter=2)
-[core_004] Executor(code)... 
+[core_004] Executor(code)... Score: 48.0 (iter=2)
+[core_005] Executor(review)... 
