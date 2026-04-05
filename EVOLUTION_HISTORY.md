@@ -1404,3 +1404,37 @@ Given v1 and v2 converged at ~58, need fundamentally different approach:
 - v3 Idea 2: Parallel Ensemble - run multiple simple agents, vote
 - v3 Idea 3: Tool-Augmented - give agents actual tools (calculator, search)
 
+---
+
+## v3 Paradigm - Ultra-Minimal Approach (2026-04-05)
+
+**Strategy**: LESS IS MORE - Remove all scaffolding
+
+### Hypothesis
+v1 and v2 both added structure (adaptive format, self-reflection). 
+What if we REMOVE all structure and just ask questions directly?
+
+### v3.1 Results (Partial - killed due to hang at core_004)
+
+| Task | Score | Notes |
+|------|-------|-------|
+| core_001 | 58.0 | research - solid |
+| core_002 | 47.0 | code - struggled |
+| core_003 | 52.0 | research - decent |
+| core_004 | HUNG | code - hung |
+
+**Conclusion**: Ultra-minimal doesn't solve code task timeout issue.
+
+### Key Observations Across All Paradigms
+1. Research tasks: Consistent 50-75 scores across ALL approaches
+2. Review tasks: Generally good (60-80 scores)
+3. Code tasks: ALWAYS hang or get low scores (30-50)
+
+**Root Cause**: Complex code tasks (core_002, core_004, core_009, gen_002, gen_005) consistently timeout or fail.
+
+### Next v3 Attempt
+**Idea**: Code Specialist with Planning-first approach
+- For code tasks: Ask for pseudocode/architecture FIRST
+- Then implement incrementally
+- Use checkpoints to survive timeouts
+
