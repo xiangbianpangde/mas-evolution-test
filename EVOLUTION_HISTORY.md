@@ -2103,3 +2103,37 @@ The improved code prompts worked but unbalanced the system:
 2. Keep the code improvements but restore research prompt strength
 3. Target: Beat v12.0's 58.01 composite
 
+
+---
+
+## v15.0 - Increased Code Output Length (2026-04-06 01:54 UTC)
+
+**Architecture**: v12.0 base with code max_tokens 2048→4000
+**Status**: 🚀 RUNNING
+
+### Hypothesis
+
+Complex code tasks (TB日志解析器, Raft算法) need more output space.
+Current v12.0 scores for code:
+- core_002 (日志解析): 38.0
+- core_004 (分布式限流): 42.0  
+- core_009 (Raft): 48.0
+
+Increasing max_tokens from 2048 to 4000 might allow:
+- More complete code implementations
+- Better structured output
+- More detailed comments and error handling
+
+### Changes from v12.0
+
+| Parameter | v12.0 | v15.0 |
+|-----------|-------|-------|
+| Code max_tokens | 2048 | 4000 |
+| Research max_tokens | 2500 | 2500 |
+| Review max_tokens | 2500 | 2500 |
+
+### Test Status
+
+- Started: 2026-04-06 01:54 UTC
+- Expected duration: ~60 minutes
+
