@@ -1807,3 +1807,70 @@ This caused v5.1 to appear "hung" when actually the API was just extremely slow.
 2. v5.1 has proper retry logic and should work when API is responsive
 3. Consider reducing benchmark to 5 tasks for faster iteration
 4. Key insight: Self-reflection helps research/review but hurts code tasks
+
+---
+
+## v12.0 - Champion (2026-04-05 11:17 UTC)
+
+**Architecture**: COT Research + V23 Code + Self-Critique
+**Status**: 🏆🏆🏆 CURRENT CHAMPION - 58.01 composite
+
+### Results
+
+| Metric | v12.0 | v23.0 | Δ |
+|--------|-------|-------|---|
+| **Composite** | **58.01** | 58.30 | -0.29 |
+| Core | 58.70 | 54.40 | **+4.30** |
+| Gen | 63.40 | 68.20 | -4.80 |
+
+### Individual Task Scores
+
+| Task | Score | Task | Score |
+|------|-------|------|-------|
+| core_001 research | 75.0 | gen_001 research | 55.0 |
+| core_002 code | 38.0 | gen_002 code | 58.0 |
+| core_003 research | 50.0 | gen_003 review | 68.0 |
+| core_004 code | 42.0 | gen_004 research | 68.0 |
+| core_005 review | 65.0 | gen_005 code | 68.0 |
+| core_006 research | 75.0 | | |
+| core_007 code | 52.0 | | |
+| core_008 research | 84.0 | | |
+| core_009 code | 48.0 | | |
+| core_010 review | 58.0 | | |
+
+### Key Insights
+
+1. **COT prompts work great for research**: core_001 (75), core_006 (75), core_008 (84)
+2. **Code tasks still struggling**: core_002 (38), core_004 (42), core_009 (48)
+3. **Gen tasks solid**: All 5 tasks 55-68 range
+
+### Strategy for Next Iteration
+
+Code tasks are the weakness. If we can improve code scores by 10-15 points each, we could beat v23.0.
+
+---
+
+## v13.0 - Improved Code Prompts (2026-04-06 00:43 UTC)
+
+**Strategy**: Based on v12.0 with better code-specific prompts
+
+### Changes from v12.0
+
+1. **Improved Code Prompt** - 5-section structure:
+   - Architecture design
+   - Core implementation (runnable)
+   - Test cases
+   - Configuration
+   - Complexity analysis
+
+2. **Improved Review Prompt** - Risk matrix format:
+   - Risk matrix
+   - Impact analysis
+   - Mitigation steps
+   - Priority ordering
+   - Verification methods
+
+3. **Same COT Research prompt** (proven to work)
+
+**Status**: 🚀 RUNNING
+
