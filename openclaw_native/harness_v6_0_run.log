@@ -1,3 +1,4 @@
-[core_001] Executor(research) (reflection)... Score: 68.0 [R]
-[core_002] Executor(code) (no reflection)... Score: 25.0 [-]
-[core_003] Executor(research) (reflection)... 
+[core_001] SKIP (checkpoint)
+[core_002] SKIP (checkpoint)
+[core_003] SKIP (checkpoint)
+[core_004] Executor(code) (no reflection)... 
