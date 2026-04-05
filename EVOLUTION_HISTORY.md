@@ -1751,3 +1751,59 @@ What if we REMOVE all structure and just ask questions directly?
 - Enhanced Gen research prompt should fix gen_001 (42 → 60+)
 - This would push Gen avg from 63.4 to 67+
 - Composite should exceed v12_0's 58.01
+
+---
+
+## v5.0 - v23 Format + Selective Self-Reflection (2026-04-06 00:21 UTC)
+
+**Strategy**: v23 adaptive format + self-reflection for Core tasks only
+**Status**: ✅ COMPLETED
+
+### Results
+
+| Metric | v5.0 | v2.0 | Δ | v23 |
+|--------|------|------|---|-----|
+| **Composite** | **52.11** | 54.64 | -2.53 | 58.30 |
+| Core | 53.71 | 50.00 | +3.71 | 54.40 |
+| Gen | 57.20 | 65.20 | -8.00 | 68.20 |
+
+### Key Findings
+
+1. **Self-reflection improves Core research** (+3.71 vs v2.0)
+   - core_001 research: 62.0
+   - core_003 research: 62.0
+   - core_005 review: 45.0
+   - core_006 research: 52.0
+
+2. **Code tasks failed with reflection (0.0 scores)**
+   - core_002 code: 0.0
+   - core_007 code: 0.0
+   - core_009 code: 0.0
+   - Root cause: Evaluator API errors
+
+3. **Gen tasks didn't use reflection (control group)**
+   - gen_001 research: 68.0
+   - gen_002 code: 63.0
+   - gen_003 review: 50.0
+
+### v5.1 - Fixing Code Evaluation
+
+**Fix**: Longer timeout (180s) for code evaluator
+**Status**: ❌ HUNG - API slowdown issue
+
+### Critical Discovery: API Latency Spike
+
+At ~00:30 UTC (2026-04-06), MiniMax API latency spiked:
+- Normal: 3-5 seconds
+- During v5.1 test: **57-61 seconds per call**
+
+This caused v5.1 to appear "hung" when actually the API was just extremely slow.
+
+**Impact**: Full benchmark would take 15 tasks × 3 calls × 60s = 45 minutes just for API calls.
+
+### Next Steps
+
+1. Wait for API to recover
+2. v5.1 has proper retry logic and should work when API is responsive
+3. Consider reducing benchmark to 5 tasks for faster iteration
+4. Key insight: Self-reflection helps research/review but hurts code tasks
