@@ -1,28 +1,23 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v15.0 - Novelty-Focused Gen + Stable Core
+OpenClaw Native Harness v15.0 - v12.0 Core Excellence + Gen Enhancement
 
-v12.0 (58.01): Best v2 paradigm
-- Core: 58.7 (beats v23's 54.4!)
-- Gen: 63.4 (below v23's 68.2)
+Key findings:
+- v12.0: Core=58.7, Gen=63.4, Composite=58.01 (Research tasks EXCELLENT)
+- v23:   Core=54.4, Gen=68.2, Composite=58.30 (Gen tasks better)
 
-v14 tried Gen reflection but hung at gen_003.
+Problem: v12.0's Gen tasks underperform vs v23 (63.4 vs 68.2)
+Solution: 
+1. Keep v12.0's self-reflection approach for ALL tasks
+2. ENHANCE Gen prompts to encourage more comprehensive output
+3. Use v23's adaptive format structure for consistency
 
-v15 Strategy: NO REFLECTION LOOPS - Instead use enhanced prompts
-- Keep v12's proven Core formats (CoT research, v23 code/review)
-- For Gen tasks: Use a single-shot enhanced prompt that explicitly requires:
-  * Novel/unseen aspects of the solution
-  * Practical applicability
-  * Specific implementation considerations
-- Target: Improve Gen to match v23 (68.2) while keeping Core (58.7)
-
-Key insight: Reflection loops cause hangs. Use better prompt engineering instead.
+v15.0 Hypothesis: Comprehensive Gen prompts + self-reflection should beat both.
 """
 
 import json
 import time
 import os
-import sys
 from dataclasses import dataclass
 from typing import Dict
 
@@ -107,150 +102,72 @@ class RealLLMCaller:
             "error": None
         }
 
-# v15: NO REFLECTION - Enhanced prompts for Gen tasks only
+# v15.0: Enhanced prompts for comprehensive Gen analysis
 
-# Core research - CoT (Chain of Thought) from v12
-CORE_RESEARCH_EXECUTOR = """你是一个专业的技术分析师。任务类型：research。
+ADAPTIVE_EXECUTOR = """你是一个专业的技术分析师。
 
+任务类型：{task_type}
 任务：{query}
 
-请按以下结构输出你的深度分析：
+根据任务类型，选择最合适的输出格式：
 
-## 1. 问题诊断
-明确核心问题是什么
+**research**: 
+## 问题诊断
+## 深度分析（包含具体数字、统计数据、研究结论）
+## 具体方案（分步骤，带优先级）
+## 数字证据（引用、指标、基准）
+## 验证方法（如何证明方案有效）
 
-## 2. 深度分析
-- 技术原理
-- 现有方案的优缺点
-- 具体数字和证据
-
-## 3. 解决方案
-分步骤的具体方案
-
-## 4. 验证方法
-如何验证方案的有效性
-
-要求：分析要有深度，方案要有可操作性。"""
-
-# Core code - v23 format
-CORE_CODE_EXECUTOR = """你是一个专业的技术分析师。任务类型：code。
-
-任务：{query}
-
-请按以下结构输出：
-
-## 架构简图
-简要描述系统架构
-
-## 核心代码
-完整可运行的代码实现
-
-## 测试用例
-验证功能的测试代码
-
-## 配置说明
-必要的配置说明
-
-要求：代码必须可运行。"""
-
-# Core review - v23 format
-CORE_REVIEW_EXECUTOR = """你是一个专业的技术分析师。任务类型：review。
-
-任务：{query}
-
-请按以下结构输出：
-
-## 风险矩阵
-列出主要风险及等级
-
-## 影响分析
-每个风险的影响
-
-## 缓解步骤
-具体的缓解措施
-
-## 优先级
-按优先级排序
-
-## 验证方法
-如何验证缓解效果
-
-要求：有具体数字和可操作步骤。"""
-
-# Gen research - Enhanced for novelty and practical applicability
-GEN_RESEARCH_EXECUTOR = """你是一个专业的技术分析师。任务类型：research（泛化任务）。
-
-任务：{query}
-
-这是跨领域泛化任务。请按以下结构输出你的分析，特别强调**新颖性**和**实用性**：
-
-## 1. 问题诊断
-核心问题是什么
-
-## 2. 跨领域迁移分析
-- 从已知领域到本领域的类比
-- 需要适配的关键点
-- **新颖点**：与标准方案的差异
-
-## 3. 具体方案
-分步骤的实现方案
-
-## 4. 实用性评估
-- 优点
-- 潜在风险
-- 实施注意事项
-
-## 5. 验证方法
-具体可操作的验证方案
-
-要求：重点展示如何将通用知识适配到本领域的创新点。"""
-
-# Gen code - Enhanced for novel implementation
-GEN_CODE_EXECUTOR = """你是一个专业的技术分析师。任务类型：code（泛化任务）。
-
-任务：{query}
-
-这是跨领域泛化任务。请按以下结构输出，特别强调**实现创新点**：
-
+**code**: 
 ## 架构设计
-系统架构及创新点
+## 核心代码（完整可运行，带注释）
+## 测试用例（至少3个，覆盖边界）
+## 配置说明
 
-## 核心代码
-完整可运行的代码（标注创新部分）
+**review**: 
+## 风险矩阵（影响×概率）
+## 影响分析（分维度）
+## 缓解步骤（分优先级）
+## 数字证据
+## 验证方法
 
-## 测试用例
-验证功能的测试代码
+要求：
+- 有具体数字和证据支撑
+- 有可操作的步骤
+- 有验证方法
+- 代码必须完整可运行"""
 
-## 实用性分析
-- 优点
-- 潜在风险
-- 优化方向
+SELF_CRITIQUE_PROMPT = """你是一个严格的技术评审专家。请评审以下输出，找出最多3个关键问题：
 
-要求：代码必须可运行，清晰标注与标准实现的差异。"""
-
-# Gen review - Enhanced for cross-domain assessment
-GEN_REVIEW_EXECUTOR = """你是一个专业的技术分析师。任务类型：review（泛化任务）。
-
+任务类型：{task_type}
 任务：{query}
 
-这是跨领域泛化任务。请按以下结构输出，特别强调**跨领域适用性**：
+当前输出：
+{output}
 
-## 风险矩阵
-主要风险及等级
+评审重点：
+1. 是否缺乏具体数字或证据？
+2. 方案是否太抽象不可操作？
+3. 验证方法是否缺失或不充分？
 
-## 跨领域影响分析
-从其他领域视角看此设计的合理性
+输出格式：
+问题1: [描述问题]
+改进1: [具体怎么做]
+问题2: ...
+问题3: ..."""
 
-## 创新点评估
-与标准架构相比的创新之处
+REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进输出：
 
-## 实用性建议
-如何提高跨领域适用性
+任务类型：{task_type}
+任务：{query}
 
-## 验证方法
-具体可操作的验证方案
+之前的输出：
+{output}
 
-要求：展示跨领域的泛化能力。"""
+评审意见：
+{critique}
+
+请输出改进后的完整版本，解决所有指出的问题。"""
 
 STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
@@ -294,24 +211,18 @@ class HarnessV150:
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
     
-    def get_executor_prompt(self, task_id: str, task_type: str) -> str:
-        """Get the appropriate executor prompt based on task ID and type"""
-        # Gen tasks (gen_*) use enhanced prompts for novelty/practicality
-        if task_id.startswith("gen_"):
-            if task_type == "research":
-                return GEN_RESEARCH_EXECUTOR
-            elif task_type == "code":
-                return GEN_CODE_EXECUTOR
-            else:  # review
-                return GEN_REVIEW_EXECUTOR
-        else:
-            # Core tasks use proven v12 prompts
-            if task_type == "research":
-                return CORE_RESEARCH_EXECUTOR
-            elif task_type == "code":
-                return CORE_CODE_EXECUTOR
-            else:  # review
-                return CORE_REVIEW_EXECUTOR
+    def load_checkpoint(self) -> Dict:
+        if os.path.exists(CHECKPOINT_FILE):
+            try:
+                with open(CHECKPOINT_FILE, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return {"tasks_completed": [], "results": []}
+    
+    def save_checkpoint(self, checkpoint: Dict):
+        with open(CHECKPOINT_FILE, 'w') as f:
+            json.dump(checkpoint, f, ensure_ascii=False)
     
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
@@ -319,19 +230,16 @@ class HarnessV150:
         query = task["query"]
         
         executor_start = time.time()
-        max_tokens = 3000 if task_type == "code" else 2500
+        max_tokens = 3500 if task_type == "code" else 2800
         
-        # Get appropriate executor prompt
-        executor_prompt = self.get_executor_prompt(task_id, task_type)
-        
-        # Single-shot execution (NO reflection loop!)
-        response = self.llm.call_with_retry(
-            prompt=f"任务：{query}",
-            system_prompt=executor_prompt.format(query=query),
+        # Step 1: Generate initial response
+        initial_response = self.llm.call_with_retry(
+            prompt=f"任务类型：{task_type}\n任务：{query}",
+            system_prompt=ADAPTIVE_EXECUTOR.format(task_type=task_type, query=query),
             max_tokens=max_tokens
         )
         
-        if response["error"]:
+        if initial_response["error"]:
             return TaskResult(
                 task_id=task_id, task_type=task_type,
                 executor_output="", quality_score=0,
@@ -339,14 +247,45 @@ class HarnessV150:
                 executor_tokens=0, evaluator_tokens=0,
                 executor_latency_ms=(time.time() - executor_start) * 1000,
                 evaluator_latency_ms=0,
-                error=f"Executor error: {response['error']}"
+                error=f"Initial error: {initial_response['error']}"
             )
         
-        current_output = response["content"]
-        total_tokens = response.get("output_tokens", 0)
+        current_output = initial_response["content"]
+        total_tokens = initial_response.get("output_tokens", 0)
+        
+        # Step 2: Self-critique
+        critique_response = self.llm.call_with_retry(
+            prompt=SELF_CRITIQUE_PROMPT.format(
+                task_type=task_type, query=query, output=current_output
+            ),
+            system_prompt="你是一个严格的评审专家。",
+            max_tokens=1500
+        )
+        
+        total_tokens += critique_response.get("output_tokens", 0)
+        critique_text = critique_response["content"]
+        
+        # Step 3: Revision if critique found issues
+        iterations = 1
+        has_issues = len(critique_text) > 100 and "问题" in critique_text
+        
+        if has_issues and not critique_response.get("error"):
+            revision_response = self.llm.call_with_retry(
+                prompt=REVISION_PROMPT.format(
+                    task_type=task_type, query=query,
+                    output=current_output, critique=critique_text
+                ),
+                system_prompt="你是一个专业的技术分析师。",
+                max_tokens=max_tokens
+            )
+            total_tokens += revision_response.get("output_tokens", 0)
+            if not revision_response.get("error"):
+                current_output = revision_response["content"]
+                iterations = 2
+        
         executor_latency = (time.time() - executor_start) * 1000
         
-        # Evaluate
+        # Step 4: Evaluate
         evaluator_start = time.time()
         evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
         evaluator_response = self.llm.call_with_retry(
@@ -395,7 +334,7 @@ class HarnessV150:
             executor_tokens=total_tokens, evaluator_tokens=evaluator_tokens,
             executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
             is_suspicious=is_suspicious,
-            iterations=1  # NO REFLECTION LOOP
+            iterations=iterations
         )
     
     def run_benchmark(self) -> Dict:
@@ -432,30 +371,45 @@ class HarnessV150:
              "query": "实现去中心化身份认证（DID）系统"}
         ]
         
+        checkpoint = self.load_checkpoint()
+        completed_ids = set(checkpoint["tasks_completed"])
+        
         results = []
+        for r in checkpoint.get("results", []):
+            results.append(TaskResult(**r))
+        
         start_time = time.time()
-        
-        print("=" * 60)
-        print("Harness v15.0 - Novelty-Focused Gen + Stable Core (NO REFLECTION)")
-        print("=" * 60)
-        
         for task in tasks:
+            if task["id"] in completed_ids:
+                print(f"[{task['id']}] SKIP (checkpoint)")
+                continue
+                
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
             result = self.execute_task(task)
             results.append(result)
-            print(f"Score: {result.quality_score:.1f}")
+            print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
             
-            # Save checkpoint after each task
-            checkpoint = {
-                "tasks_completed": [t["id"] for t in tasks[:len(results)]],
-                "last_task": task["id"]
-            }
-            with open(CHECKPOINT_FILE, 'w') as f:
-                json.dump(checkpoint, f)
+            checkpoint["tasks_completed"].append(task["id"])
+            checkpoint["results"].append({
+                "task_id": result.task_id,
+                "task_type": result.task_type,
+                "executor_output": result.executor_output,
+                "quality_score": result.quality_score,
+                "depth_score": result.depth_score,
+                "completeness_score": result.completeness_score,
+                "actionability_score": result.actionability_score,
+                "executor_tokens": result.executor_tokens,
+                "evaluator_tokens": result.evaluator_tokens,
+                "executor_latency_ms": result.executor_latency_ms,
+                "evaluator_latency_ms": result.evaluator_latency_ms,
+                "is_suspicious": result.is_suspicious,
+                "error": result.error,
+                "iterations": result.iterations
+            })
+            self.save_checkpoint(checkpoint)
         
         elapsed = time.time() - start_time
         
-        # Clean up checkpoint on success
         if os.path.exists(CHECKPOINT_FILE):
             os.remove(CHECKPOINT_FILE)
         
@@ -474,7 +428,7 @@ class HarnessV150:
         
         return {
             "harness_version": "v15.0",
-            "paradigm": "v2 (Novelty-Focused Gen + Stable Core)",
+            "paradigm": "v2 (Enhanced prompts + Comprehensive Gen)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
@@ -486,14 +440,14 @@ class HarnessV150:
             },
             "individual_results": [
                 {"task_id": r.task_id, "task_type": r.task_type,
-                 "quality_score": r.quality_score, "is_suspicious": r.is_suspicious}
+                 "quality_score": r.quality_score, "is_suspicious": r.is_suspicious,
+                 "iterations": r.iterations}
                 for r in results
             ]
         }
 
 
 if __name__ == "__main__":
-    # Use test key (same as other versions)
     api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
     
     harness = HarnessV150(api_key)
