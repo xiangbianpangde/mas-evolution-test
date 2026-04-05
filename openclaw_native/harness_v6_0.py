@@ -1,28 +1,35 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v6.0 - v23 Format Only (No Self-Reflection)
+OpenClaw Native Harness v6.0 - Selective Reflection (Research/Review Only)
 
-Previous versions showed:
-- v2.0 (54.64): Self-reflection with generic prompts worked well
-- v5.1: Self-reflection with v23 format produced garbage (revision gave 60 chars)
+Learning from experiments:
+- v12.0 (58.01): Self-reflection works for ALL tasks
+- v3_simple (partial): NO-reflection works for research (core_003=82!) but not code (38,28)
 
-Hypothesis: The self-critique + revision with long context isn't working.
-v6.0 Strategy: Use v23's proven adaptive format WITHOUT self-reflection.
-If v6.0 scores ~58+ (like v23), then self-reflection is the problem.
-If v6.0 scores lower, v23 was just lucky.
+v6.0 Strategy:
+1. Research & Review tasks: Use self-reflection (proven effective)
+2. Code tasks: Use NO-reflection (v3_simple showed code hangs with reflection)
+3. 60s timeout per call (faster failure detection)
+4. Checkpoint after each task
+
+Key insight: Code tasks seem to cause hangs/infinite loops when reflection is used.
+By removing reflection from code ONLY, we get stability + quality.
 """
 
 import json
 import time
 import os
-import urllib.request
+import sys
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Optional
 
 API_CONFIG = {
     "base_url": "https://api.minimaxi.com/anthropic",
     "model": "MiniMax-M2.7"
 }
+
+CHECKPOINT_FILE = "v6_0_checkpoint.json"
+RESULTS_PREFIX = "benchmark_results_v6_0"
 
 @dataclass
 class TaskResult:
@@ -39,28 +46,34 @@ class TaskResult:
     evaluator_latency_ms: float
     is_suspicious: bool = False
     error: str = ""
+    iterations: int = 1
 
 class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 120, max_retries: int = 2) -> Dict:
+    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 60, max_retries: int = 2) -> Dict:
         for attempt in range(max_retries + 1):
             try:
                 result = self._make_request(prompt, system_prompt, max_tokens, timeout)
                 if result.get("error") is None:
                     return result
-                print(f"  [Retry {attempt+1}]", end=" ", flush=True)
-                time.sleep(2)
-            except Exception as e:
-                print(f"  [Error: {e}]", end=" ", flush=True)
                 if attempt < max_retries:
+                    print(f"  [Retry {attempt+1}/{max_retries}]", end=" ", flush=True)
+                    time.sleep(2)
+            except Exception as e:
+                if attempt < max_retries:
+                    print(f"  [Error: {e}, retry {attempt+1}/{max_retries}]", end=" ", flush=True)
                     time.sleep(2)
                 else:
-                    return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": str(e)}
-        return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries"}
+                    return {
+                        "content": "", "latency_ms": 0,
+                        "input_tokens": 0, "output_tokens": 0, "error": str(e)
+                    }
+        return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries exceeded"}
     
     def _make_request(self, prompt: str, system_prompt: str, max_tokens: int, timeout: int) -> Dict:
+        import urllib.request
         start = time.time()
         headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -94,26 +107,74 @@ class RealLLMCaller:
             "error": None
         }
 
-# v6.0: v23 adaptive format - no self-reflection
+# Prompts for different task types
 
-ADAPTIVE_EXECUTOR = """你是一个专业的技术分析师。
+CODE_EXECUTOR = """你是一个专业的技术架构师。
 
-任务类型：{task_type}
 任务：{query}
 
-根据任务类型，选择最合适的输出格式：
+请输出：
 
-**research**: 问题诊断 → 深度分析 → 具体方案 → 数字证据 → 验证方法
-**code**: 架构简图 → 核心代码（完整可运行）→ 测试用例 → 配置说明
-**review**: 风险矩阵 → 影响分析 → 缓解步骤 → 优先级 → 验证方法
+## 架构简图
+[用文字描述架构]
 
-无论哪种类型，都要做到：
-- 有具体数字和证据
-- 有可操作的步骤
-- 有验证方法
-- 代码必须可运行
+## 核心代码
+[完整可运行的代码]
 
-直接输出你的分析。"""
+## 测试用例
+[基本的测试用例]
+
+要求：代码必须可运行。"""
+
+RESEARCH_EXECUTOR = """你是一个专业的技术分析师。
+
+任务：{query}
+
+请按照以下格式输出：
+
+## 问题诊断
+## 深度分析（包含具体数字）
+## 解决方案（分步骤）
+## 验证方法
+
+要求：有具体数字和证据，有可操作的步骤。"""
+
+REVIEW_EXECUTOR = """你是一个专业的技术评审专家。
+
+任务：{query}
+
+请按照以下格式输出：
+
+## 风险矩阵
+## 影响分析
+## 缓解步骤
+## 优先级
+## 验证方法
+
+要求：有具体数字，有可操作的步骤。"""
+
+SELF_CRITIQUE_PROMPT = """你是一个严格的技术评审专家。请评审以下输出，找出关键问题：
+
+当前输出：
+{output}
+
+请严格指出最多3个最重要的问题：
+
+输出格式：
+问题1: [描述]
+改进1: [具体怎么做]
+问题2: ...
+问题3: ..."""
+
+REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进你的输出：
+
+之前的输出：
+{output}
+
+评审意见：
+{critique}
+
+请输出改进后的完整版本。保持原有优点，解决评审指出的问题。"""
 
 STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
@@ -157,6 +218,31 @@ class HarnessV60:
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
     
+    def load_checkpoint(self) -> Dict:
+        if os.path.exists(CHECKPOINT_FILE):
+            try:
+                with open(CHECKPOINT_FILE, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return {"tasks_completed": [], "results": []}
+    
+    def save_checkpoint(self, checkpoint: Dict):
+        with open(CHECKPOINT_FILE, 'w') as f:
+            json.dump(checkpoint, f, ensure_ascii=False)
+    
+    def get_executor_prompt(self, task_type: str, query: str) -> str:
+        if task_type == "code":
+            return CODE_EXECUTOR.format(query=query)
+        elif task_type == "research":
+            return RESEARCH_EXECUTOR.format(query=query)
+        else:  # review
+            return REVIEW_EXECUTOR.format(query=query)
+    
+    def should_reflect(self, task_type: str) -> bool:
+        """Self-reflection only for research and review, NOT for code"""
+        return task_type != "code"
+    
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
         task_type = task["type"]
@@ -165,14 +251,14 @@ class HarnessV60:
         executor_start = time.time()
         max_tokens = 3000 if task_type == "code" else 2500
         
-        # Single response with v23 adaptive format
-        executor_response = self.llm.call_with_retry(
-            prompt=f"任务类型：{task_type}\n任务：{query}",
-            system_prompt=ADAPTIVE_EXECUTOR.format(task_type=task_type, query=query),
+        # Step 1: Generate initial response
+        initial_response = self.llm.call_with_retry(
+            prompt=self.get_executor_prompt(task_type, query),
+            system_prompt="你是一个专业的技术分析师。",
             max_tokens=max_tokens
         )
         
-        if executor_response["error"]:
+        if initial_response["error"]:
             return TaskResult(
                 task_id=task_id, task_type=task_type,
                 executor_output="", quality_score=0,
@@ -180,32 +266,61 @@ class HarnessV60:
                 executor_tokens=0, evaluator_tokens=0,
                 executor_latency_ms=(time.time() - executor_start) * 1000,
                 evaluator_latency_ms=0,
-                error=f"Executor: {executor_response['error']}"
+                error=f"Initial error: {initial_response['error']}"
             )
         
-        executor_output = executor_response["content"]
-        executor_tokens = executor_response.get("output_tokens", 0)
+        current_output = initial_response["content"]
+        total_tokens = initial_response.get("output_tokens", 0)
+        
+        # Step 2: Self-critique (only for research/review, NOT code)
+        iterations = 1
+        if self.should_reflect(task_type):
+            critique_response = self.llm.call_with_retry(
+                prompt=SELF_CRITIQUE_PROMPT.format(output=current_output),
+                system_prompt="你是一个严格的评审专家。",
+                max_tokens=1500
+            )
+            
+            total_tokens += critique_response.get("output_tokens", 0)
+            critique_text = critique_response["content"]
+            
+            has_issues = len(critique_text) > 100 and "问题" in critique_text
+            
+            if has_issues and not critique_response.get("error"):
+                revision_response = self.llm.call_with_retry(
+                    prompt=REVISION_PROMPT.format(
+                        output=current_output, critique=critique_text
+                    ),
+                    system_prompt="你是一个专业的技术分析师。",
+                    max_tokens=max_tokens
+                )
+                total_tokens += revision_response.get("output_tokens", 0)
+                if not revision_response.get("error"):
+                    current_output = revision_response["content"]
+                    iterations = 2
+        
         executor_latency = (time.time() - executor_start) * 1000
         
-        # Evaluate
+        # Step 3: Evaluate
         evaluator_start = time.time()
         evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
         evaluator_response = self.llm.call_with_retry(
-            prompt=evaluator_prompt.format(content=executor_output),
+            prompt=evaluator_prompt.format(content=current_output),
             system_prompt="你是一个严格的技术评估专家。",
             max_tokens=1024
         )
         evaluator_latency = (time.time() - evaluator_start) * 1000
         evaluator_tokens = evaluator_response.get("output_tokens", 0)
+        total_tokens += evaluator_tokens
         
         if evaluator_response["error"]:
             return TaskResult(
                 task_id=task_id, task_type=task_type,
-                executor_output=executor_output, quality_score=0,
+                executor_output=current_output, quality_score=0,
                 depth_score=0, completeness_score=0, actionability_score=0,
-                executor_tokens=executor_tokens, evaluator_tokens=0,
+                executor_tokens=total_tokens, evaluator_tokens=0,
                 executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
-                error=f"Evaluator: {evaluator_response['error']}"
+                error=f"Evaluator error: {evaluator_response['error']}"
             )
         
         try:
@@ -221,7 +336,7 @@ class HarnessV60:
             depth_score = eval_json.get("depth", {}).get("level", 3)
             completeness_score = eval_json.get("completeness", {}).get("level", 3)
             actionability_score = eval_json.get("actionability", {}).get("level", 3)
-            is_suspicious = executor_latency < 10000 and len(executor_output) > 1000
+            is_suspicious = executor_latency < 10000 and len(current_output) > 1000
         except:
             quality_score = 50
             depth_score = completeness_score = actionability_score = 3
@@ -229,12 +344,13 @@ class HarnessV60:
         
         return TaskResult(
             task_id=task_id, task_type=task_type,
-            executor_output=executor_output, quality_score=quality_score,
+            executor_output=current_output, quality_score=quality_score,
             depth_score=depth_score, completeness_score=completeness_score,
             actionability_score=actionability_score,
-            executor_tokens=executor_tokens, evaluator_tokens=evaluator_tokens,
+            executor_tokens=total_tokens, evaluator_tokens=evaluator_tokens,
             executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
-            is_suspicious=is_suspicious
+            is_suspicious=is_suspicious,
+            iterations=iterations
         )
     
     def run_benchmark(self) -> Dict:
@@ -271,20 +387,49 @@ class HarnessV60:
              "query": "实现去中心化身份认证（DID）系统"}
         ]
         
+        checkpoint = self.load_checkpoint()
+        completed_ids = set(checkpoint["tasks_completed"])
+        
         results = []
+        for r in checkpoint.get("results", []):
+            results.append(TaskResult(**r))
+        
         start_time = time.time()
-        
-        print("=" * 60)
-        print("Harness v6.0 - v23 Format Only (Control Test)")
-        print("=" * 60)
-        
         for task in tasks:
+            if task["id"] in completed_ids:
+                print(f"[{task['id']}] SKIP (checkpoint)")
+                continue
+                
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
             result = self.execute_task(task)
             results.append(result)
-            print(f"Score: {result.quality_score:.1f}")
+            print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
+            
+            # Save checkpoint after each task
+            checkpoint["tasks_completed"].append(task["id"])
+            checkpoint["results"].append({
+                "task_id": result.task_id,
+                "task_type": result.task_type,
+                "executor_output": result.executor_output,
+                "quality_score": result.quality_score,
+                "depth_score": result.depth_score,
+                "completeness_score": result.completeness_score,
+                "actionability_score": result.actionability_score,
+                "executor_tokens": result.executor_tokens,
+                "evaluator_tokens": result.evaluator_tokens,
+                "executor_latency_ms": result.executor_latency_ms,
+                "evaluator_latency_ms": result.evaluator_latency_ms,
+                "is_suspicious": result.is_suspicious,
+                "error": result.error,
+                "iterations": result.iterations
+            })
+            self.save_checkpoint(checkpoint)
         
         elapsed = time.time() - start_time
+        
+        # Clean up checkpoint on success
+        if os.path.exists(CHECKPOINT_FILE):
+            os.remove(CHECKPOINT_FILE)
         
         total = len(results)
         core_scores = [r.quality_score for r in results[:10] if r.quality_score > 0]
@@ -301,7 +446,7 @@ class HarnessV60:
         
         return {
             "harness_version": "v6.0",
-            "paradigm": "v1 (v23 format, no self-reflection)",
+            "paradigm": "Selective Reflection (code=no reflection, research/review=reflection)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
@@ -313,7 +458,8 @@ class HarnessV60:
             },
             "individual_results": [
                 {"task_id": r.task_id, "task_type": r.task_type,
-                 "quality_score": r.quality_score, "is_suspicious": r.is_suspicious}
+                 "quality_score": r.quality_score, "is_suspicious": r.is_suspicious,
+                 "iterations": r.iterations}
                 for r in results
             ]
         }
@@ -325,7 +471,7 @@ if __name__ == "__main__":
     harness = HarnessV60(api_key)
     results = harness.run_benchmark()
     
-    output_file = f"benchmark_results_v6_0_{time.strftime('%Y%m%d_%H%M%S')}.json"
+    output_file = f"{RESULTS_PREFIX}_{time.strftime('%Y%m%d_%H%M%S')}.json"
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"\nResults saved to: {output_file}")
