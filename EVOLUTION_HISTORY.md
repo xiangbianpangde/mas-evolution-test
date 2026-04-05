@@ -2296,3 +2296,67 @@ MiniMax API became extremely slow after ~02:00 UTC. Multiple harness versions (v
 2. **Code/Review Trade-off**: Find evaluator that works for both
 3. **Consistency**: v14 had huge variance (core_008 dropped 34 points)
 
+
+---
+
+## v14.0 - Lenient Code Evaluator - COMPLETED (2026-04-06 01:50 UTC)
+
+**Strategy**: v12.0 base + truly lenient code evaluator (gives partial credit)
+
+### Results
+
+| Metric | v14.0 | v12.0 | Δ |
+|--------|-------|-------|---|
+| **Composite** | **56.91** | 58.01 | -1.10 |
+| Core | **66.00** | 58.70 | **+7.30** |
+| Gen | 53.20 | 63.40 | -10.20 |
+
+### Individual Scores
+
+| Task | Type | v14.0 | v12.0 | Δ |
+|------|------|-------|-------|---|
+| core_001 | research | 82.0 | 75.0 | +7.0 |
+| core_002 | code | **65.0** | 38.0 | **+27.0** |
+| core_003 | research | **78.0** | 50.0 | **+28.0** |
+| core_004 | code | **87.0** | 42.0 | **+45.0** |
+| core_005 | review | 48.0 | 65.0 | -17.0 |
+| core_006 | research | 52.0 | 75.0 | -23.0 |
+| core_007 | code | **68.0** | 52.0 | +16.0 |
+| core_008 | research | 50.0 | **84.0** | -34.0 |
+| core_009 | code | **68.0** | 48.0 | +20.0 |
+| core_010 | review | 62.0 | 58.0 | +4.0 |
+| gen_001 | research | 58.0 | 55.0 | +3.0 |
+| gen_002 | code | **72.0** | 58.0 | **+14.0** |
+| gen_003 | review | **38.0** | 68.0 | **-30.0** |
+| gen_004 | research | 50.0 | 68.0 | -18.0 |
+| gen_005 | code | 48.0 | 68.0 | -20.0 |
+
+### Key Findings
+
+1. **Code tasks dramatically improved**: +16-45 points
+   - core_002: 38→65 (+27)
+   - core_004: 42→87 (+45)
+   - core_007: 52→68 (+16)
+   - core_009: 48→68 (+20)
+
+2. **But Gen tasks dropped significantly**: -10-30 points
+   - gen_003 review: 68→38 (-30)
+   - gen_004 research: 68→50 (-18)
+   - gen_005 code: 68→48 (-20)
+
+3. **Huge variance**: Same task type (research) varied 28 points (core_001 82 vs core_008 50)
+
+### Root Cause Analysis
+
+The lenient code evaluator works great for CODE but HURTS review/research because:
+- Review tasks got punished when they didn't produce "runnable code"
+- Research tasks evaluated on wrong criteria
+- API variance accounts for some (8% expected) but not all
+
+### Lesson Learned
+
+Task-type-specific evaluators need careful design:
+- Code evaluator: Lenient makes sense (partial credit for partial implementation)
+- Research evaluator: Needs strict criteria (depth, evidence, verification)
+- Review evaluator: Needs balance (risk assessment, not code)
+
