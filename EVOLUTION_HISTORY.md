@@ -1720,3 +1720,34 @@ What if we REMOVE all structure and just ask questions directly?
 - Try v9.0 again with different random seed
 - Or try selective self-reflection (only for gen code tasks)
 
+
+---
+
+## v20.0 - Enhanced Gen Research Focus (2026-04-05 23:22 UTC)
+
+**Strategy**: v12_0 base + enhanced Gen research prompt
+**Status**: 🚀 RUNNING
+
+### Key Insight
+- v12_0 (58.01): Best v2 paradigm, but Gen research weak (gen_001 = 42)
+- gen_003 (review): 88 - excellent
+- gen_005 (code): 82 - excellent
+- gen_001 and gen_004 (research) need better frontier-tech analysis
+
+### v20.0 Changes
+1. Gen research gets enhanced "frontier tech" prompt with:
+   - TRL (Technology Readiness Level) analysis
+   - Commercialization challenges
+   - Timeline predictions
+2. Core research keeps CoT (proven to work)
+3. Code/review keep v23 format
+
+### Test Status
+- Started: 2026-04-05 23:22 UTC
+- Expected: ~40 minutes for 15 tasks
+- v12_0 checkpoint shows best path is selective reflection
+
+### Hypothesis
+- Enhanced Gen research prompt should fix gen_001 (42 → 60+)
+- This would push Gen avg from 63.4 to 67+
+- Composite should exceed v12_0's 58.01
