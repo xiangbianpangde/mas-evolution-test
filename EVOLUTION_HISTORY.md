@@ -1200,3 +1200,27 @@ v12.0 remains the BEST v2 paradigm result. Multiple attempts (v13, v14, v15) to 
 v2.1 tag created to mark v2 paradigm convergence at v12.0 (58.01).
 
 **Conclusion**: API seems unstable. Multiple harness versions hanging. v12.0 = 58.01 remains the reference point.
+
+## v3_simple - Ultra-Minimal Stability (RUNNING)
+
+**Date**: 2026-04-05 13:58 UTC
+**Status**: 🚀 RUNNING
+
+### Strategy
+- NO self-reflection (single pass only)
+- Minimal prompts
+- 60s timeout per call (faster failure)
+- Checkpoint after each task
+
+### Hypothesis
+Previous v3 attempts hung because:
+- v3.0: API responded but harness stalled
+- v3.1: Parallel ensemble complexity
+
+v3_simple removes ALL complexity to maximize stability.
+
+### Expected Outcome
+- Lower quality than v12.0 (58.01) due to no reflection
+- But should COMPLETE without hanging
+- Target: 45-55 composite (stable baseline)
+
