@@ -1874,3 +1874,34 @@ Code tasks are the weakness. If we can improve code scores by 10-15 points each,
 
 **Status**: 🚀 RUNNING
 
+
+### ❌ v13.0 FAILED - REGRESSION
+
+**Result**: Scores dropped across the board
+
+| Task | v13.0 | v12.0 | Change |
+|------|-------|-------|--------|
+| core_001 research | 65.0 | 75.0 | -10.0 |
+| core_002 code | 50.0 | 38.0 | +12.0 |
+| core_003 research | 58.0 | 50.0 | +8.0 |
+| core_004 code | 25.0 | 42.0 | -17.0 |
+| core_005 review | 48.0 | 65.0 | -17.0 |
+| core_006 research | 35.0 | 75.0 | -40.0 |
+| core_007 code | 50.0 | 52.0 | -2.0 |
+| core_008 research | 67.0 | 84.0 | -17.0 |
+| core_009 code | 28.0 | 48.0 | -20.0 |
+| core_010 review | 50.0 | 58.0 | -8.0 |
+| gen_001 research | 50.0 | 55.0 | -5.0 |
+| gen_002 code | 50.0 | 58.0 | -8.0 |
+| gen_003 review | 50.0 | 68.0 | -18.0 |
+| gen_004 research | 52.0 | 68.0 | -16.0 |
+
+**Partial Composite (14/15 tasks)**: ~47.6 Core, 50.5 Gen (incomplete)
+
+**Conclusion**: The improved code prompts made things WORSE. 
+- Research tasks dropped significantly (core_006: 75→35!)
+- Code tasks were mixed (some improved, some worse)
+- v12.0 prompts remain the best
+
+**Action**: v12.0 is re-running to confirm scores.
+
