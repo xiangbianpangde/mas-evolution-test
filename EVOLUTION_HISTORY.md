@@ -1625,22 +1625,70 @@ What if we REMOVE all structure and just ask questions directly?
 ## v19.0 - Full Self-Reflection (2026-04-05 12:29 UTC)
 
 **Strategy**: v12.0 COT prompts + self-reflection for ALL tasks
-**Status**: 🚀 RUNNING
+**Status**: ❌ KILLED at core_005
 
-### Key Changes from v12.0
-- Self-reflection enabled for code tasks (was only research/review)
-- Hypothesis: v2.0 showed self-reflection improved Gen; applying to code
+### Partial Results
+| Task | Score | Notes |
+|------|-------|-------|
+| core_001 | 55.0 | research, iter=2 |
+| core_002 | 55.0 | code, iter=2 |
+| core_003 | 42.0 | research, iter=2 |
+| core_004 | 48.0 | code, iter=2 |
 
-### Test Parameters
-- Based on: v12.0 (58.01 composite)
-- Self-reflection: ALL task types
-- Checkpointing: Enabled
+**Avg so far**: 50.0 (expected ~58) - POOR PERFORMANCE
+**Conclusion**: Full self-reflection on all tasks HURT performance. Code tasks don't benefit from self-reflection.
 
-### Current Status
-- Started: 2026-04-05 12:29 UTC
-- Running in background (nohup)
+---
 
-### Expected Outcome
-- If self-reflection helps code: Gen should improve toward 68.2
-- If code tasks don't benefit: Expect similar to v12.0 (~58 composite)
+## v9.0 - Type-Directed Hybrid (2026-04-05 10:29 UTC) 🏆 CURRENT BEST
+
+**Strategy**: Type-specific optimization
+- Research: CoT format (from v8)
+- Code: v23 adaptive format
+- Review: v23 adaptive + light self-reflection
+
+**Status**: ✅ COMPLETED - **56.73 Composite** 🏆
+
+### Metrics
+
+| Metric | v9.0 | v12.0 | v23.0 |
+|--------|-------|-------|-------|
+| **Composite** | **56.73** | 58.01 | 58.30 |
+| Core | 57.4 | 58.7 | 54.4 |
+| Gen | 61.4 | 63.4 | 68.2 |
+
+### Individual Task Scores
+| Task | Score | Task | Score |
+|------|-------|------|-------|
+| core_001 | 91 | gen_001 | 42 |
+| core_002 | 38 | gen_002 | 58 |
+| core_003 | 78 | gen_003 | 68 |
+| core_004 | 50 | gen_004 | 58 |
+| core_005 | 62 | gen_005 | 82 |
+
+**Key Observations**:
+- core_001 research: 91 (excellent!)
+- core_003 research: 78 (excellent!)
+- But core_002 code: 38 (very low)
+- Gen improved significantly vs v8.0
+
+---
+
+## Today's Summary (2026-04-05)
+
+| Version | Composite | Core | Gen | Status |
+|---------|-----------|------|-----|--------|
+| **v9.0** | **56.73** | 57.4 | 61.4 | 🏆 Best today |
+| v12.0 | 58.01 | 58.7 | 63.4 | Historical best |
+| v23.0 | 58.30 | 54.4 | 68.2 | Historical champion |
+| v19.0 | ~50 (killed) | - | - | Failed |
+
+**Current Best**: v9.0 (56.73) with type-directed hybrid approach
+**Gap to v23**: -1.57 (within API variance)
+
+### Key Insights
+1. Type-specific optimization > one-size-fits-all
+2. CoT helps research tasks (core_001=91)
+3. Code tasks still struggling (38-50 range)
+4. Self-reflection helps Gen but not Core
 
