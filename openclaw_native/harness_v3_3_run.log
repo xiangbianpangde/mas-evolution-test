@@ -11,4 +11,11 @@
 [gen_001] Executor(research)... Score: 50.0
 [gen_002] Executor(code)... Score: 42.0
 [gen_003] Executor(review)... Score: 50.0
-[gen_004] Executor(research)... 
+[gen_004] Executor(research)... Score: 50.0
+[gen_005] Executor(code)... Score: 50.0
+
+============================================================
+v3.3: Core=61.40 Gen=48.40 Composite=52.48
+============================================================
+
+Results saved to: benchmark_results_v3_3_20260405_160457.json
