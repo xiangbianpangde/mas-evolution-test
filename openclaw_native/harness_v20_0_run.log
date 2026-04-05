@@ -1,0 +1,17 @@
+============================================================
+Harness v20.0 - Enhanced Gen Research Focus
+============================================================
+[core_001] Executor(research)... Score: 50.0 (iter=2)
+[core_002] Executor(code)... Score: 35.0 (iter=1)
+[core_003] Executor(research)... Score: 50.0 (iter=2)
+[core_004] Executor(code)... Score: 38.0 (iter=1)
+[core_005] Executor(review)... Score: 58.0 (iter=2)
+[core_006] Executor(research)... Score: 52.0 (iter=2)
+[core_007] Executor(code)... Score: 30.0 (iter=1)
+[core_008] Executor(research)... Score: 58.0 (iter=2)
+[core_009] Executor(code)... Score: 35.0 (iter=1)
+[core_010] Executor(review)... Score: 50.0 (iter=2)
+[gen_001] Executor(research)... Score: 63.0 (iter=2)
+[gen_002] Executor(code)... Score: 78.0 (iter=1)
+[gen_003] Executor(review)... Score: 78.0 (iter=1)
+[gen_004] Executor(research)... 
