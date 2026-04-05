@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v10.0 - Type-Directed + Targeted Self-Reflection
+OpenClaw Native Harness v10.0 - Type-Directed + Code Self-Reflection
 
-v9.0 (56.73): Type-directed strategy - Core=57.4, Gen=61.4
-v23 (58.30): Adaptive format - Core=54.4, Gen=68.2 (still BEST overall)
+v9.0 (56.73): Type-directed - Research=CoT, Code=adaptive, Review=adaptive
+  - core_001 research: 91.0 (excellent!)
+  - core_008 research: 88.0 (excellent)
+  - gen_004 research: 88.0 (excellent)
+  - core_009 code: 15.0 (VERY POOR - Raft共识算法太复杂)
+  - core_002 code: 38.0 (poor)
 
-Key insight from v8/v9:
-- CoT improved research tasks (core_001=91, core_003=78)
-- But Gen dropped because code tasks still weak
+Key insight: Research tasks excel with CoT, but code tasks need help.
+v10.0 Strategy:
+- Research: Keep v9's CoT (proven: 91, 88, 88)
+- Code: Add self-reflection (only for code, not research)
+- Review: Keep v9's adaptive (working well: 62, 72)
 
-v10 Strategy: Type-Directed + Targeted Self-Reflection
-- Research: CoT format (proven) + targeted self-reflection on depth
-- Code: v23 format + self-reflection for implementation completeness  
-- Review: v23 format + self-reflection for risk coverage
-
-Hypothesis: Targeted reflection on WEAK areas (code, gen) will boost Gen without hurting Core.
+Hypothesis: Self-reflection can boost code scores from ~30 to ~50+
 """
 
 import json
@@ -52,83 +53,79 @@ class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 120, max_retries: int = 2) -> Dict:
-        for attempt in range(max_retries + 1):
-            try:
-                result = self._make_request(prompt, system_prompt, max_tokens, timeout)
-                if result.get("error") is None:
-                    return result
-                if attempt < max_retries:
-                    print(f"  [Retry {attempt+1}]", end=" ", flush=True)
-                    time.sleep(2)
-            except Exception as e:
-                if attempt < max_retries:
-                    print(f"  [Err: {str(e)[:30]}, retry {attempt+1}]", end=" ", flush=True)
-                    time.sleep(2)
-                else:
-                    return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": str(e)}
-        return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries"}
-    
-    def _make_request(self, prompt: str, system_prompt: str, max_tokens: int, timeout: int) -> Dict:
+    def call(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 120) -> Dict:
         import urllib.request
         start = time.time()
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-            "anthropic-version": "2023-06-01"
-        }
-        payload = {
-            "model": API_CONFIG["model"],
-            "max_tokens": max_tokens,
-            "system": system_prompt or "You are a helpful AI assistant.",
-            "messages": [{"role": "user", "content": prompt}]
-        }
-        data = json.dumps(payload).encode('utf-8')
-        req = urllib.request.Request(
-            f"{API_CONFIG['base_url']}/v1/messages",
-            data=data, headers=headers, method='POST'
-        )
-        with urllib.request.urlopen(req, timeout=timeout) as response:
-            result = json.loads(response.read().decode('utf-8'))
-        latency = (time.time() - start) * 1000
-        content = ""
-        for item in result.get("content", []):
-            if item.get("type") == "text":
-                content = item.get("text", "")
-                break
-        return {
-            "content": content,
-            "latency_ms": latency,
-            "input_tokens": result.get("usage", {}).get("input_tokens", 0),
-            "output_tokens": result.get("usage", {}).get("output_tokens", 0),
-            "error": None
-        }
+        try:
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+                "anthropic-version": "2023-06-01"
+            }
+            payload = {
+                "model": API_CONFIG["model"],
+                "max_tokens": max_tokens,
+                "system": system_prompt or "You are a helpful AI assistant.",
+                "messages": [{"role": "user", "content": prompt}]
+            }
+            data = json.dumps(payload).encode('utf-8')
+            req = urllib.request.Request(
+                f"{API_CONFIG['base_url']}/v1/messages",
+                data=data, headers=headers, method='POST'
+            )
+            with urllib.request.urlopen(req, timeout=timeout) as response:
+                result = json.loads(response.read().decode('utf-8'))
+            latency = (time.time() - start) * 1000
+            content = ""
+            for item in result.get("content", []):
+                if item.get("type") == "text":
+                    content = item.get("text", "")
+                    break
+            return {
+                "content": content,
+                "latency_ms": latency,
+                "input_tokens": result.get("usage", {}).get("input_tokens", 0),
+                "output_tokens": result.get("usage", {}).get("output_tokens", 0),
+                "error": None
+            }
+        except Exception as e:
+            return {
+                "content": "", "latency_ms": (time.time() - start) * 1000,
+                "input_tokens": 0, "output_tokens": 0, "error": str(e)
+            }
 
-# v10.0: Type-Directed + Targeted Self-Reflection
+# v10.0: Type-Directed + Code Self-Reflection
 
-# Research tasks: CoT format (from v8, proven for research)
-RESEARCH_EXECUTOR = """你是一个专业的技术分析师。
+# Research tasks: CoT format (proven from v9)
+COT_RESEARCH_PROMPT = """你是一个专业的技术分析师。
 
+任务类型：research
 任务：{query}
 
-请按照以下 Chain-of-Thought 格式输出你的完整分析：
+请按以下步骤深度分析：
 
-1. **问题诊断**：识别核心技术问题
-2. **深度分析**：分解问题成因，包含具体数字和案例
-3. **解决方案**：提出具体可操作的技术方案
-4. **数字证据**：引用具体数字、研究数据或案例
-5. **验证方法**：说明如何验证方案有效性
-6. **风险评估**：识别潜在风险和应对策略
+Step 1 - 问题诊断：
+[准确识别问题的核心挑战]
 
-要求：
-- 有具体数字和证据支撑
-- 有可操作的步骤
-- 有验证方法
+Step 2 - 深度分析：
+[使用 Chain-of-Thought 推理，逐步拆解]
+- 首先...（因果链）
+- 然后...（递进关系）
+- 最后...（综合结论）
 
-直接输出完整分析。"""
+Step 3 - 具体方案：
+[有数字支撑的解决方案]
 
-# Code tasks: v23 format + self-reflection for completeness
-CODE_EXECUTOR = """你是一个专业的技术分析师。
+Step 4 - 数字证据：
+[引用具体数据、研究或案例]
+
+Step 5 - 验证方法：
+[如何验证方案有效性]
+
+直接输出你的完整分析。"""
+
+# Code tasks: v23 adaptive + self-reflection
+ADAPTIVE_CODE_PROMPT = """你是一个专业的技术分析师。
 
 任务类型：code
 任务：{query}
@@ -138,15 +135,41 @@ CODE_EXECUTOR = """你是一个专业的技术分析师。
 **code**: 架构简图 → 核心代码（完整可运行）→ 测试用例 → 配置说明
 
 要求：
-- 有具体数字和证据
-- 有可操作的步骤
-- 有验证方法
-- 代码必须可运行
+- 代码必须完整可运行
+- 有具体的实现细节
+- 有测试用例验证
 
-直接输出你的完整分析。"""
+直接输出你的分析。"""
 
-# Review tasks: v23 format + self-reflection for risk coverage
-REVIEW_EXECUTOR = """你是一个专业的技术分析师。
+CODE_CRITIQUE_PROMPT = """你是一个代码质量评审专家。请评审以下代码实现，找出关键问题：
+
+任务：{query}
+
+当前代码实现：
+{output}
+
+请严格指出最多3个最重要的问题：
+
+输出格式：
+问题1: [描述]
+改进1: [具体怎么做]
+问题2: ...
+问题3: ..."""
+
+CODE_REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进你的代码实现：
+
+任务：{query}
+
+之前的代码：
+{output}
+
+评审意见：
+{critique}
+
+请输出改进后的完整版本。保持原有优点，解决评审指出的问题。"""
+
+# Review tasks: v23 format (from v9)
+ADAPTIVE_REVIEW_PROMPT = """你是一个专业的技术分析师。
 
 任务类型：review
 任务：{query}
@@ -156,83 +179,11 @@ REVIEW_EXECUTOR = """你是一个专业的技术分析师。
 **review**: 风险矩阵 → 影响分析 → 缓解步骤 → 优先级 → 验证方法
 
 要求：
-- 有具体数字和证据
-- 有可操作的步骤
-- 有验证方法
-- 代码必须可运行
+- 有具体的风险评估
+- 有可操作的缓解步骤
+- 有明确的优先级
 
-直接输出你的完整分析。"""
-
-# Self-reflection prompts (targeted to task type)
-RESEARCH_REFLECTION = """你是一个严格的技术评审专家。
-
-当前输出（research任务）：
-{output}
-
-请检查：
-1. 深度分析是否充分？（要求：包含具体数字、案例、研究数据）
-2. 解决方案是否可操作？（要求：步骤明确、可执行）
-3. 验证方法是否有效？（要求：可复现的验证方式）
-
-如果发现问题，请指出最多2个关键问题和改进建议。
-否则，回复"无需修改"。
-
-输出格式：
-问题1: [描述]
-改进1: [建议]
-（可选问题2...）
-或：无需修改"""
-
-CODE_REFLECTION = """你是一个严格的代码评审专家。
-
-当前输出（code任务）：
-{output}
-
-请检查：
-1. 代码是否完整可运行？（要求：包含完整实现、依赖说明、测试用例）
-2. 架构设计是否合理？（要求：模块化、可扩展）
-3. 是否有错误处理和边界条件？（要求：健壮性）
-
-如果发现问题，请指出最多2个关键问题和改进建议。
-否则，回复"无需修改"。
-
-输出格式：
-问题1: [描述]
-改进1: [建议]
-（可选问题2...）
-或：无需修改"""
-
-REVIEW_REFLECTION = """你是一个严格的风险评审专家。
-
-当前输出（review任务）：
-{output}
-
-请检查：
-1. 风险矩阵是否全面？（要求：覆盖主要风险维度）
-2. 影响分析是否有具体数据支撑？
-3. 缓解步骤是否可操作？
-
-如果发现问题，请指出最多2个关键问题和改进建议。
-否则，回复"无需修改"。
-
-输出格式：
-问题1: [描述]
-改进1: [建议]
-（可选问题2...）
-或：无需修改"""
-
-REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进你的输出：
-
-任务类型：{task_type}
-任务：{query}
-
-之前的输出：
-{output}
-
-评审意见：
-{critique}
-
-请输出改进后的完整版本。保持原有优点，解决评审指出的问题。"""
+直接输出你的评审。"""
 
 STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
@@ -276,22 +227,6 @@ class HarnessV100:
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
     
-    def get_executor_prompt(self, task_type: str) -> str:
-        if task_type == "research":
-            return RESEARCH_EXECUTOR
-        elif task_type == "code":
-            return CODE_EXECUTOR
-        else:  # review
-            return REVIEW_EXECUTOR
-    
-    def get_reflection_prompt(self, task_type: str) -> str:
-        if task_type == "research":
-            return RESEARCH_REFLECTION
-        elif task_type == "code":
-            return CODE_REFLECTION
-        else:  # review
-            return REVIEW_REFLECTION
-    
     def load_checkpoint(self) -> Dict:
         if os.path.exists(CHECKPOINT_FILE):
             try:
@@ -305,19 +240,30 @@ class HarnessV100:
         with open(CHECKPOINT_FILE, 'w') as f:
             json.dump(checkpoint, f, ensure_ascii=False)
     
+    def get_prompt_for_task(self, task_type: str, query: str) -> tuple:
+        """Returns (system_prompt, user_prompt) based on task type"""
+        if task_type == "research":
+            return ("你是一个专业的技术分析师。", COT_RESEARCH_PROMPT.format(query=query))
+        elif task_type == "code":
+            return ("你是一个专业的技术分析师。", ADAPTIVE_CODE_PROMPT.format(query=query))
+        elif task_type == "review":
+            return ("你是一个专业的技术分析师。", ADAPTIVE_REVIEW_PROMPT.format(query=query))
+        return ("你是一个专业的技术分析师。", f"任务：{query}")
+    
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
         task_type = task["type"]
         query = task["query"]
         
         executor_start = time.time()
-        max_tokens = 3000 if task_type == "code" else 2500
+        max_tokens = 3500 if task_type == "code" else 2500
         
-        # Step 1: Generate initial response using type-specific prompt
-        executor_prompt = self.get_executor_prompt(task_type)
-        initial_response = self.llm.call_with_retry(
-            prompt=f"任务类型：{task_type}\n任务：{query}",
-            system_prompt=executor_prompt.format(query=query),
+        system_prompt, user_prompt = self.get_prompt_for_task(task_type, query)
+        
+        # Step 1: Generate initial response
+        initial_response = self.llm.call(
+            prompt=user_prompt,
+            system_prompt=system_prompt,
             max_tokens=max_tokens
         )
         
@@ -334,42 +280,39 @@ class HarnessV100:
         
         current_output = initial_response["content"]
         total_tokens = initial_response.get("output_tokens", 0)
-        
-        # Step 2: Type-targeted self-reflection
-        reflection_prompt = self.get_reflection_prompt(task_type)
-        reflection_response = self.llm.call_with_retry(
-            prompt=reflection_prompt.format(output=current_output),
-            system_prompt="你是一个严格的评审专家。",
-            max_tokens=1500
-        )
-        
-        total_tokens += reflection_response.get("output_tokens", 0)
-        reflection_text = reflection_response["content"]
-        
-        # Step 3: Revision if reflection found issues
         iterations = 1
-        needs_revision = len(reflection_text) > 50 and "问题" in reflection_text and "无需修改" not in reflection_text
         
-        if needs_revision and not reflection_response.get("error"):
-            revision_response = self.llm.call_with_retry(
-                prompt=REVISION_PROMPT.format(
-                    task_type=task_type, query=query,
-                    output=current_output, critique=reflection_text
-                ),
-                system_prompt="你是一个专业的技术分析师。",
-                max_tokens=max_tokens
+        # Step 2: Self-reflection ONLY for code tasks
+        if task_type == "code":
+            critique_response = self.llm.call(
+                prompt=CODE_CRITIQUE_PROMPT.format(query=query, output=current_output),
+                system_prompt="你是一个严格的代码评审专家。",
+                max_tokens=1500
             )
-            total_tokens += revision_response.get("output_tokens", 0)
-            if not revision_response.get("error"):
-                current_output = revision_response["content"]
-                iterations = 2
+            total_tokens += critique_response.get("output_tokens", 0)
+            critique_text = critique_response["content"]
+            
+            has_issues = len(critique_text) > 100 and "问题" in critique_text
+            
+            if has_issues and not critique_response.get("error"):
+                revision_response = self.llm.call(
+                    prompt=CODE_REVISION_PROMPT.format(
+                        query=query, output=current_output, critique=critique_text
+                    ),
+                    system_prompt="你是一个专业的技术分析师。",
+                    max_tokens=max_tokens
+                )
+                total_tokens += revision_response.get("output_tokens", 0)
+                if not revision_response.get("error"):
+                    current_output = revision_response["content"]
+                    iterations = 2
         
         executor_latency = (time.time() - executor_start) * 1000
         
-        # Step 4: Evaluate
+        # Step 3: Evaluate
         evaluator_start = time.time()
         evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
-        evaluator_response = self.llm.call_with_retry(
+        evaluator_response = self.llm.call(
             prompt=evaluator_prompt.format(content=current_output),
             system_prompt="你是一个严格的技术评估专家。",
             max_tokens=1024
@@ -464,13 +407,12 @@ class HarnessV100:
             if task["id"] in completed_ids:
                 print(f"[{task['id']}] SKIP (checkpoint)")
                 continue
-                
+            
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
             result = self.execute_task(task)
             results.append(result)
             print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
             
-            # Save checkpoint
             checkpoint["tasks_completed"].append(task["id"])
             checkpoint["results"].append({
                 "task_id": result.task_id,
@@ -492,23 +434,16 @@ class HarnessV100:
         
         elapsed = time.time() - start_time
         
-        # Clean up checkpoint on success
         if os.path.exists(CHECKPOINT_FILE):
             os.remove(CHECKPOINT_FILE)
         
         total = len(results)
-        core_results = [r for r in results if r.task_id.startswith("core_") and r.quality_score > 0]
-        gen_results = [r for r in results if r.task_id.startswith("gen_") and r.quality_score > 0]
-        
-        core_scores = [r.quality_score for r in core_results]
-        gen_scores = [r.quality_score for r in gen_results]
+        core_scores = [r.quality_score for r in results[:10] if r.quality_score > 0]
+        gen_scores = [r.quality_score for r in results[10:] if r.quality_score > 0]
+        avg_actionability = sum(r.actionability_score for r in results if r.quality_score > 0) / max(len(results), 1)
         
         core_avg = sum(core_scores) / len(core_scores) if core_scores else 0
         gen_avg = sum(gen_scores) / len(gen_scores) if gen_scores else 0
-        
-        all_scores = [r for r in results if r.quality_score > 0]
-        avg_actionability = sum(r.actionability_score for r in all_scores) / max(len(all_scores), 1)
-        
         composite = core_avg * 0.45 + gen_avg * 0.45 + (avg_actionability * 10) * 0.1
         
         print(f"\n{'=' * 60}")
@@ -517,7 +452,7 @@ class HarnessV100:
         
         return {
             "harness_version": "v10.0",
-            "paradigm": "v2 (Type-Directed + Targeted Self-Reflection)",
+            "paradigm": "v2 (Type-Directed + Code Self-Reflection)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
