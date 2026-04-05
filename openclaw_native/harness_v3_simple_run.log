@@ -1,5 +1,0 @@
-[core_001] Executor(research)... Score: 58.0
-[core_002] Executor(code)... Score: 38.0
-[core_003] Executor(research)... Score: 82.0
-[core_004] Executor(code)... Score: 28.0
-[core_005] Executor(review)...   [Error: The read operation timed out, retry 1/2] 
