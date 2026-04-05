@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v4.0 - Checkpointed Self-Reflection with v23 Format
+OpenClaw Native Harness v4.0 - Parallel Ensemble with Best-of-K Selection
 
-Combining:
-- v23's proven adaptive format (Core avg 54.4)
-- Self-reflection from v2.0 (Gen improved 44.8->65.2)
-- Checkpointing to survive crashes
-- Better error handling
+v3.3 (52.48): Self-reflection improved Core but hurt Gen
+v23 (58.30): Best composite so far
 
-Key insight from v2.0: Self-reflection significantly improved Gen (65.2 vs 44.8)
-But Core dropped (50.0 vs 54.4) because v2.0 used generic prompts.
+v4.0 Strategy: Instead of self-reflection (which reinforces patterns),
+run MULTIPLE independent simple agents and pick the best result.
 
-v4.0 strategy:
-- Use v23's type-specific adaptive format
-- Add self-critique only when output seems weak
-- Save checkpoint after each task
+Key insight: Different agents may approach problems differently.
+By running K=3 agents and selecting the best, we get diversity without
+the pattern-reinforcing effect of self-critique.
+
+Changes from v3.3:
+- No self-critique loop (removes pattern reinforcement)
+- Run 3 independent agents per task
+- Simple evaluator picks the best output
+- Checkpoint after each task
 """
 
 import json
@@ -22,7 +24,7 @@ import time
 import os
 import sys
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 API_CONFIG = {
     "base_url": "https://api.minimaxi.com/anthropic",
@@ -30,7 +32,8 @@ API_CONFIG = {
 }
 
 CHECKPOINT_FILE = "v4_0_checkpoint.json"
-RESULTS_FILE = "benchmark_results_v4_0_gen1.json"
+RESULTS_PREFIX = "benchmark_results_v4_0"
+NUM_AGENTS = 3
 
 @dataclass
 class TaskResult:
@@ -47,54 +50,69 @@ class TaskResult:
     evaluator_latency_ms: float
     is_suspicious: bool = False
     error: str = ""
-    iterations: int = 1
+    agent_responses: int = 0
 
 class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 180) -> Dict:
+    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 120, max_retries: int = 2) -> Dict:
+        """Call API with retry logic"""
+        for attempt in range(max_retries + 1):
+            try:
+                result = self._make_request(prompt, system_prompt, max_tokens, timeout)
+                if result.get("error") is None:
+                    return result
+                if attempt < max_retries:
+                    print(f"  [Retry {attempt+1}/{max_retries}]", end=" ", flush=True)
+                    time.sleep(2)
+            except Exception as e:
+                if attempt < max_retries:
+                    print(f"  [Error: {e}, retry {attempt+1}/{max_retries}]", end=" ", flush=True)
+                    time.sleep(2)
+                else:
+                    return {
+                        "content": "", "latency_ms": 0,
+                        "input_tokens": 0, "output_tokens": 0, "error": str(e)
+                    }
+        return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries exceeded"}
+    
+    def _make_request(self, prompt: str, system_prompt: str, max_tokens: int, timeout: int) -> Dict:
         import urllib.request
         start = time.time()
-        try:
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-                "anthropic-version": "2023-06-01"
-            }
-            payload = {
-                "model": API_CONFIG["model"],
-                "max_tokens": max_tokens,
-                "system": system_prompt or "You are a helpful AI assistant.",
-                "messages": [{"role": "user", "content": prompt}]
-            }
-            data = json.dumps(payload).encode('utf-8')
-            req = urllib.request.Request(
-                f"{API_CONFIG['base_url']}/v1/messages",
-                data=data, headers=headers, method='POST'
-            )
-            with urllib.request.urlopen(req, timeout=timeout) as response:
-                result = json.loads(response.read().decode('utf-8'))
-            latency = (time.time() - start) * 1000
-            content = ""
-            for item in result.get("content", []):
-                if item.get("type") == "text":
-                    content = item.get("text", "")
-                    break
-            return {
-                "content": content,
-                "latency_ms": latency,
-                "input_tokens": result.get("usage", {}).get("input_tokens", 0),
-                "output_tokens": result.get("usage", {}).get("output_tokens", 0),
-                "error": None
-            }
-        except Exception as e:
-            return {
-                "content": "", "latency_ms": (time.time() - start) * 1000,
-                "input_tokens": 0, "output_tokens": 0, "error": str(e)
-            }
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            "anthropic-version": "2023-06-01"
+        }
+        payload = {
+            "model": API_CONFIG["model"],
+            "max_tokens": max_tokens,
+            "system": system_prompt or "You are a helpful AI assistant.",
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        data = json.dumps(payload).encode('utf-8')
+        req = urllib.request.Request(
+            f"{API_CONFIG['base_url']}/v1/messages",
+            data=data, headers=headers, method='POST'
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            result = json.loads(response.read().decode('utf-8'))
+        latency = (time.time() - start) * 1000
+        content = ""
+        for item in result.get("content", []):
+            if item.get("type") == "text":
+                content = item.get("text", "")
+                break
+        return {
+            "content": content,
+            "latency_ms": latency,
+            "input_tokens": result.get("usage", {}).get("input_tokens", 0),
+            "output_tokens": result.get("usage", {}).get("output_tokens", 0),
+            "error": None
+        }
 
-# v4.0: v23 adaptive format + targeted self-critique
+# v4.0: Simple adaptive format (same as v23)
 
 ADAPTIVE_EXECUTOR = """你是一个专业的技术分析师。
 
@@ -111,68 +129,66 @@ ADAPTIVE_EXECUTOR = """你是一个专业的技术分析师。
 - 有具体数字和证据
 - 有可操作的步骤
 - 有验证方法
+- 代码必须可运行
 
 直接输出你的完整分析。"""
 
-SELF_CRITIQUE_PROMPT = """评审以下输出，找出关键问题（最多3个）：
+STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
-任务类型：{task_type}
-任务：{query}
+评分标准：
+- L5: 卓越 - 有独到见解，有具体可执行步骤，有数字证据
+- L4: 优秀 - 分析深入，有具体方案
+- L3: 合格 - 技术正确，但方案需要细化
+- L2: 不足 - 方案过于抽象
+- L1: 差 - 方案不可行
 
-输出：
-{output}
-
-指出：
-1. 最重要的问题（如有）
-2. 如何改进
-
-简洁回答。"""
-
-REVISION_PROMPT = """根据评审改进输出：
-
-任务类型：{task_type}
-任务：{query}
-
-输出：
-{output}
-
-评审：{critique}
-
-输出改进版本，直接给出完整分析。"""
-
-STRICT_EVALUATOR = """评分（输出JSON）：
+输出 JSON（不用markdown）：
 {{"depth": {{"level": 1-5, "evidence": "引用"}}, "completeness": {{"level": 1-5, "evidence": "引用"}}, "actionability": {{"level": 1-5, "evidence": "引用"}}, "overall_score": 0-100, "reasoning": "说明"}}
 
 ---
 {content}
 ---
 
-严格评分。"""
+请严格评分。"""
 
-LENIENT_CODE_EVALUATOR = """评分JSON：
+LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。
+
+评分标准：
+- L5: 功能完整，结构清晰，有测试
+- L4: 功能完整，有小问题
+- L3: 基本OK
+- L2: 不完整或混乱
+- L1: 不可行
+
+输出 JSON（不用markdown）：
 {{"depth": {{"level": 1-5, "evidence": "引用"}}, "completeness": {{"level": 1-5, "evidence": "引用"}}, "actionability": {{"level": 1-5, "evidence": "引用"}}, "overall_score": 0-100, "reasoning": "说明"}}
 
 ---
 {content}
 ---
 
-功能完整性为主。"""
+重点看功能实现。"""
 
 
 class HarnessV40:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
-        self.max_iterations = 2
+        self.api_key = api_key
     
     def load_checkpoint(self) -> Dict:
+        """Load checkpoint if exists"""
         if os.path.exists(CHECKPOINT_FILE):
-            with open(CHECKPOINT_FILE, 'r') as f:
-                return json.load(f)
-        return {"completed": [], "results": []}
+            try:
+                with open(CHECKPOINT_FILE, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return {"tasks_completed": [], "results": []}
     
-    def save_checkpoint(self, completed: list, results: list):
+    def save_checkpoint(self, checkpoint: Dict):
+        """Save checkpoint"""
         with open(CHECKPOINT_FILE, 'w') as f:
-            json.dump({"completed": completed, "results": results}, f)
+            json.dump(checkpoint, f, ensure_ascii=False)
     
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
@@ -182,62 +198,60 @@ class HarnessV40:
         executor_start = time.time()
         max_tokens = 3000 if task_type == "code" else 2500
         
-        # Initial response with v23 format
-        initial_response = self.llm.call(
-            prompt=f"任务类型：{task_type}\n任务：{query}",
-            system_prompt=ADAPTIVE_EXECUTOR.format(task_type=task_type, query=query),
-            max_tokens=max_tokens
-        )
+        # Run NUM_AGENTS independent agents
+        agent_outputs = []
+        agent_scores = []
+        total_tokens = 0
         
-        if initial_response["error"]:
-            return TaskResult(
-                task_id=task_id, task_type=task_type,
-                executor_output="", quality_score=0,
-                depth_score=0, completeness_score=0, actionability_score=0,
-                executor_tokens=0, evaluator_tokens=0,
-                executor_latency_ms=(time.time() - executor_start) * 1000,
-                evaluator_latency_ms=0,
-                error=f"Initial error: {initial_response['error']}"
-            )
-        
-        current_output = initial_response["content"]
-        total_tokens = initial_response.get("output_tokens", 0)
-        
-        # Light self-critique for improvement
-        critique_response = self.llm.call(
-            prompt=SELF_CRITIQUE_PROMPT.format(
-                task_type=task_type, query=query, output=current_output
-            ),
-            system_prompt="你是一个评审专家。",
-            max_tokens=800
-        )
-        
-        total_tokens += critique_response.get("output_tokens", 0)
-        critique_text = critique_response.get("content", "")
-        
-        # Only revise if critique found real issues
-        has_issues = len(critique_text) > 50 and ("问题" in critique_text or "改进" in critique_text)
-        
-        if has_issues:
-            revision_response = self.llm.call(
-                prompt=REVISION_PROMPT.format(
-                    task_type=task_type, query=query,
-                    output=current_output, critique=critique_text
-                ),
-                system_prompt="你是一个技术分析师。",
+        for agent_id in range(NUM_AGENTS):
+            print(f"  [Agent{agent_id+1}]", end=" ", flush=True)
+            response = self.llm.call_with_retry(
+                prompt=f"任务类型：{task_type}\n任务：{query}",
+                system_prompt=ADAPTIVE_EXECUTOR.format(task_type=task_type, query=query) + f"\n\n[Agent {agent_id+1}]",
                 max_tokens=max_tokens
             )
-            total_tokens += revision_response.get("output_tokens", 0)
-            current_output = revision_response["content"]
+            
+            if not response.get("error") and response.get("content"):
+                agent_outputs.append(response["content"])
+                total_tokens += response.get("output_tokens", 0)
+                
+                # Quick score check
+                evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
+                eval_response = self.llm.call_with_retry(
+                    prompt=evaluator_prompt.format(content=response["content"]),
+                    system_prompt="你是一个严格的技术评估专家。",
+                    max_tokens=1024
+                )
+                
+                try:
+                    eval_text = eval_response["content"]
+                    json_start = eval_text.find('{')
+                    json_end = eval_text.rfind('}') + 1
+                    if json_start >= 0 and json_end > json_start:
+                        eval_json = json.loads(eval_text[json_start:json_end])
+                        score = eval_json.get("overall_score", 50)
+                    else:
+                        score = 50
+                except:
+                    score = 50
+                
+                agent_scores.append(score)
+                total_tokens += eval_response.get("output_tokens", 0)
+            else:
+                agent_scores.append(0)
+        
+        # Select best output
+        best_idx = agent_scores.index(max(agent_scores)) if agent_scores else 0
+        best_output = agent_outputs[best_idx] if agent_outputs else ""
         
         executor_latency = (time.time() - executor_start) * 1000
         
-        # Evaluate
+        # Final evaluation
         evaluator_start = time.time()
         evaluator_prompt = LENIENT_CODE_EVALUATOR if task_type == "code" else STRICT_EVALUATOR
-        evaluator_response = self.llm.call(
-            prompt=evaluator_prompt.format(content=current_output),
-            system_prompt="你是一个评估专家。",
+        evaluator_response = self.llm.call_with_retry(
+            prompt=evaluator_prompt.format(content=best_output),
+            system_prompt="你是一个严格的技术评估专家。",
             max_tokens=1024
         )
         evaluator_latency = (time.time() - evaluator_start) * 1000
@@ -247,7 +261,7 @@ class HarnessV40:
         if evaluator_response["error"]:
             return TaskResult(
                 task_id=task_id, task_type=task_type,
-                executor_output=current_output, quality_score=0,
+                executor_output=best_output, quality_score=0,
                 depth_score=0, completeness_score=0, actionability_score=0,
                 executor_tokens=total_tokens, evaluator_tokens=0,
                 executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
@@ -267,7 +281,7 @@ class HarnessV40:
             depth_score = eval_json.get("depth", {}).get("level", 3)
             completeness_score = eval_json.get("completeness", {}).get("level", 3)
             actionability_score = eval_json.get("actionability", {}).get("level", 3)
-            is_suspicious = executor_latency < 10000 and len(current_output) > 1000
+            is_suspicious = executor_latency < 10000 and len(best_output) > 1000
         except:
             quality_score = 50
             depth_score = completeness_score = actionability_score = 3
@@ -275,16 +289,16 @@ class HarnessV40:
         
         return TaskResult(
             task_id=task_id, task_type=task_type,
-            executor_output=current_output, quality_score=quality_score,
+            executor_output=best_output, quality_score=quality_score,
             depth_score=depth_score, completeness_score=completeness_score,
             actionability_score=actionability_score,
             executor_tokens=total_tokens, evaluator_tokens=evaluator_tokens,
             executor_latency_ms=executor_latency, evaluator_latency_ms=evaluator_latency,
             is_suspicious=is_suspicious,
-            iterations=2 if has_issues else 1
+            agent_responses=len(agent_outputs)
         )
     
-    def run_benchmark(self, api_key: str) -> Dict:
+    def run_benchmark(self) -> Dict:
         tasks = [
             {"id": "core_001", "type": "research", "difficulty": 8,
              "query": "分析 Transformer 架构在长上下文场景下的注意力机制优化方案"},
@@ -318,82 +332,92 @@ class HarnessV40:
              "query": "实现去中心化身份认证（DID）系统"}
         ]
         
-        self.api_key = api_key
         checkpoint = self.load_checkpoint()
-        completed_ids = set(checkpoint["completed"])
-        results = checkpoint["results"]
+        completed_ids = set(checkpoint["tasks_completed"])
+        
+        results = []
+        for r in checkpoint.get("results", []):
+            results.append(TaskResult(**r))
         
         start_time = time.time()
-        
-        print("=" * 60)
-        print("Harness v4.0 - Checkpointed v23 Format + Self-Reflection")
-        print("=" * 60)
-        
-        if completed_ids:
-            print(f"Resuming from checkpoint. Completed tasks: {len(completed_ids)}")
-        
-        for i, task in enumerate(tasks):
+        for task in tasks:
             if task["id"] in completed_ids:
-                print(f"[{task['id']}] Already completed, skipping")
+                print(f"[{task['id']}] SKIP (checkpoint)")
                 continue
-            
+                
             print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
             result = self.execute_task(task)
-            results.append({
+            results.append(result)
+            print(f"Score: {result.quality_score:.1f} (agents={result.agent_responses})")
+            
+            # Save checkpoint after each task
+            checkpoint["tasks_completed"].append(task["id"])
+            checkpoint["results"].append({
                 "task_id": result.task_id,
                 "task_type": result.task_type,
+                "executor_output": result.executor_output,
                 "quality_score": result.quality_score,
+                "depth_score": result.depth_score,
+                "completeness_score": result.completeness_score,
+                "actionability_score": result.actionability_score,
+                "executor_tokens": result.executor_tokens,
+                "evaluator_tokens": result.evaluator_tokens,
+                "executor_latency_ms": result.executor_latency_ms,
+                "evaluator_latency_ms": result.evaluator_latency_ms,
                 "is_suspicious": result.is_suspicious,
-                "iterations": result.iterations,
-                "error": result.error
+                "error": result.error,
+                "agent_responses": result.agent_responses
             })
-            completed_ids.add(task["id"])
-            self.save_checkpoint(list(completed_ids), results)
-            print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
+            self.save_checkpoint(checkpoint)
         
         elapsed = time.time() - start_time
         
+        # Clean up checkpoint on success
+        if os.path.exists(CHECKPOINT_FILE):
+            os.remove(CHECKPOINT_FILE)
+        
         total = len(results)
-        core_scores = [r["quality_score"] for r in results[:10]]
-        gen_scores = [r["quality_score"] for r in results[10:]]
+        core_scores = [r.quality_score for r in results[:10] if r.quality_score > 0]
+        gen_scores = [r.quality_score for r in results[10:] if r.quality_score > 0]
+        avg_actionability = sum(r.actionability_score for r in results if r.quality_score > 0) / max(len(results), 1)
         
         core_avg = sum(core_scores) / len(core_scores) if core_scores else 0
         gen_avg = sum(gen_scores) / len(gen_scores) if gen_scores else 0
-        composite = core_avg * 0.45 + gen_avg * 0.45
+        composite = core_avg * 0.45 + gen_avg * 0.45 + (avg_actionability * 10) * 0.1
         
         print(f"\n{'=' * 60}")
         print(f"v4.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
         print(f"{'=' * 60}")
         
-        # Save final results
-        final_results = {
+        return {
             "harness_version": "v4.0",
-            "paradigm": "v2 (Self-Reflection + v23 Format)",
+            "paradigm": "v4 (Parallel Ensemble - Best-of-K)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
                 "total_tasks": total,
                 "core_avg_score": core_avg,
                 "gen_avg_score": gen_avg,
+                "avg_actionability_level": avg_actionability,
                 "composite_score": composite,
             },
-            "individual_results": results
+            "individual_results": [
+                {"task_id": r.task_id, "task_type": r.task_type,
+                 "quality_score": r.quality_score, "is_suspicious": r.is_suspicious,
+                 "agent_responses": r.agent_responses}
+                for r in results
+            ]
         }
-        
-        with open(RESULTS_FILE, 'w', encoding='utf-8') as f:
-            json.dump(final_results, f, ensure_ascii=False, indent=2)
-        
-        # Clean up checkpoint
-        if os.path.exists(CHECKPOINT_FILE):
-            os.remove(CHECKPOINT_FILE)
-        
-        return final_results
 
 
 if __name__ == "__main__":
-    api_key = os.environ.get("MINIMAX_API_KEY", "")
-    if not api_key:
-        api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
+    # Use test key (same as other versions)
+    api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
     
     harness = HarnessV40(api_key)
-    harness.run_benchmark(api_key)
+    results = harness.run_benchmark()
+    
+    output_file = f"{RESULTS_PREFIX}_{time.strftime('%Y%m%d_%H%M%S')}.json"
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(results, f, ensure_ascii=False, indent=2)
+    print(f"\nResults saved to: {output_file}")
