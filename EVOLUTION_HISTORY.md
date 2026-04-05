@@ -2442,3 +2442,36 @@ curl -X POST [API endpoint] --max-time 10
 ```
 
 **Next Action**: Investigate Python urllib configuration or wait for API stability
+
+---
+
+## Final Status - 2026-04-06 03:16 UTC
+
+### Champions
+
+| Version | Composite | Core | Gen | Notes |
+|---------|-----------|------|-----|-------|
+| **v12.0** | **58.01** | 58.70 | 63.40 | 🏆 CHAMPION |
+| v14.0 | 56.91 | 66.00 | 53.20 | Best Core but lower Gen |
+| v18.0 | 52.83 | - | - | |
+| v23.0 | 58.30 | 54.40 | 68.20 | (historical) |
+
+### v12.0 Strategy
+- COT (Chain-of-Thought) prompts for research tasks
+- V23-style prompts for code/review
+- Self-critique + revision for all tasks
+- Standard strict evaluator
+
+### v14.0 Strategy  
+- Same as v12.0 but with LENIENT code evaluator
+- Improved code scores (65, 87, 68, 68, 72) vs v12.0 (38, 42, 48, 52, 58)
+- But worse Gen scores (53.20 vs 63.40)
+
+### Key Insight
+Lenient code evaluator helps code tasks significantly (+20-45 points) but hurts Gen tasks.
+
+### API Status
+- API responding to curl (~2s latency)
+- Python harness hangs on first API call
+- Root cause: Unknown - possibly network config or Python version
+
