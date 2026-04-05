@@ -1180,3 +1180,23 @@ v12.0 remains the BEST v2 paradigm result. Multiple attempts (v13, v14, v15) to 
 - Consider: v1.2 tag for v12.0 as stable v2 release
 
 **Next**: Either tag v12.0 as v2.0 release, or try completely different approach.
+
+## v3.0 - Paradigm v3: Simplicity First (FAILED)
+
+**Date**: 2026-04-05 13:48 UTC
+**Status**: ❌ Hung completely on core_001
+
+### Strategy
+- No reflection (to avoid hangs)
+- Minimal prompts
+- Single API call per task
+
+### Issue
+- Hung on first task (core_001)
+- API responded but harness didn't progress
+- Possible: API response format changed? Or timeout issue?
+
+### v2.0 Status
+v2.1 tag created to mark v2 paradigm convergence at v12.0 (58.01).
+
+**Conclusion**: API seems unstable. Multiple harness versions hanging. v12.0 = 58.01 remains the reference point.
