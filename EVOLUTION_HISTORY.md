@@ -1086,3 +1086,48 @@ v9.0 is the best v2 paradigm result, approaching v23 level.
 Key insight: Type-specific prompts without self-reflection is more stable.
 
 **Next Direction**: Try lighter self-reflection or different optimization angle.
+
+## v12.0 - Hybrid: v9 CoT + v23 Code/Review + Light Gen Reflection (2026-04-05 11:24)
+
+**Status**: ✅ **NEW BEST OF v2 PARADIGM!**
+
+### Results
+
+| Metric | v12.0 | v23 | Δ |
+|--------|--------|-----|---|
+| **Composite** | **58.01** | 58.30 | -0.29 |
+| Core | **58.70** | 54.40 | **+4.30** |
+| Gen | 63.40 | 68.20 | -4.80 |
+
+### Score Breakdown
+
+| Task | Score | Type |
+|------|-------|------|
+| core_001 | 75.0 | research |
+| core_006 | 75.0 | research |
+| core_008 | 84.0 | research |
+| gen_003 | 68.0 | review |
+| gen_004 | 68.0 | research |
+| gen_005 | 68.0 | code |
+
+### Key Findings
+
+1. **Core BEATS v23**: 58.7 vs 54.4 (+4.3 points)
+2. **Composite APPROACHES v23**: 58.01 vs 58.30 (-0.29)
+3. **Architecture**: Hybrid of v9 CoT (research) + v23 (code/review) + light Gen reflection
+4. **Checkpoint/resume**: v11 ran 12/15 tasks, v12 completed remaining 3
+
+### Architecture Evolution Summary (v2 Paradigm)
+
+| Version | Strategy | Composite | Core | Gen |
+|---------|----------|-----------|------|-----|
+| v2.0 | Self-reflection | 54.64 | 50.0 | 65.2 |
+| v8.0 | CoT format | 52.27 | **60.0** | 49.2 |
+| v9.0 | Type-Directed | 56.73 | 57.4 | 61.4 |
+| **v12.0** | **Hybrid** | **58.01** | **58.7** | 63.4 |
+| v23 | Adaptive format | 58.30 | 54.4 | 68.2 |
+
+**Conclusion**: v12.0 is the **BEST v2 paradigm result**, approaching v23 level!
+Core research tasks significantly improved (+4.3 vs v23).
+
+**Next**: Try stronger Gen optimization without losing Core gains.
