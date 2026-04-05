@@ -955,3 +955,45 @@ The API is not suitable for testing at this time.
 3. API is currently too unstable for reliable testing
 
 **Next Action**: Wait for API to stabilize, or switch to faster/simpler prompts
+
+---
+
+## v7.0 - v23 Format + Self-Correction (2026-04-05 09:39)
+
+**Strategy**: v23 format with simplified self-correction
+**Status**: ✅ Completed
+
+### Results
+
+| Metric | v7.0 | v2.0 | v23 |
+|--------|------|------|-----|
+| **Composite** | **51.38** | 54.64 | 58.30 |
+| Core | 50.20 | 50.00 | 54.40 |
+| Gen | 57.60 | 65.20 | 68.20 |
+
+**Observations**:
+- Better than v36 (43.60) and v1 paradigm
+- But still below v2.0 (54.64) and v23 (58.30)
+- Self-correction with v23 format doesn't help as much as expected
+
+### Score Breakdown
+| Task | Score | Notes |
+|------|-------|-------|
+| core_005 | 68.0 | review - strong |
+| core_003/006 | 58.0 | research - good |
+| gen_003 | 70.0 | review - good |
+| core_002/004/009 | 38.0 | code - weak |
+
+## v8.0 - Chain-of-Thought Enhanced (RUNNING)
+
+**Strategy**: Single-shot v23 format + CoT prompts (NO self-reflection)
+**Started**: 2026-04-05 09:50 UTC
+
+**Hypothesis**: v23's success came from adaptive format. Add CoT to strengthen initial analysis without iteration overhead.
+
+**Early Result**:
+- core_001: **87.0** (excellent!)
+
+**If v8.0 > 58.30**: CoT is the key enhancement
+**If v8.0 ≈ 58.30**: v23 is near optimal
+**If v8.0 < 58.30**: API variance explains v23's score
