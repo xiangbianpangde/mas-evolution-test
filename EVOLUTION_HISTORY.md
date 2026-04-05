@@ -1438,3 +1438,42 @@ What if we REMOVE all structure and just ask questions directly?
 - Then implement incrementally
 - Use checkpoints to survive timeouts
 
+
+### v3.3 Results - Self-Reflection + v23 Format (FINAL)
+
+| Metric | v3.3 | v23 | Δ |
+|--------|------|-----|---|
+| **Composite** | 52.48 | 58.30 | -5.82 |
+| Core | **61.40** | 54.40 | **+7.00** |
+| Gen | 48.40 | 68.20 | -19.80 |
+
+**Detailed Scores:**
+- core_001: 78.0 (research - excellent!)
+- core_002: 65.0 (code)
+- core_003: 65.0 (research)
+- core_004: 62.0 (code)
+- core_005: 76.0 (review - excellent!)
+- core_006: 50.0 (research)
+- core_007: 53.0 (code)
+- core_008: 72.0 (research - excellent!)
+- core_009: 25.0 (code - poor)
+- core_010: 68.0 (review - excellent!)
+- gen_001: 50.0 (research)
+- gen_002: 42.0 (code)
+- gen_003: 50.0 (review)
+- gen_004: 50.0 (research)
+- gen_005: 50.0 (code)
+
+**Key Finding**: Self-reflection significantly improved Core research tasks (61.4 vs 54.4) but catastrophically hurt Gen generalization (48.4 vs 68.2). 
+
+**Root Cause Analysis**: 
+- Self-reflection causes agent to double-down on domain-specific patterns
+- Gen tasks by definition require generalization - self-critique reinforces existing patterns
+- Trade-off: Domain-specific improvement vs generalization
+
+**Conclusion**: Self-reflection is a double-edged sword. Good for refining known task types, bad for generalization.
+
+**Next Iteration Strategy**:
+- Option A: Use self-reflection ONLY for Core tasks, regular execution for Gen tasks
+- Option B: Abandon self-reflection, try tool-augmented approach
+- Option C: Ensemble: run both v23 and v3.3, pick better result per task
