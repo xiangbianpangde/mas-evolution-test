@@ -1153,3 +1153,30 @@ Core research tasks significantly improved (+4.3 vs v23).
 v12.0 remains the BEST v2 paradigm result. The Gen reflection approach in v14 causes instability.
 
 **Next**: Either accept v12.0 as the v2 champion, or try a completely different approach (e.g., ensemble without reflection).
+
+## v15.0 - Novelty-Focused Gen + Stable Core (2026-04-05 13:45)
+
+**Status**: ❌ Hung at core_002 (1/15 tasks)
+
+### Attempted Strategy
+- No reflection (which caused hangs in v14)
+- Novelty-focused prompts for Gen tasks
+- Stable v12 Core formats
+
+### Issue
+- Hung on core_002 (code task)
+- core_001 scored 58.0 but no further progress
+
+### Current Best
+- **v12.0 = 58.01** (58.7 Core, 63.4 Gen)
+- v23 = 58.30 (54.4 Core, 68.2 Gen)
+
+### Conclusion
+v12.0 remains the BEST v2 paradigm result. Multiple attempts (v13, v14, v15) to improve Gen have caused hangs.
+
+**v2 Paradigm Assessment**: 
+- Current ceiling: ~58 (v12.0 and v23)
+- API instability causing hangs when complexity increases
+- Consider: v1.2 tag for v12.0 as stable v2 release
+
+**Next**: Either tag v12.0 as v2.0 release, or try completely different approach.
