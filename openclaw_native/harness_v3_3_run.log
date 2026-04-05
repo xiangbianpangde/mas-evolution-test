@@ -1,4 +1,7 @@
 [core_001] Executor(research)... Score: 78.0
 [core_002] Executor(code)... Score: 65.0
 [core_003] Executor(research)... Score: 65.0
-[core_004] Executor(code)... 
+[core_004] Executor(code)... Score: 62.0
+[core_005] Executor(review)... Score: 76.0
+[core_006] Executor(research)... Score: 50.0
+[core_007] Executor(code)... 
