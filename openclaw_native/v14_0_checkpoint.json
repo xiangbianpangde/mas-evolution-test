@@ -1,1 +1,1 @@
-{"tasks_completed": ["core_001"], "results": [{"task_id": "core_001", "task_type": "research", "quality_score": 50, "iterations": 2}]}
+{"tasks_completed": ["core_001", "core_002"], "results": [{"task_id": "core_001", "task_type": "research", "quality_score": 50, "iterations": 2}, {"task_id": "core_002", "task_type": "code", "quality_score": 15, "iterations": 2}]}
