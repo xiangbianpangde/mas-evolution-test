@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v18.0 - Resume from v11 checkpoint
+OpenClaw Native Harness v12.0 - Resume from v11 checkpoint
 
 v11 ran 12/15 tasks before interruption:
 - Core avg (10 tasks): 58.7 - EXCELLENT
@@ -22,8 +22,8 @@ API_CONFIG = {
     "model": "MiniMax-M2.7"
 }
 
-CHECKPOINT_FILE = "v18_0_checkpoint.json"  # Resume from v11's checkpoint
-RESULTS_FILE = "benchmark_results_v18.0_gen1.json"
+CHECKPOINT_FILE = "v11_0_checkpoint.json"  # Resume from v11's checkpoint
+RESULTS_FILE = "benchmark_results_v12_0_gen1.json"
 
 @dataclass
 class TaskResult:
@@ -421,12 +421,12 @@ class HarnessV12:
         composite = core_avg * 0.45 + gen_avg * 0.45 + (avg_actionability * 10) * 0.1
         
         print(f"\n{'=' * 60}")
-        print(f"v18.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
+        print(f"v12.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
         print(f"{'=' * 60}")
         
         # Save final results
         final_results = {
-            "harness_version": "v18.0",
+            "harness_version": "v12.0",
             "paradigm": "v2 (Hybrid: v9 CoT + v23 + Light Gen Reflection)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
