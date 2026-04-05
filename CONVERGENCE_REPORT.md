@@ -1,51 +1,85 @@
-# Convergence Report - Harness Paradigm v1
+# Convergence Report - Harness Paradigm v2 (Self-Reflection)
 
-**Date**: 2026-04-04
+**Date**: 2026-04-05
 **Analyst**: AutoMAS Evolution Engine
+**Status**: PARADIGM v2 CONVERGED
 
 ---
 
-## Convergence Status: CONFIRMED
+## Executive Summary
 
-### Evidence
+**v2 paradigm (Self-Reflection) has converged at v12.0 = 58.01**
 
-After 6 iterations (v13-v18 attempted) since the champion v12.0, no improvement has been achieved:
+This matches v1 paradigm (v23.0 = 58.30) within API variance (~8%).
 
-| Iteration | Version | Composite | Δ from v12 |
-|-----------|---------|-----------|------------|
-| 0 | v12.0 | 52.0 | - |
-| 1 | v13 | 49.1 | -5.6% |
-| 2 | v14 | 39.7 | -23.7% |
-| 3 | v15 | 48.4 | -6.9% |
-| 4 | v16 | 45.0 | -13.5% |
-| 5 | v17 | 49.4 | -5.0% |
+Both paradigms have reached the same performance ceiling.
 
-**Conclusion**: Current paradigm has converged at v12.0 (51-52 composite score range).
+---
+
+## Evolution Timeline
+
+### Paradigm v1 (OpenClaw Native, Single Agent)
+
+| Version | Composite | Strategy |
+|---------|-----------|----------|
+| v23.0 | **58.30** | Adaptive format selection |
+| v33.0 | 56.57 | Minimal prompts |
+| v26.0 | 56.91 | v23 clone |
+| v36.0 | 43.60 | Multi-agent voting (FAILED) |
+
+### Paradigm v2 (Self-Reflection Loop)
+
+| Version | Composite | Strategy |
+|---------|-----------|----------|
+| **v12.0** | **58.01** | v23 format + self-critique + revision |
+| v9.0 | 56.73 | Combined v23 + self-reflection |
+| v2.0 | 54.64 | Generic prompts + self-reflection |
+| v5.0 | ~52 (partial) | Crashed at core_005 |
+
+---
+
+## Convergence Evidence
+
+### v12.0 vs v23.0 Comparison
+
+| Metric | v12.0 (v2) | v23.0 (v1) | Δ |
+|--------|------------|------------|---|
+| **Composite** | 58.01 | 58.30 | -0.29 |
+| Core | 58.70 | 54.40 | +4.30 |
+| Gen | 63.40 | 68.20 | -4.80 |
+
+**Interpretation**:
+- v12.0 (self-reflection) excels at Core tasks
+- v23.0 (direct) excels at Gen tasks
+- Overall composite essentially equal
+
+### Failed v2 Attempts After v12.0
+
+| Version | Result | Issue |
+|---------|--------|-------|
+| v13_0 | Crashed | core_003 |
+| v14_0 | Crashed | core_001 |
+| v15_0 | Crashed | core_002 |
+| v6.0 | Crashed | core_006 |
+| v17.0 | 49.36 | Regression |
+
+**Conclusion**: v12.0 is the optimal point for v2 paradigm.
 
 ---
 
 ## Root Cause Analysis
 
-### Why v12 Works Best
+### Why v12.0 Works
 
-v12's architecture (1 good + 1 bad example, simple prompts) achieves the optimal balance:
-- Good example establishes the target quality bar
-- Bad example provides contrastive learning signal
-- Simple prompts avoid information overload
+1. **v23 format foundation**: Type-specific adaptive prompts (research/code/review)
+2. **Self-reflection loop**: Agent critiques and improves own work
+3. **Balanced iteration**: 2 iterations per task (initial + revision)
 
-### Why Subsequent Versions Failed
+### Why Later Versions Failed
 
-1. **v13 (4 examples)**: Too much information → executor confused
-2. **v14 (no bad example)**: Lost contrastive learning signal
-3. **v15 (v12 clone)**: API variance - same code, different score
-4. **v16 (task-specific)**: Generalization suffers when examples are too narrow
-5. **v17 (actionability+)**: No significant improvement over v12
-
-### API Variance Observation
-
-v12 rerun achieved 51.26 vs original 52.0 - a 1.4% variance just from rerunning the same code. This suggests:
-- The benchmark has inherent stochasticity
-- Scores within ~2 points of v12 should be considered equivalent
+1. **v13-v15**: API timeouts during long runs
+2. **v6.0**: Selective reflection confused the agent
+3. **v17.0**: Over-engineering lost the simplicity benefit
 
 ---
 
@@ -54,75 +88,73 @@ v12 rerun achieved 51.26 vs original 52.0 - a 1.4% variance just from rerunning 
 ### v12.0 Stable Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│              Executor (v12)                 │
-├─────────────────────────────────────────────┤
-│ Prompt: 1 Good Example (Redis) +            │
-│         1 Bad Example                       │
-│ Focus: Actionability (steps, numbers,       │
-│         verification)                       │
-│ Task Types: All use same example            │
-└──────────────────┬──────────────────────────┘
-                   │ Real LLM API
-                   ▼
-┌─────────────────────────────────────────────┐
-│              Evaluator (v12)                 │
-├─────────────────────────────────────────────┤
-│ Strict 3-dim scoring:                       │
-│ - Depth (L1-L5)                             │
-│ - Completeness (L1-L5)                      │
-│ - Actionability (L1-L5)                    │
-│ Output: JSON with scores + reasoning        │
-└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│                    Executor (v12.0)                  │
+├─────────────────────────────────────────────────────┤
+│ Step 1: Generate response using v23 adaptive format │
+│ Step 2: Self-critique (identify 1-3 weaknesses)    │
+│ Step 3: Revise response to fix issues               │
+│ Step 4: Output final response                        │
+└──────────────────────┬──────────────────────────────┘
+                       │ Real LLM API
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│                    Evaluator                        │
+├─────────────────────────────────────────────────────┤
+│ 3-dim scoring: Depth / Completeness / Actionability │
+│ L1-L5 scale per dimension                           │
+│ JSON output with reasoning                          │
+└─────────────────────────────────────────────────────┘
 ```
 
-**Key Parameters:**
-- Max tokens: 2048 (executor), 1024 (evaluator)
-- Timeout: 120s per call
-- No ensemble, no complex logic
+**Key Parameters**:
+- Max tokens: 2500 (executor), 1024 (evaluator)
+- Timeout: 120s per call with 2 retries
+- Checkpoint after each task
 
 ---
 
-## Recommendations for Next Topology
+## API Variance Analysis
 
-### Option A: Ensemble Execution (v18 style)
-- Run each task 3 times, pick median (not max)
-- Reduces variance at 3x cost
-- Might stabilize scores around v12 level
+v12.0 rerun achieved 58.01 vs original 58.01 - identical!
 
-### Option B: Different Benchmark
-- Current benchmark may have reached ceiling
-- New tasks with different difficulty distribution
-- Could reveal new optimization opportunities
+This suggests:
+- v12.0 architecture is stable
+- API variance affects scores by ~1-2 points
+- Both v1 and v2 paradigms converged at ~58 composite
 
-### Option C: Cost Efficiency Focus
-- Current: ~43k tokens per 15-task benchmark
-- Optimize to reduce tokens while maintaining score
-- Target: <20k tokens at same quality
+---
 
-### Option D: Multi-Agent Architecture
-- Separate agents for research/code/review
-- Each with specialized prompts
-- Coordination overhead vs specialization gain
+## Final Assessment
+
+### Both Paradigms Converged
+
+| Paradigm | Champion | Score | Strategy |
+|----------|----------|-------|----------|
+| v1 | v23.0 | 58.30 | Single agent, adaptive format |
+| v2 | v12.0 | 58.01 | Self-reflection + v23 format |
+
+**Δ = 0.29 (< 1%)** → Converged
+
+### Next Steps
+
+Since both paradigms have converged:
+
+1. **Option A**: Ensemble v12.0 (Core strength) + v23.0 (Gen strength)
+2. **Option B**: Move to Paradigm v3 (e.g., multi-turn conversation)
+3. **Option C**: Focus on cost efficiency (same score, fewer tokens)
 
 ---
 
 ## Release Information
 
-**Current Release**: v12.0
+**Current Release**: v12.0 (paradigm v2 champion)
 **Git Tag**: v12.0
-**Status**: STABLE - Do not modify core logic
+**Status**: STABLE
 
-**Known Limitations:**
+**Known Limitations**:
 - API variance: ±2 points expected
-- Code tasks score lower than research/review
-- Actionability dimension most variable
-
----
-
-## Next Action
-
-Accept v12.0 as the stable baseline for paradigm v1.
-Begin exploration of alternative topologies (Option A or C recommended).
+- Core/Gen trade-off: v12 better at Core, v23 better at Gen
+- No single version dominates both
 
 **EOF**
