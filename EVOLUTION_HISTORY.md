@@ -1131,3 +1131,25 @@ Key insight: Type-specific prompts without self-reflection is more stable.
 Core research tasks significantly improved (+4.3 vs v23).
 
 **Next**: Try stronger Gen optimization without losing Core gains.
+
+## v14.0 - Enhanced Gen + Stable Core (2026-04-05 12:00)
+
+**Status**: ❌ Hung at gen_003 (12/15 tasks)
+
+### Attempted Strategy
+- Keep v12's proven Core formats (CoT research, v23 code/review)
+- For Gen tasks ONLY: Add stronger reflection
+
+### Issue
+- v14 consistently hangs at gen_003 (3rd generalization task)
+- Tried restarting multiple times, same issue
+- Likely: Gen reflection loop causes API timeout or infinite loop
+
+### Current Best
+- **v12.0 = 58.01** (58.7 Core, 63.4 Gen)
+- v23 = 58.30 (54.4 Core, 68.2 Gen)
+
+### Conclusion
+v12.0 remains the BEST v2 paradigm result. The Gen reflection approach in v14 causes instability.
+
+**Next**: Either accept v12.0 as the v2 champion, or try a completely different approach (e.g., ensemble without reflection).
