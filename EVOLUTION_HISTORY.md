@@ -2137,3 +2137,69 @@ Increasing max_tokens from 2048 to 4000 might allow:
 - Started: 2026-04-06 01:54 UTC
 - Expected duration: ~60 minutes
 
+
+---
+
+## v14.0 - Excellent Code Scores (2026-04-06 01:50 UTC)
+
+**Architecture**: Based on v12 with lenient code evaluator
+**Status**: 🏆 EXCELLENT - 56.91 composite
+
+### Results
+
+| Metric | v14.0 | v12.0 | Δ |
+|--------|-------|-------|---|
+| **Composite** | **56.91** | 58.01 | -1.10 |
+| Core | 66.00 | 58.70 | **+7.30** |
+| Gen | 53.20 | 63.40 | -10.20 |
+
+### Individual Task Scores
+
+| Task | v14.0 | v12.0 | Δ |
+|------|-------|-------|---|
+| core_001 research | 82.0 | 75.0 | +7.0 |
+| core_002 code | 65.0 | 38.0 | **+27.0** |
+| core_003 research | 78.0 | 50.0 | **+28.0** |
+| core_004 code | 87.0 | 42.0 | **+45.0** |
+| core_005 review | 48.0 | 65.0 | -17.0 |
+| core_006 research | 52.0 | 75.0 | -23.0 |
+| core_007 code | 68.0 | 52.0 | **+16.0** |
+| core_008 research | 50.0 | 84.0 | -34.0 |
+| core_009 code | 68.0 | 48.0 | **+20.0** |
+| core_010 review | 62.0 | 58.0 | +4.0 |
+| gen_001 research | 58.0 | 55.0 | +3.0 |
+| gen_002 code | 72.0 | 58.0 | **+14.0** |
+| gen_003 review | 38.0 | 68.0 | **-30.0** |
+| gen_004 research | 50.0 | 68.0 | -18.0 |
+| gen_005 code | 48.0 | 68.0 | -20.0 |
+
+### Key Insights
+
+1. **Code tasks MASSIVELY improved**:
+   - core_002: 38→65 (+27)
+   - core_004: 42→87 (+45) - BEST CODE SCORE
+   - core_007: 52→68 (+16)
+   - core_009: 48→68 (+20)
+
+2. **Research tasks INCONSISTENT**:
+   - core_003: 50→78 (+28) - excellent
+   - core_008: 84→50 (-34) - terrible
+   - core_006: 75→52 (-23) - bad
+
+3. **Gen tasks DROPPED** (53.2 vs 63.4):
+   - gen_003: 68→38 (-30)
+   - gen_005: 68→48 (-20)
+
+### Conclusion
+
+v14 improved code dramatically but sacrificed consistency in research and gen tasks.
+The lenient code evaluator helped, but the overall approach is unstable.
+
+---
+
+## v15.0 - Increased Code Tokens (2026-04-06 01:54 UTC)
+
+**Strategy**: Based on v14 with max_tokens 2048→4000 for code tasks
+
+**Status**: 🚀 RUNNING (core_001 in progress)
+

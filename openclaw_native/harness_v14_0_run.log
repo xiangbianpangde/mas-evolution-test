@@ -1,0 +1,21 @@
+[core_001] Executor(research)... Score: 82.0 (iter=2)
+[core_002] Executor(code)... Score: 65.0 (iter=1)
+[core_003] Executor(research)... Score: 78.0 (iter=2)
+[core_004] Executor(code)... Score: 87.0 (iter=1)
+[core_005] Executor(review)... Score: 48.0 (iter=2)
+[core_006] Executor(research)... Score: 52.0 (iter=2)
+[core_007] Executor(code)... Score: 68.0 (iter=1)
+[core_008] Executor(research)... Score: 50.0 (iter=2)
+[core_009] Executor(code)... Score: 68.0 (iter=1)
+[core_010] Executor(review)... Score: 62.0 (iter=2)
+[gen_001] Executor(research)... Score: 58.0 (iter=2)
+[gen_002] Executor(code)... Score: 72.0 (iter=1)
+[gen_003] Executor(review)... Score: 38.0 (iter=2)
+[gen_004] Executor(research)... Score: 50.0 (iter=2)
+[gen_005] Executor(code)... Score: 48.0 (iter=1)
+
+============================================================
+v14.0: Core=66.00 Gen=53.20 Composite=56.91
+============================================================
+
+Results saved to: benchmark_results_v14.0_gen1.json
