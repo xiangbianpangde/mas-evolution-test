@@ -1011,3 +1011,51 @@ The API is not suitable for testing at this time.
 **Interpretation**: CoT format significantly improved research/review tasks but weakened code and generalization tasks. Trade-off between Core and Gen.
 
 **Next Question**: Can we combine v8.0's Core strength with v2.0's Gen strength?
+
+## v9.0 - Type-Directed Strategy (2026-04-05 10:29)
+
+**Strategy**: Different prompts for different task types
+- Research tasks: CoT format (from v8)
+- Code tasks: v23 adaptive format
+- Review tasks: v23 adaptive + light self-reflection
+
+**Status**: ✅ Completed at **56.73 composite**
+
+### Results
+
+| Metric | v9.0 | v23 | Δ |
+|--------|------|-----|---|
+| **Composite** | **56.73** | 58.30 | -1.57 |
+| Core | 57.40 | 54.40 | **+3.0** |
+| Gen | 61.40 | 68.20 | -6.8 |
+| Best Tasks | core_001=91, core_003=78, gen_004=88 | | |
+
+### Score Breakdown
+| Task | Score | Type | Strategy |
+|------|-------|------|----------|
+| core_001 | 91.0 | research | CoT |
+| core_003 | 78.0 | research | CoT |
+| core_008 | 88.0 | research | CoT |
+| gen_004 | 88.0 | research | CoT |
+| core_002 | 38.0 | code | v23 format |
+
+### Key Finding
+v9.0's Core (57.4) **BEAT v23's Core (54.4)**!
+But Gen dropped (61.4 vs 68.2).
+
+**Interpretation**: Task-type-specific optimization works for Core but not Gen.
+v23's balanced approach is still best overall.
+
+### Architecture Evolution Summary (v2 Paradigm)
+| Version | Strategy | Composite | Core | Gen |
+|---------|----------|-----------|------|-----|
+| v2.0 | Self-reflection | 54.64 | 50.0 | 65.2 |
+| v7.0 | v23+self-correction | 51.38 | 50.2 | 57.6 |
+| v8.0 | CoT format | 52.27 | **60.0** | 49.2 |
+| **v9.0** | **Type-Directed** | **56.73** | 57.4 | 61.4 |
+| v23 | Adaptive format | 58.30 | 54.4 | 68.2 |
+
+**Conclusion**: v9.0 is 2nd best overall, beating v8.0 significantly.
+Approaching v23 level (58.30) with different architecture.
+
+**Next**: Try combining v9.0's type-specific approach with self-reflection for Gen tasks.
