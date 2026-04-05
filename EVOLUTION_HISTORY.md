@@ -1229,3 +1229,69 @@ v2.1 tag created to mark v2 paradigm convergence at v12.0 (58.01).
 
 **Conclusion**: v3_simple proves NO-REFLECTION is more stable but lower quality. v12.0 (58.01) remains best v2 result.
 
+
+## v7.0 - Stability Run (2026-04-05 09:39)
+
+**Date**: 2026-04-05 09:39 UTC
+**Status**: ✅ Completed
+
+| Metric | v7.0 | v2.0 | v23 |
+|--------|-------|------|-----|
+| **Composite** | 51.38 | 54.64 | 58.30 |
+| Core | 50.2 | 50.0 | 54.4 |
+| Gen | 57.6 | 65.2 | 68.2 |
+
+**Analysis**: Mid-range performance. Neither strong Core nor strong Gen.
+
+## v8.0 - Chain-of-Thought Focus (2026-04-05 10:08)
+
+**Date**: 2026-04-05 10:08 UTC
+**Status**: ✅ Completed
+
+| Metric | v8.0 | v7.0 | v23 |
+|--------|-------|------|-----|
+| **Composite** | 52.27 | 51.38 | 58.30 |
+| Core | **60.0** | 50.2 | 54.4 |
+| Gen | 49.2 | 57.6 | 68.2 |
+
+**Analysis**: High Core (60.0!) but Gen dropped significantly. CoT helps research tasks but hurts generalization.
+
+## v9.0 - Type-Directed Hybrid (2026-04-05 10:29) 🏆 v2 SERIES CHAMPION
+
+**Date**: 2026-04-05 10:29 UTC
+**Status**: ✅ Completed
+**Architecture**: Type-Directed Hybrid
+
+### Strategy
+- Research tasks: Chain-of-Thought format (from v8)
+- Code tasks: v23's adaptive format
+- Review tasks: v23 adaptive + light self-reflection
+
+### Results
+
+| Metric | v9.0 | v8.0 | v2.0 | v23 |
+|--------|------|------|------|-----|
+| **Composite** | **56.73** | 52.27 | 54.64 | 58.30 |
+| Core | 57.4 | 60.0 | 50.0 | 54.4 |
+| Gen | 61.4 | 49.2 | 65.2 | 68.2 |
+
+### Individual Highlights
+- core_001 research: **91.0** (excellent!)
+- core_008 research: **88.0** (excellent)
+- gen_004 research: **88.0** (excellent)
+- gen_003 review: 72.0 (good)
+- core_009 code: **15.0** (poor - Raft consensus too complex)
+
+### Key Finding
+Type-specific optimization achieved best v2 series result (56.73) but still 1.57 below v23 (58.30).
+
+### v2 Paradigm Summary
+| Version | Composite | Core | Gen |
+|---------|-----------|------|-----|
+| v2.0 | 54.64 | 50.0 | 65.2 |
+| v7.0 | 51.38 | 50.2 | 57.6 |
+| v8.0 | 52.27 | 60.0 | 49.2 |
+| **v9.0** | **56.73** | 57.4 | 61.4 |
+| v23 (v1 champion) | 58.30 | 54.4 | 68.2 |
+
+**Conclusion**: v9.0 proves type-specific optimization helps but v23's balanced approach is still superior. API timeouts are causing hangs on v6.0 and v3_simple.

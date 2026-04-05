@@ -1,5 +1,1 @@
-============================================================
-Harness v6.0 - v23 Format Only (Control Test)
-============================================================
-[core_001] Executor(research)... Score: 50.0
-[core_002] Executor(code)... 
+[core_001] Executor(research)...   [Error: The read operation timed out, retry 1/2] 
