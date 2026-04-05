@@ -2,4 +2,5 @@
 Harness v14.0 - Enhanced Gen + Stable Core
 Strategy: v12 Core prompts + Enhanced Gen reflection
 ============================================================
-[core_001] Executor(research)... 
+[core_001] Executor(research)... Score: 50.0 (iter=2)
+[core_002] Executor(code)... 
