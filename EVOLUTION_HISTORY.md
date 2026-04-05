@@ -1477,3 +1477,26 @@ What if we REMOVE all structure and just ask questions directly?
 - Option A: Use self-reflection ONLY for Core tasks, regular execution for Gen tasks
 - Option B: Abandon self-reflection, try tool-augmented approach
 - Option C: Ensemble: run both v23 and v3.3, pick better result per task
+
+### v6.0 - Type-Specific Prompts + Selective Reflection (RUNNING)
+
+**Strategy**: Combine best of v3.3 and v23
+- Type-specific prompts (simpler is better)
+- Self-reflection ONLY for Core research tasks (not code, not Gen)
+- Should get Core improvement without Gen penalty
+
+**Key Hypotheses**:
+1. Type-specific prompts (v3.3) better than v23 adaptive format
+2. Self-reflection for Core research → Core=61.4+ (self-reflection benefit)
+3. No reflection for Gen → Gen preserved (no penalty)
+
+**Expected Result**:
+- Core research: 61.4+ (from self-reflection)
+- Core code: ~55 (v3.3 without reflection but simpler prompts)
+- Gen: 68.2+ (no reflection penalty, should match v23)
+- Target: 58.30+ composite
+
+**Test Status**:
+- Started: 2026-04-05 16:30 UTC
+- Running in background (checkpoint enabled)
+
