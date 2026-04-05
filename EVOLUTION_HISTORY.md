@@ -1620,3 +1620,27 @@ What if we REMOVE all structure and just ask questions directly?
 2. Focus on: improving Gen tasks (currently 63.4 vs 68.2 in v23)
 3. Alternative: Ensemble v12.0 Core + v23 Gen strategies
 
+---
+
+## v19.0 - Full Self-Reflection (2026-04-05 12:29 UTC)
+
+**Strategy**: v12.0 COT prompts + self-reflection for ALL tasks
+**Status**: 🚀 RUNNING
+
+### Key Changes from v12.0
+- Self-reflection enabled for code tasks (was only research/review)
+- Hypothesis: v2.0 showed self-reflection improved Gen; applying to code
+
+### Test Parameters
+- Based on: v12.0 (58.01 composite)
+- Self-reflection: ALL task types
+- Checkpointing: Enabled
+
+### Current Status
+- Started: 2026-04-05 12:29 UTC
+- Running in background (nohup)
+
+### Expected Outcome
+- If self-reflection helps code: Gen should improve toward 68.2
+- If code tasks don't benefit: Expect similar to v12.0 (~58 composite)
+
