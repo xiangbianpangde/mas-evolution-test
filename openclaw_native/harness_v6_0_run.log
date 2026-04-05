@@ -1,1 +1,2 @@
-[core_001] Executor(research)...   [Error: The read operation timed out, retry 1/2] 
+[core_001] Executor(research) (reflection)... Score: 68.0 [R]
+[core_002] Executor(code) (no reflection)... 
