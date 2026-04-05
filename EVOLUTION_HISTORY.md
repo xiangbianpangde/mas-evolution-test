@@ -2399,3 +2399,21 @@ This suggests scheduled maintenance or rate limiting.
 3. Consider reducing task count to 5 for faster iteration
 4. Document API issue in results
 
+
+---
+
+## Summary as of 2026-04-05 18:39 UTC
+
+**Current Champion**: v14.0 at 56.91 composite
+- Core: 66.00 (excellent - best ever)
+- Gen: 53.20 (weak)
+
+**Best Core Score**: v14.0 at 66.00
+**Best Gen Score**: v12.0 at 63.40
+
+**API Status**: Intermittent severe latency (~60s or timeout)
+- Both v15.0 and v16.0 killed after failing to complete tasks
+- v14.0 completed successfully before API issues
+
+**Next Action**: Wait for stable API, then run v16.0 to confirm it improves upon v14.0
+
