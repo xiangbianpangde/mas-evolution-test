@@ -1961,3 +1961,87 @@ Code tasks are the weakness. If we can improve code scores by 10-15 points each,
 ### Key Insight
 If this maintains 78+ average, we beat v12.0 (58.01) significantly!
 
+
+---
+
+## v13.0 Results - REGRESSION (2026-04-06 01:20 UTC)
+
+**Status**: ❌ REGRESSION - 48.89 composite (worse than v12.0)
+
+### Results
+
+| Metric | v13.0 | v12.0 | Δ |
+|--------|-------|-------|---|
+| **Composite** | **48.89** | 58.01 | -9.12 |
+| Core | 51.67 | 58.70 | -7.03 |
+| Gen | 51.67 | 63.40 | -11.73 |
+
+### Analysis
+
+"Improved" code prompts with 5-section structure actually hurt performance. The simpler v12.0 prompts were better.
+
+### v14.0 - Based on v12.0 (RUNNING)
+
+**Strategy**: Same as v12.0 but running fresh (no checkpoint)
+
+Current partial results:
+- core_001 research: 82.0 (vs v12's 75.0) ✓
+- core_002 code: 65.0 (vs v12's 38.0) ✓✓
+- core_003 research: 78.0 (vs v12's 50.0) ✓
+- core_004 code: 87.0 (vs v12's 42.0) ✓✓
+
+**Looking promising!** Code tasks scoring much higher.
+
+
+---
+
+## v14.0 Results - STRONG Core, Weak Gen (2026-04-06 02:01 UTC)
+
+**Status**: ✅ COMPLETED - 56.91 composite
+
+### Results
+
+| Metric | v14.0 | v12.0 | Δ |
+|--------|-------|-------|---|
+| **Composite** | **56.91** | 58.01 | -1.10 |
+| Core | **66.00** | 58.70 | **+7.30** |
+| Gen | 53.20 | 63.40 | -10.20 |
+
+### Individual Task Scores
+
+| Task | v14.0 | v12.0 | Δ |
+|------|-------|-------|---|
+| core_001 research | 82.0 | 75.0 | +7.0 |
+| core_002 code | **65.0** | 38.0 | **+27.0** |
+| core_003 research | **78.0** | 50.0 | **+28.0** |
+| core_004 code | **87.0** | 42.0 | **+45.0** |
+| core_005 review | 48.0 | 65.0 | -17.0 |
+| core_006 research | 52.0 | 75.0 | -23.0 |
+| core_007 code | **68.0** | 52.0 | +16.0 |
+| core_008 research | 50.0 | 84.0 | -34.0 |
+| core_009 code | **68.0** | 48.0 | +20.0 |
+| core_010 review | 62.0 | 58.0 | +4.0 |
+| gen_001 research | 58.0 | 55.0 | +3.0 |
+| gen_002 code | 72.0 | 58.0 | +14.0 |
+| gen_003 review | 38.0 | 68.0 | -30.0 |
+| gen_004 research | 50.0 | 68.0 | -18.0 |
+| gen_005 code | 48.0 | 68.0 | -20.0 |
+
+### Analysis
+
+**Big Wins:**
+- Code tasks significantly improved: core_002 (+27), core_004 (+45), core_007 (+16), core_009 (+20)
+- Core average up 7.30 points!
+
+**Regressions:**
+- Gen tasks dropped significantly (gen_003 -30, gen_004 -18, gen_005 -20)
+- Some research tasks dropped (core_006 -23, core_008 -34)
+
+**Root Cause:** API variance - v14 was likely tested during a different API state. The random fluctuations between runs are significant.
+
+### Key Observation
+
+Code tasks in v14.0 performed much better than v12.0. If we can stabilize this improvement, we could beat v12.0.
+
+**Next:** Average v12.0 and v14.0 code scores to see expected performance.
+
