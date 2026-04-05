@@ -1556,10 +1556,27 @@ What if we REMOVE all structure and just ask questions directly?
 
 ---
 
-## v6.0 - Selective Reflection (RUNNING)
+## v3.3 - High Core Variant (2026-04-05 16:04)
+
+**Architecture**: Type-specific prompts lineage
+**Status**: ✅ COMPLETED - 52.48 Composite
+
+### Metrics
+
+| Metric | v3.3 | v12.0 | v23.0 |
+|--------|-------|-------|-------|
+| **Composite** | 52.48 | 58.01 | 58.30 |
+| Core | **61.4** | 58.7 | 54.4 |
+| Gen | 48.4 | 63.4 | 68.2 |
+
+**Observation**: v3.3 achieved highest Core (61.4) but lowest Gen (48.4). Trade-off between Core and Gen.
+
+---
+
+## v6.0 - Selective Reflection (ABANDONED)
 
 **Strategy**: Type-specific prompts + self-reflection for Core research only
-**Status**: 4/15 tasks completed
+**Status**: Crashed at core_006 (4/15 tasks completed)
 
 ### Partial Results
 | Task | Score | Notes |
