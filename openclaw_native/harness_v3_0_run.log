@@ -1,6 +1,1 @@
-============================================================
-Harness v3.0 - Checkpointed Hybrid (v23 format + Self-Reflection)
-============================================================
-[core_001] Executor(research)... Score: 68.0 (iter=2)
-[core_002] Executor(code)... Score: 0.0 (iter=2)
-[core_003] Executor(research)... 
+[core_001] Executor(research)... 
