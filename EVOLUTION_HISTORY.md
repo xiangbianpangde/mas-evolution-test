@@ -1059,3 +1059,30 @@ v23's balanced approach is still best overall.
 Approaching v23 level (58.30) with different architecture.
 
 **Next**: Try combining v9.0's type-specific approach with self-reflection for Gen tasks.
+
+## v10.0 - Type-Directed + Targeted Self-Reflection (FAILED)
+
+**Date**: 2026-04-05 10:40 UTC
+**Strategy**: Combine v9.0 type-specific prompts with targeted self-reflection
+- Research: CoT format + depth reflection
+- Code: v23 format + completeness reflection
+- Review: v23 format + risk reflection
+
+**Status**: ❌ FAILED - API timeout after 5+ minutes on core_001
+
+**Root Cause**: Adding self-reflection to already complex type-specific prompts created context that was too long for the API to process reliably.
+
+**Lesson**: Self-reflection works with simple prompts (v2.0), but combining with complex prompts (CoT + type-specific) causes timeout.
+
+## Current Best - v9.0 (56.73)
+
+| Metric | v9.0 | v23 | Δ |
+|--------|------|-----|---|
+| **Composite** | **56.73** | 58.30 | -1.57 |
+| Core | 57.40 | 54.40 | **+3.0** |
+| Gen | 61.40 | 68.20 | -6.8 |
+
+v9.0 is the best v2 paradigm result, approaching v23 level.
+Key insight: Type-specific prompts without self-reflection is more stable.
+
+**Next Direction**: Try lighter self-reflection or different optimization angle.
