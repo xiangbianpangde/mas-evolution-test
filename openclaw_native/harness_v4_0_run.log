@@ -1,4 +1,2 @@
-============================================================
-Harness v4.0 - Checkpointed v23 Format + Self-Reflection
-============================================================
-[core_001] Executor(research)... 
+[core_001] Executor(research)...   [Agent1]   [Agent2]   [Agent3] Score: 50.0 (agents=3)
+[core_002] Executor(code)...   [Agent1] 
