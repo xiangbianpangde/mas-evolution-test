@@ -2,4 +2,5 @@
 [core_002] SKIP (checkpoint)
 [core_003] SKIP (checkpoint)
 [core_004] Executor(code) (no reflection)... Score: 38.0 [-]
-[core_005] Executor(review) (no reflection)... 
+[core_005] Executor(review) (no reflection)... Score: 50.0 [-]
+[core_006] Executor(research) (reflection)... 
