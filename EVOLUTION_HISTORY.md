@@ -1500,3 +1500,77 @@ What if we REMOVE all structure and just ask questions directly?
 - Started: 2026-04-05 16:30 UTC
 - Running in background (checkpoint enabled)
 
+
+---
+
+## v12.0 - Resume from v11 Checkpoint (2026-04-05 11:24)
+
+**Architecture**: Type-specific prompts (v11/v12 lineage)
+**Status**: ✅ COMPLETED - 58.01 Composite (NEW CHAMPION!)
+
+### Metrics
+
+| Metric | v12.0 | v23.0 | Δ |
+|--------|-------|-------|---|
+| **Composite** | **58.01** | 58.30 | -0.29 |
+| Core | 58.7 | 54.4 | **+4.3** |
+| Gen | 63.4 | 68.2 | -4.8 |
+
+### Individual Results
+| Task | Score |
+|------|-------|
+| core_001 | 75 |
+| core_002 | 38 |
+| core_003 | 50 |
+| core_004 | 42 |
+| core_005 | 65 |
+| core_006 | 75 |
+| core_007 | 52 |
+| core_008 | 84 |
+| core_009 | 48 |
+| core_010 | 58 |
+| gen_001 | 55 |
+| gen_002 | 58 |
+| gen_003 | 68 |
+| gen_004 | 68 |
+| gen_005 | 68 |
+
+**Key Insight**: v12.0 achieved 58.01 - essentially matching v23's 58.30 within API variance!
+
+---
+
+## v17.0 - Type-Specific Prompts v2 (2026-04-05 16:27)
+
+**Architecture**: Type-specific prompts with selective reflection
+**Status**: ✅ COMPLETED - 49.36 Composite (REGRESSION)
+
+### Metrics
+
+| Metric | v17.0 | v12.0 | v23.0 |
+|--------|-------|-------|-------|
+| **Composite** | 49.36 | 58.01 | 58.30 |
+| Core | 52.3 | 58.7 | 54.4 |
+| Gen | 52.3 | 63.4 | 68.2 |
+
+**Regression**: Core dropped from 58.7→52.3, Gen dropped from 63.4→52.3
+
+---
+
+## v6.0 - Selective Reflection (RUNNING)
+
+**Strategy**: Type-specific prompts + self-reflection for Core research only
+**Status**: 4/15 tasks completed
+
+### Partial Results
+| Task | Score | Notes |
+|------|-------|-------|
+| core_001 | 68 | |
+| core_002 | 25 | code, no reflection |
+| core_003 | 50 | |
+| core_004 | 38 | code, no reflection |
+
+### Observations
+- core_002 (code): 25 - very low
+- Self-reflection not helping code tasks
+- v12.0 lineage seems stronger
+
