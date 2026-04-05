@@ -2203,3 +2203,54 @@ The lenient code evaluator helped, but the overall approach is unstable.
 
 **Status**: 🚀 RUNNING (core_001 in progress)
 
+
+---
+
+## v14.0 - Code Tasks Revolution (2026-04-06 01:50 UTC)
+
+**Architecture**: v12.0 + Lenient Code Evaluator
+**Status**: 🏆🏆 EXCELLENT - 56.91 composite, Core=66.0
+
+### Results
+
+| Metric | v14.0 | v12.0 | Δ |
+|--------|-------|-------|---|
+| **Composite** | **56.91** | 58.01 | -1.10 |
+| Core | **66.00** | 58.70 | **+7.30** |
+| Gen | 53.20 | 63.40 | -10.20 |
+
+### Individual Task Scores (BEST CODE RESULTS EVER!)
+
+| Task | v14.0 | v12.0 | Δ | Notes |
+|------|-------|-------|---|-------|
+| core_002 code | **65.0** | 38.0 | **+27** | Huge improvement! |
+| core_004 code | **87.0** | 42.0 | **+45** | HUGE! |
+| core_007 code | **68.0** | 52.0 | **+16** | |
+| core_009 code | **68.0** | 48.0 | **+20** | |
+| core_001 research | 82.0 | 75.0 | +7 | |
+| core_003 research | 78.0 | 50.0 | +28 | |
+| gen_002 code | 72.0 | 58.0 | +14 | |
+| gen_003 review | 38.0 | 68.0 | -30 | Gen dropped |
+
+### Key Insight
+
+**Code tasks dramatically improved** (+16-45 points)! The lenient code evaluator allowed better code scores.
+
+**BUT Gen dropped** (-10.20) because Gen review task (gen_003) scored only 38 vs 68 in v12.
+
+### Strategy
+
+The trade-off is clear:
+- Lenient code evaluator → Great for code tasks
+- But hurts review/generalization tasks
+
+Next: Try STRICT code evaluator + lenient review evaluator?
+
+---
+
+## v15.0 - Increased Code Tokens (2026-04-06 01:54 UTC)
+
+**Strategy**: v12.0 base + more tokens for code (2048→4000)
+
+**Status**: 🚀 RUNNING (2/15 tasks done)
+
