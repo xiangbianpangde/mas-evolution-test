@@ -1370,3 +1370,14 @@ Difference: 0.29 points (within API variance of ~8%).
 | v2 (Reflection) | v12 | 58.01 | 58.7 | 63.4 |
 
 **Both paradigms converged at ~58 composite.** Different architecture, similar results.
+
+
+## v16.0 - v12/v23 Hybrid Attempt (2026-04-05 14:19)
+
+**Status**: ❌ Failed - hung at core_002
+**Checkpoint**: Only core_001 completed (Score: 50.0, iter=2)
+
+**Conclusion**: Code tasks continue to cause timeouts. v12.0=58.01 remains best.
+
+**Next**: Need to investigate code task timeout issue specifically.
+
