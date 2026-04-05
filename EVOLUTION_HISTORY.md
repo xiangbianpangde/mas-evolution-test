@@ -1678,13 +1678,13 @@ What if we REMOVE all structure and just ask questions directly?
 
 | Version | Composite | Core | Gen | Status |
 |---------|-----------|------|-----|--------|
-| **v9.0** | **56.73** | 57.4 | 61.4 | 🏆 Best today |
-| v12.0 | 58.01 | 58.7 | 63.4 | Historical best |
+| **v12.0** | **58.01** | 58.7 | 63.4 | 🏆 Best today |
+| v9.0 | 56.73 | 57.4 | 61.4 | Second place |
 | v23.0 | 58.30 | 54.4 | 68.2 | Historical champion |
 | v19.0 | ~50 (killed) | - | - | Failed |
 
-**Current Best**: v9.0 (56.73) with type-directed hybrid approach
-**Gap to v23**: -1.57 (within API variance)
+**Current Best**: v12.0 (58.01) with type-directed hybrid approach
+**Gap to v23**: -0.29 (within API variance)
 
 ### Key Insights
 1. Type-specific optimization > one-size-fits-all
