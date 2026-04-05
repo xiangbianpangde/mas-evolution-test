@@ -2254,3 +2254,45 @@ Next: Try STRICT code evaluator + lenient review evaluator?
 
 **Status**: 🚀 RUNNING (2/15 tasks done)
 
+
+**Status**: ❌ HUNG - API issues at core_005
+
+### Partial Results
+
+| Task | Score |
+|------|-------|
+| core_001 | 52.0 |
+| core_002 | 58.0 |
+| core_003 | 48.0 |
+| core_004 | 62.0 |
+
+**Analysis**: API became extremely slow/unresponsive after 01:54 UTC. Tasks were hanging on API calls.
+
+---
+
+## v16.0 - v12 Prompts + v14 Lenient Evaluator (2026-04-06 02:05 UTC)
+
+**Strategy**: Combine v12.0's proven research/review prompts with v14's lenient code evaluator
+
+**Status**: ❌ HUNG - Same API issues, stuck on core_001
+
+### Same Issue
+
+MiniMax API became extremely slow after ~02:00 UTC. Multiple harness versions (v14, v15, v16) all hung.
+
+---
+
+## Current Best: v14.0 (56.91)
+
+| Version | Composite | Core | Gen | Notes |
+|---------|-----------|------|-----|-------|
+| **v14.0** | **56.91** | 66.00 | 53.20 | Best code scores |
+| v12.0 | 58.01 | 58.70 | 63.40 | Most balanced |
+| v23.0 | 58.30 | 54.40 | 68.20 | Best Gen |
+
+### Priority Fixes
+
+1. **API Stability**: Need better timeout/retry handling
+2. **Code/Review Trade-off**: Find evaluator that works for both
+3. **Consistency**: v14 had huge variance (core_008 dropped 34 points)
+
