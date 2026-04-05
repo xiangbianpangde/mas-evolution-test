@@ -22,8 +22,8 @@ API_CONFIG = {
     "model": "MiniMax-M2.7"
 }
 
-CHECKPOINT_FILE = "v11_0_checkpoint.json"  # Resume from v11's checkpoint
-RESULTS_FILE = "benchmark_results_v12_0_gen1.json"
+CHECKPOINT_FILE = "v18_0_checkpoint.json"  # Resume from v11's checkpoint
+RESULTS_FILE = "benchmark_results_v18_0_gen1.json"
 
 @dataclass
 class TaskResult:
@@ -212,8 +212,8 @@ class HarnessV12:
             return (V23_CODE_PROMPT.format(task_type=task_type, query=query), f"任务类型：{task_type}\n任务：{query}")
     
     def should_reflect(self, task_type: str) -> bool:
-        """Self-reflection mainly for Gen tasks"""
-        return task_type in ["research", "review"]  # Gen research/review get reflection
+        """Self-reflection for ALL task types"""
+        return True  # All tasks get self-reflection
     
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
