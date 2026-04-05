@@ -2417,3 +2417,28 @@ This suggests scheduled maintenance or rate limiting.
 
 **Next Action**: Wait for stable API, then run v16.0 to confirm it improves upon v14.0
 
+
+---
+
+## API Latency Issue - Ongoing (2026-04-06 03:10 UTC)
+
+**Issue**: All recent harness runs (v15.0, v16.0, fresh v14.0) hang on first API call
+
+**Observation**:
+- API works with direct curl (~2s response)
+- Python harness hangs indefinitely on first `call_with_retry`
+- Not a checkpoint issue - fresh runs also hang
+
+**Likely Cause**: Network configuration or Python environment issue
+
+**v14.0 Status**: Previously completed successfully at 56.91 composite
+- But fresh run now hangs on core_001
+- The code itself worked before
+
+**API Test**:
+```
+curl -X POST [API endpoint] --max-time 10
+# Returns in ~2s when API is healthy
+```
+
+**Next Action**: Investigate Python urllib configuration or wait for API stability
