@@ -1201,26 +1201,31 @@ v2.1 tag created to mark v2 paradigm convergence at v12.0 (58.01).
 
 **Conclusion**: API seems unstable. Multiple harness versions hanging. v12.0 = 58.01 remains the reference point.
 
-## v3_simple - Ultra-Minimal Stability (RUNNING)
+## v3_simple - Ultra-Minimal Stability (HUNG AT 4/15)
 
 **Date**: 2026-04-05 13:58 UTC
-**Status**: 🚀 RUNNING
+**Status**: ❌ Hung on core_005 (4/15 tasks completed)
 
-### Strategy
-- NO self-reflection (single pass only)
-- Minimal prompts
-- 60s timeout per call (faster failure)
-- Checkpoint after each task
+### Results (Partial)
+| Task | Score | Type |
+|------|-------|------|
+| core_001 | 58.0 | research |
+| core_002 | 38.0 | code |
+| core_003 | **82.0** | research |
+| core_004 | 28.0 | code |
 
-### Hypothesis
-Previous v3 attempts hung because:
-- v3.0: API responded but harness stalled
-- v3.1: Parallel ensemble complexity
+### Key Findings
+- Research tasks excel (core_003=82!)
+- Code tasks struggle (38, 28) - likely need better prompts
+- Hung on core_005 with API timeout after retry
+- v3_simple shows NO-REFLECTION works for research but not code
 
-v3_simple removes ALL complexity to maximize stability.
+### v2.0 vs v3_simple Comparison
+| Metric | v2.0 (58.01) | v3_simple (partial) |
+|--------|--------------|---------------------|
+| Core research | 58.7 | 70.0 (2 tasks) |
+| Core code | - | 33.0 (2 tasks) |
+| Reflection | Yes | No |
 
-### Expected Outcome
-- Lower quality than v12.0 (58.01) due to no reflection
-- But should COMPLETE without hanging
-- Target: 45-55 composite (stable baseline)
+**Conclusion**: v3_simple proves NO-REFLECTION is more stable but lower quality. v12.0 (58.01) remains best v2 result.
 
