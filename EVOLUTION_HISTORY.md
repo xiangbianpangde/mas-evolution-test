@@ -2360,3 +2360,42 @@ Task-type-specific evaluators need careful design:
 - Research evaluator: Needs strict criteria (depth, evidence, verification)
 - Review evaluator: Needs balance (risk assessment, not code)
 
+
+---
+
+## v15.0 / v16.0 - API Latency Issues (2026-04-06 02:00-02:09 UTC)
+
+**Status**: HUNG/KILLED
+
+### Observations
+
+At ~02:00 UTC (2026-04-06), the MiniMax API started experiencing severe latency:
+- Normal: 3-10 seconds per call
+- During issue: **60+ seconds or timeout**
+
+### v15.0 Results (Partial - 2/15 tasks)
+
+| Task | Score |
+|------|-------|
+| core_001 | 52.0 |
+| core_002 | 58.0 |
+
+v15 checkpoint shows only 2 tasks despite log suggesting 3 started.
+
+### v16.0 - Killed by SIGKILL
+
+v16.0 (v12.0 prompts + v14.0 lenient code evaluator) never made progress.
+Process killed after ~4 minutes on core_001.
+
+### Root Cause
+
+API service degradation at specific times (~00:30 and ~02:00 UTC).
+This suggests scheduled maintenance or rate limiting.
+
+### Next Steps
+
+1. Wait for API to recover
+2. Implement exponential backoff retry
+3. Consider reducing task count to 5 for faster iteration
+4. Document API issue in results
+
