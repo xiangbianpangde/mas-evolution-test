@@ -1,0 +1,120 @@
+{
+  "harness_version": "v25.0",
+  "paradigm": "v25 (v23 + Gen Review Reflection)",
+  "timestamp": "2026-04-07T00:37:42",
+  "elapsed_seconds": 1482.9419162273407,
+  "summary": {
+    "total_tasks": 15,
+    "core_avg_score": 62.6,
+    "gen_avg_score": 64.4,
+    "avg_actionability_level": 3.2,
+    "composite_score": 60.35000000000001
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "task_type": "research",
+      "quality_score": 50,
+      "is_suspicious": false,
+      "iterations": 2
+    },
+    {
+      "task_id": "core_002",
+      "task_type": "code",
+      "quality_score": 68,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "core_003",
+      "task_type": "research",
+      "quality_score": 50,
+      "is_suspicious": false,
+      "iterations": 2
+    },
+    {
+      "task_id": "core_004",
+      "task_type": "code",
+      "quality_score": 78,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "core_005",
+      "task_type": "review",
+      "quality_score": 58,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "core_006",
+      "task_type": "research",
+      "quality_score": 50,
+      "is_suspicious": false,
+      "iterations": 2
+    },
+    {
+      "task_id": "core_007",
+      "task_type": "code",
+      "quality_score": 68,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "core_008",
+      "task_type": "research",
+      "quality_score": 58,
+      "is_suspicious": false,
+      "iterations": 2
+    },
+    {
+      "task_id": "core_009",
+      "task_type": "code",
+      "quality_score": 78,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "core_010",
+      "task_type": "review",
+      "quality_score": 68,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "gen_001",
+      "task_type": "research",
+      "quality_score": 58,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "gen_002",
+      "task_type": "code",
+      "quality_score": 78,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "gen_003",
+      "task_type": "review",
+      "quality_score": 50,
+      "is_suspicious": false,
+      "iterations": 2
+    },
+    {
+      "task_id": "gen_004",
+      "task_type": "research",
+      "quality_score": 58,
+      "is_suspicious": false,
+      "iterations": 1
+    },
+    {
+      "task_id": "gen_005",
+      "task_type": "code",
+      "quality_score": 78,
+      "is_suspicious": false,
+      "iterations": 1
+    }
+  ]
+}
