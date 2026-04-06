@@ -1,0 +1,73 @@
+{
+  "harness_version": "v29.0",
+  "paradigm": "v29 (v23 MAX strategy)",
+  "summary": {
+    "total_tasks": 15,
+    "core_avg_score": 67.1,
+    "gen_avg_score": 74.4,
+    "avg_actionability_level": 3.3333333333333335,
+    "composite_score": 67.00833333333333
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "quality_score": 62
+    },
+    {
+      "task_id": "core_002",
+      "quality_score": 78
+    },
+    {
+      "task_id": "core_003",
+      "quality_score": 55
+    },
+    {
+      "task_id": "core_004",
+      "quality_score": 58
+    },
+    {
+      "task_id": "core_005",
+      "quality_score": 68
+    },
+    {
+      "task_id": "core_006",
+      "quality_score": 72
+    },
+    {
+      "task_id": "core_007",
+      "quality_score": 78
+    },
+    {
+      "task_id": "core_008",
+      "quality_score": 68
+    },
+    {
+      "task_id": "core_009",
+      "quality_score": 82
+    },
+    {
+      "task_id": "core_010",
+      "quality_score": 50
+    },
+    {
+      "task_id": "gen_001",
+      "quality_score": 92
+    },
+    {
+      "task_id": "gen_002",
+      "quality_score": 78
+    },
+    {
+      "task_id": "gen_003",
+      "quality_score": 52
+    },
+    {
+      "task_id": "gen_004",
+      "quality_score": 72
+    },
+    {
+      "task_id": "gen_005",
+      "quality_score": 78
+    }
+  ]
+}
