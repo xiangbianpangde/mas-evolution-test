@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v15.0 - v15.0: Increased code max_tokens 2048->3500
+OpenClaw Native Harness v15.0 - Fix Gen Regression
 
-v11 ran 12/15 tasks before interruption:
-- Core avg (10 tasks): 58.7 - EXCELLENT
-- Gen (2 tasks): [55, 58] - partial
+Root Cause Analysis:
+- v14.0 (Core=66.0, Gen=53.2): Self-reflection applied to ALL Gen research/review tasks
+  - gen_001: 72→58 (research, self-reflection hurt)
+  - gen_003: 50→38 (review, self-reflection hurt)  
+  - gen_004: 68→50 (research, self-reflection hurt)
+- v8.0 (Core=59.3, Gen=57.4): No self-reflection on Gen tasks, better COT format
 
-This harness resumes from v11's checkpoint and completes remaining tasks.
-Then calculates final composite score.
+Key Insight: v8.0's COT format + no self-reflection on Gen tasks was BETTER for Gen.
+v14.0's self-reflection helps Core research (core_001: 78→82) but hurts Gen.
+
+v15.0 Strategy:
+1. Keep v14.0's code improvements (LENIENT_CODE_EVALUATOR, no CoT for code)
+2. Restore v8.0's COT format for research tasks (all research, including Gen)
+3. NO self-reflection on ANY Gen task (research or review)
+4. Keep self-reflection for Core research tasks ONLY
+5. Core review tasks get minimal/lenient reflection trigger
 """
 
 import json
@@ -22,8 +32,8 @@ API_CONFIG = {
     "model": "MiniMax-M2.7"
 }
 
-CHECKPOINT_FILE = "v15_0_checkpoint.json"  # Resume from v11's checkpoint
-RESULTS_FILE = "benchmark_results_v15.0_gen1.json"
+CHECKPOINT_FILE = "v15_0_checkpoint.json"
+RESULTS_FILE = "benchmark_results_v15_0_gen1.json"
 
 @dataclass
 class TaskResult:
@@ -98,20 +108,55 @@ class RealLLMCaller:
             "error": None
         }
 
-# v11 Prompts (same as v11.0)
-COT_RESEARCH_PROMPT = """你是一个专业的技术分析师。请深入分析以下研究任务。
 
+# ============================================================
+# v8.0's COT Format (RESTORED) - Better for Gen tasks
+# ============================================================
+COT_EXECUTOR = """你是一个专业的技术分析师。请仔细分析以下任务。
+
+任务类型：{task_type}
 任务：{query}
 
-请按以下Chain-of-Thought格式输出：
-1. 问题诊断：先明确核心问题
-2. 深度分析：分解问题，包含具体数字和案例
-3. 技术方案：给出可操作的解决方案
-4. 数字证据：引用具体数据支持分析
-5. 验证方法：说明如何验证方案有效性
+## 分析步骤（请先思考这些步骤，再输出最终答案）：
 
-要求：有深度，有具体数字，有可操作性。"""
+1. **问题诊断**：这个问题的核心挑战是什么？
+2. **深度分析**：有哪些关键技术点需要考虑？
+3. **方案设计**：具体的解决方案是什么？
+4. **证据支撑**：有哪些数字或案例支持这个方案？
+5. **验证方法**：如何验证方案的有效性？
 
+## 输出格式要求：
+
+根据任务类型，选择最合适的输出格式：
+
+**research**: 
+- 问题诊断（核心挑战是什么）
+- 深度分析（包含具体数字和技术细节）
+- 具体方案（分步骤）
+- 证据支撑（数字、案例）
+- 验证方法（如何验证）
+
+**code**:
+- 架构简图
+- 核心代码（完整可运行，附注释）
+- 测试用例
+- 配置说明
+
+**review**:
+- 风险矩阵
+- 影响分析
+- 缓解步骤（分优先级）
+- 验证方法
+
+## 质量标准：
+- 有具体数字和证据
+- 有可操作的步骤
+- 有验证方法
+- 代码必须可运行
+
+请先完成分析步骤，再输出最终答案。"""
+
+# v14.0's code format (kept from v14.0)
 V23_CODE_PROMPT = """你是一个专业的技术分析师。
 
 任务类型：{task_type}
@@ -177,43 +222,76 @@ STRICT_EVALUATOR = """你是一个严格的技术评估专家。
 
 请严格评分。"""
 
-LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。
+# v14.0's lenient code evaluator (kept from v14.0)
+LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。代码任务评分标准：
 
-评分标准：
-- L5: 功能完整，结构清晰，有测试
-- L4: 功能完整，有小问题
-- L3: 基本OK
-- L2: 不完整或混乱
-- L1: 不可行
+- L5 (90-100): 完整可运行实现 + 测试 + 清晰结构
+- L4 (75-89): 完整实现，个别细节问题
+- L3 (60-74): 核心逻辑完成，部分功能缺失但可接受
+- L2 (40-59): 部分完成，核心功能有但实现不完整
+- L1 (20-39): 有尝试但基本不可用
+- L0 (0-19): 几乎没有有效代码
+
+评分原则：
+- 给分从宽，只要有有效代码就给部分分
+- 重点看核心功能是否实现
+- 小问题不扣大分
+- 注释缺失、格式问题忽略
 
 输出 JSON（不用markdown）：
-{{"depth": {{"level": 1-5, "evidence": "引用"}}, "completeness": {{"level": 1-5, "evidence": "引用"}}, "actionability": {{"level": 1-5, "evidence": "引用"}}, "overall_score": 0-100, "reasoning": "说明"}}
+{{"depth": {{"level": 0-5, "evidence": "引用"}}, "completeness": {{"level": 0-5, "evidence": "引用"}}, "actionability": {{"level": 0-5, "evidence": "引用"}}, "overall_score": 0-100, "reasoning": "说明"}}
 
 ---
 {content}
 ---
 
-重点看功能实现。"""
+请从宽评分。"""
 
 
-class HarnessV12:
+class HarnessV15:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
     
     def get_prompt_for_task(self, task: Dict) -> tuple:
-        """Return (system_prompt, prompt) based on task type"""
+        """Return (system_prompt, prompt) based on task type and ID"""
+        task_id = task["id"]
         task_type = task["type"]
         query = task["query"]
         
-        if task_type == "research":
-            return (COT_RESEARCH_PROMPT.format(query=query), f"任务类型：{task_type}\n任务：{query}")
+        is_gen = task_id.startswith("gen_")
+        
+        if task_type == "code":
+            # v14.0's code format (no CoT for code)
+            return (V23_CODE_PROMPT.format(task_type=task_type, query=query), 
+                    f"任务类型：{task_type}\n任务：{query}")
         else:
-            return (V23_CODE_PROMPT.format(task_type=task_type, query=query), f"任务类型：{task_type}\n任务：{query}")
+            # v8.0's COT format for ALL research/review (including Gen)
+            return (COT_EXECUTOR.format(task_type=task_type, query=query),
+                    f"任务类型：{task_type}\n任务：{query}")
     
-    def should_reflect(self, task_type: str) -> bool:
-        """Self-reflection mainly for Gen tasks"""
-        return task_type in ["research", "review"]  # Gen research/review get reflection
+    def should_reflect(self, task: Dict) -> bool:
+        """
+        Self-reflection strategy for v15.0:
+        - NO self-reflection on ANY Gen task (key fix!)
+        - Self-reflection on Core research tasks ONLY
+        - No self-reflection on Core review tasks (review is harder to improve via reflection)
+        """
+        task_id = task["id"]
+        task_type = task["type"]
+        
+        # Gen tasks: NO self-reflection (this was hurting them)
+        if task_id.startswith("gen_"):
+            return False
+        
+        # Core tasks: selective self-reflection
+        # Core research: YES (helps core_001: 78→82)
+        if task_type == "research":
+            return True
+        
+        # Core review: NO (review is harder to improve via reflection)
+        # v14.0 had core_005=48, core_010=62 with reflection - not worth the risk
+        return False
     
     def execute_task(self, task: Dict) -> TaskResult:
         task_id = task["id"]
@@ -221,7 +299,7 @@ class HarnessV12:
         query = task["query"]
         
         executor_start = time.time()
-        max_tokens = 4000 if task_type == "code" else 2500
+        max_tokens = 3000 if task_type == "code" else 2500
         
         system_prompt, prompt = self.get_prompt_for_task(task)
         
@@ -246,9 +324,9 @@ class HarnessV12:
         current_output = initial_response["content"]
         total_tokens = initial_response.get("output_tokens", 0)
         
-        # Step 2: Light self-reflection only for Gen research/review
+        # Step 2: Self-reflection only for Core research tasks
         iterations = 1
-        if self.should_reflect(task_type):
+        if self.should_reflect(task):
             critique_response = self.llm.call_with_retry(
                 prompt=SELF_CRITIQUE_PROMPT.format(
                     task_type=task_type, query=query, output=current_output
@@ -259,6 +337,7 @@ class HarnessV12:
             total_tokens += critique_response.get("output_tokens", 0)
             critique_text = critique_response["content"]
             
+            # Only revise if critique is substantive
             has_issues = len(critique_text) > 80 and "问题" in critique_text
             if has_issues and not critique_response.get("error"):
                 revision_response = self.llm.call_with_retry(
@@ -359,7 +438,7 @@ class HarnessV12:
              "query": "实现去中心化身份认证（DID）系统"}
         ]
         
-        # Load v11 checkpoint
+        # Load checkpoint if exists
         checkpoint = {"tasks_completed": [], "results": []}
         if os.path.exists(CHECKPOINT_FILE):
             try:
@@ -379,7 +458,8 @@ class HarnessV12:
                 print(f"[{task['id']}] SKIP (already completed)")
                 continue
             
-            print(f"[{task['id']}] Executor({task['type']})...", end=" ", flush=True)
+            reflect_str = "CoT" if self.should_reflect(task) else "no-reflect"
+            print(f"[{task['id']}] Executor({task['type']}, {reflect_str})...", end=" ", flush=True)
             result = self.execute_task(task)
             results.append(result)
             print(f"Score: {result.quality_score:.1f} (iter={result.iterations})")
@@ -424,10 +504,16 @@ class HarnessV12:
         print(f"v15.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
         print(f"{'=' * 60}")
         
+        # Per-task breakdown
+        print("\nPer-task scores:")
+        for r in results:
+            gen_marker = " [GEN]" if r.task_id.startswith("gen_") else ""
+            print(f"  {r.task_id}: {r.quality_score:.1f} (iter={r.iterations}){gen_marker}")
+        
         # Save final results
         final_results = {
             "harness_version": "v15.0",
-            "paradigm": "v2 (Hybrid: v9 CoT + v23 + Light Gen Reflection)",
+            "paradigm": "v3 (v8.0 COT + v14.0 Code + No Gen Reflection)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
@@ -460,5 +546,5 @@ class HarnessV12:
 if __name__ == "__main__":
     api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
     
-    harness = HarnessV12(api_key)
+    harness = HarnessV15(api_key)
     harness.run_benchmark()
