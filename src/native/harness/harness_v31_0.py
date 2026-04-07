@@ -50,7 +50,7 @@ class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 180, max_retries: int = 3) -> Dict:
+    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 600, max_retries: int = 5) -> Dict:
         for attempt in range(max_retries + 1):
             try:
                 result = self._make_request(prompt, system_prompt, max_tokens, timeout)
