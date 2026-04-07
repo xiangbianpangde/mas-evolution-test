@@ -23,9 +23,9 @@ def is_harness_running():
             capture_output=True,
             text=True
         )
-        # 检查是否有 python3 进程正在运行 harness
+        # 检查是否有 python3 进程正在运行 harness (包括 harness_v* 和 harness_evo*)
         for line in result.stdout.split("\n"):
-            if "harness_v" in line and "python" in line.lower():
+            if ("harness_v" in line or "harness_evo" in line) and "python" in line.lower():
                 return True
         return False
     except:
