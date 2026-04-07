@@ -1,0 +1,17 @@
+{
+  "task_id": "gen_002",
+  "task_type": "code",
+  "quality_score": 82,
+  "depth_score": 4,
+  "completeness_score": 4,
+  "actionability_score": 4,
+  "executor_tokens": 5858,
+  "evaluator_tokens": 858,
+  "executor_latency_ms": 97738.83533477783,
+  "evaluator_latency_ms": 24235.3196144104,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 1,
+  "run": 1,
+  "evaluation_reasoning": "联邦学习梯度聚合核心代码质量高。完整实现了4种主流聚合策略(FedAvg/FedProx/Krum/TrimmedMean)，包含拜占庭容错机制。设计规范(抽象基类+策略模式)、数据结构清晰、验证机制完备、统计指标丰富。只因TrimmedMean策略末尾截断扣分，但核心功能全部实现。L4级别(75-89)合理，从宽给分82分。"
+}

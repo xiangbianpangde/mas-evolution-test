@@ -1,0 +1,17 @@
+{
+  "task_id": "gen_001",
+  "task_type": "research",
+  "quality_score": 88,
+  "depth_score": 4,
+  "completeness_score": 5,
+  "actionability_score": 4,
+  "executor_tokens": 5982,
+  "evaluator_tokens": 982,
+  "executor_latency_ms": 100498.13437461853,
+  "evaluator_latency_ms": 39458.37187767029,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 1,
+  "run": 1,
+  "evaluation_reasoning": "报告整体质量优秀，达到行业领先水平。深度L4(分析深入但批判性不足)，完整性L5(结构完整覆盖全链条)，可执行性L4(方案具体但缺成本/风险量化)。主要优势:技术对比详尽(5种路线/127-5000+量子比特数据)、实验案例库(4个真实案例含具体指标)、时间线具体(关键节点明确)、代码可落地(评估模型可直接实现)。主要不足:未量化实施成本与ROI、未分析供应商锁定风险、未考虑监管差异(中国/美国/欧盟)、验证指标阈值设定依据不充分。扣分项:量子优势声明过于乐观(需明确当前仍为理论优势)、缺少失败模式和应急方案。"
+}

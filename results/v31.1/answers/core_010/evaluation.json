@@ -1,0 +1,17 @@
+{
+  "task_id": "core_010",
+  "task_type": "review",
+  "quality_score": 75,
+  "depth_score": 4,
+  "completeness_score": 4,
+  "actionability_score": 4,
+  "executor_tokens": 3755,
+  "evaluator_tokens": 755,
+  "executor_latency_ms": 85803.3516407013,
+  "evaluator_latency_ms": 31628.300428390503,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 1,
+  "run": 2,
+  "evaluation_reasoning": "该报告达到优秀水平：量化分析充分(容量模型、并发计算)、架构设计完整(含Service Mesh、中间件选型)、优先级划分清晰(P0-P2)。扣分项：(1)成本估算截断 (2)分库分表具体实施步骤缺失 (3)无迁移路径说明 (4)安全方案中身份认证/授权机制未展开。整体属于'分析深入、有具体方案'的L4水平，但距离L5'独到见解、数字证据充分'仍有差距。"
+}
