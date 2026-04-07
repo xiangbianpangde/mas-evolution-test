@@ -1,20 +1,14 @@
 {
-  "version": "evolution_state",
+  "version": "infinite",
   "current_round": 0,
   "best_score": 76.22,
-  "best_version": "v31.0",
+  "best_version": "v31_0",
   "no_progress_rounds": 0,
-  "target_score": 80.0,
-  "max_rounds": 50,
+  "target_score": 999.0,
+  "max_rounds": 10000,
   "status": "idle",
+  "mode": "infinite",
   "started_at": null,
   "last_run_at": null,
-  "strategy_queue": [
-    {"tokens": 5000, "reflect": "core_only", "max_runs": 2},
-    {"tokens": 4500, "reflect": "all", "max_runs": 2},
-    {"tokens": 4000, "reflect": "core_only", "max_runs": 2},
-    {"tokens": 5500, "reflect": "none", "max_runs": 2},
-    {"tokens": 6000, "reflect": "core_only", "max_runs": 1}
-  ],
   "history": []
 }

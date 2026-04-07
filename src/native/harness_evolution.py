@@ -152,17 +152,15 @@ def record_result(state, version, strategy, result):
     return entry
 
 def should_stop(state):
-    """判断是否应该停止"""
-    if state["current_round"] >= state["max_rounds"]:
-        print(f"达到最大轮次 {state['max_rounds']}")
+    """判断是否应该停止 - 无限进化，永不停止"""
+    # 无限模式：永不自动停止
+    # 仅当达到极端情况时停止
+    if state["best_score"] >= 100.0:
+        print(f"🎉 达到满分 100.0!")
         return True
     
-    if state["no_progress_rounds"] >= 5:
-        print(f"连续 {state['no_progress_rounds']} 轮无进步，停止")
-        return True
-    
-    if state["best_score"] >= state["target_score"]:
-        print(f"🎉 达到目标分数 {state['target_score']}!")
+    if state["current_round"] >= 10000:
+        print(f"达到安全上限 10000 轮，停止")
         return True
     
     return False
