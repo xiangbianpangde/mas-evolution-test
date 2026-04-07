@@ -590,8 +590,19 @@ class HarnessV37:
                 "composite_score": composite,
             },
             "individual_results": [
-                {"task_id": r.task_id, "task_type": r.task_type,
-                 "quality_score": r.quality_score, "iterations": r.iterations, "run": r.run}
+                {
+                    "task_id": r.task_id,
+                    "task_type": r.task_type,
+                    "quality_score": r.quality_score,
+                    "depth_score": r.depth_score,
+                    "completeness_score": r.completeness_score,
+                    "actionability_score": r.actionability_score,
+                    "executor_output": r.executor_output,
+                    "executor_tokens": r.executor_tokens,
+                    "executor_latency_ms": r.executor_latency_ms,
+                    "iterations": r.iterations,
+                    "run": r.run
+                }
                 for r in clean_results
             ]
         }
