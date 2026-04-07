@@ -27,15 +27,20 @@ archive/
 │   ├── harness_v12_0_rerun.log
 │   └── ... (各种运行日志)
 │
+├── scripts/                      # 归档脚本 ⭐ 新
+│   ├── evaluate.py
+│   ├── generate_reports.py
+│   ├── generate_reports_gen121_164.py
+│   ├── run_v7_0_tool.sh
+│   ├── run_v8_0_standard.sh
+│   └── run_v9_0_ext.sh
+│
+├── benchmark_results/            # 归档结果 ⭐ 新
+│   └── benchmark_results_v29_*.json
+│
 ├── benchmark_json/              # 基准测试 JSON
-├── benchmark_results_v29_gen1.json
-├── evaluate.py                  # 旧评测脚本
-├── generate_reports.py          # 报告生成
-├── generate_reports_gen121_164.py
 ├── harness_results_v26.md
-├── run_v7_0_tool.sh
-├── run_v8_0_standard.sh
-└── run_v9_0_ext.sh
+└── README_STRUCTURE.md          # 旧版结构说明
 ```
 
 ---
@@ -58,6 +63,14 @@ Python 实现的多智能体系统版本。
 运行日志，用于调试和复盘。
 **状态**: 历史记录
 
+### scripts/
+归档的脚本工具。
+**状态**: 保留参考
+
+### benchmark_results/
+归档的基准测试结果 JSON。
+**状态**: 历史记录
+
 ---
 
 ## 为什么保留
@@ -74,6 +87,7 @@ Python 实现的多智能体系统版本。
 1. `reports/` 中的旧报告 (保留 gen100, 200, 300 等关键节点)
 2. `logs/` 中的所有日志
 3. `benchmark_json/` 如果不再需要
+4. `python_mas/` 全部 (已迁移到 src/legacy/)
 
 ---
 

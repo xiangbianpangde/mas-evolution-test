@@ -1,73 +1,66 @@
-# OpenClaw Native Harness - v6.0 防作弊架构
+# 📰 Docs
 
-## 核心架构
+> 项目文档目录
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Harness v6.0                          │
-│                   防作弊评测架构                          │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  Task → [Executor Agent] → 真实输出（无 expected 泄漏）  │
-│                    ↓                                    │
-│          [Evaluator Agent] → 独立评分                    │
-│          （不知道 expected，仅评估内容质量）               │
-│                    ↓                                    │
-│           Quality Score + Token 统计                     │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
+---
 
-## 防作弊机制
-
-| 机制 | 说明 |
-|------|------|
-| **分离执行** | Executor 和 Evaluator 完全分离 |
-| **信息隔离** | Executor 看不到 expected outputs |
-| **行为审计** | 检测异常短延迟（<5秒）+长输出 |
-| **独立评分** | Evaluator 不知道正确答案 |
-
-## Benchmark 结果 v6.0
-
-| 指标 | 数值 |
-|------|------|
-| **综合评分** | 45.00 |
-| 核心任务质量分 | 50.0 |
-| 泛化任务质量分 | 50.0 |
-| Executor Token | 30,582 |
-| Evaluator Token | 7,680 |
-| 平均延迟 | 41.2秒/任务 |
-| 可疑检测 | 0 个 |
-
-## 发现的问题
-
-1. **Evaluator 区分度不足**: 所有任务统一给 50 分
-2. **评分维度单一**: 只有整体质量分
-3. **需要多维度评估**: 技术深度/完整性/可执行性分离
-
-## 下一步进化方向
-
-- 改进 Evaluator prompt，引入多维度评分
-- 添加更细粒度的子评分（技术准确性、完整性、可操作性）
-- 考虑引入外部知识库进行事实核查
-
-## 文件结构
+## 目录结构
 
 ```
-openclaw_native/
-├── SOUL.md                    # Agent 定义
-├── evaluator/SOUL.md          # Evaluator Agent
-├── research/SOUL.md          # Research Agent
-├── code/SOUL.md             # Code Agent
-├── review/SOUL.md           # Review Agent
-├── mas-supervisor/
-│   └── skills/mas-orchestrator/
-│       ├── SKILL.md
-│       └── scripts/
-│           └── harness_v6.py  # 防作弊 Harness
-└── benchmark_results_v6_gen1.json
+docs/
+├── README.md                    # 本文件
+├── ARCHITECTURE.md              # 系统架构详解
+├── CONVERGENCE_REPORT.md        # 收敛分析报告
+├── EVOLUTION_HISTORY.md         # 完整演进历史
+├── test_results/                # 测试结果存档 ⭐
+│   └── test_results_v32_*.md
+└── README_v6_NATIVE.md          # (已移至 src/native/)
 ```
 
 ---
 
-*Harness v6.0 - Anti-Cheat Architecture*
+## 文档说明
+
+### ARCHITECTURE.md
+系统架构的详细说明，包括：
+- 整体架构设计
+- 核心组件
+- 数据流
+
+### CONVERGENCE_REPORT.md
+收敛分析报告，包含：
+- 范式收敛判定
+- 性能趋势
+- 关键里程碑
+
+### EVOLUTION_HISTORY.md
+完整的演进历史：
+- 从 v1 到 v40+ 的完整记录
+- 每次实验的分数和策略
+- 关键决策点
+
+### test_results/
+测试结果的存档文件。
+
+---
+
+## 查看位置
+
+| 文档 | 路径 | 大小 |
+|------|------|------|
+| Architecture | docs/ARCHITECTURE.md | ~2.7KB |
+| Convergence | docs/CONVERGENCE_REPORT.md | ~5KB |
+| Evolution | docs/EVOLUTION_HISTORY.md | ~77KB |
+| Test Results | docs/test_results/ | ~1KB |
+
+---
+
+## 快速链接
+
+- **[EVOLUTION_HISTORY.md](EVOLUTION_HISTORY.md)** - 完整演进历史 (~77KB)
+- **[CONVERGENCE_REPORT.md](CONVERGENCE_REPORT.md)** - 收敛分析
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - 系统架构
+
+---
+
+*最后更新: 2026-04-07*
