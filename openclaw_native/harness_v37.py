@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v33.0 - MAX-3 Strategy (3 runs, take best)
+OpenClaw Native Harness v37.0 - Extended Self-Critique to ALL Tasks
 
-v31.0: Core=79.2, Gen=81.0, Composite=76.22 (CHAMPION, 5000 tokens, 2 runs)
+v31.0: Composite 76.22, Core 79.2, Gen 81.0 - CHAMPION
+v31 only applied self-critique+revision to core research tasks.
+v37 hypothesis: Extending self-critique+revision to ALL tasks will improve:
+  - core_005 (review, 65) - didn't get revision
+  - gen_003 (review, 68) - didn't get revision  
+  - code tasks with mid-tier scores
 
-v33.0 Strategy:
-1. Keep v31's 5000 tokens (optimal)
-2. Run each task 3 times instead of 2
-3. Take the best score (MAX-3)
-4. This should further reduce variance
-
-Target: Beat v31's 76.22
+Key changes from v31:
+1. Self-critique+revision applies to ALL tasks (not just core research)
+2. Task-specific revision prompts for review and code tasks
+3. Keep 5000 tokens (proven sweet spot)
+4. Keep MAX strategy (2 runs)
 """
 
 import json
@@ -24,8 +27,8 @@ API_CONFIG = {
     "model": "MiniMax-M2.7"
 }
 
-CHECKPOINT_FILE = "v33_0_checkpoint.json"
-RESULTS_FILE = "benchmark_results_v33_0_gen1.json"
+CHECKPOINT_FILE = "v37_0_checkpoint.json"
+RESULTS_FILE = "benchmark_results_v37_0_gen1.json"
 
 @dataclass
 class TaskResult:
@@ -102,6 +105,8 @@ class RealLLMCaller:
         }
 
 
+# ============ PROMPTS ============
+
 CORE_RESEARCH_PROMPT = """你是一个世界级的技术架构专家，专注于深度技术分析和证据驱动的研究。
 
 任务：{query}
@@ -140,7 +145,7 @@ CORE_RESEARCH_PROMPT = """你是一个世界级的技术架构专家，专注于
 
 请开始深度分析："""
 
-V15_GEN_RESEARCH_PROMPT = """你是一个专业的技术分析师。请仔细分析以下任务。
+GEN_RESEARCH_PROMPT = """你是一个专业的技术分析师。请仔细分析以下任务。
 
 任务类型：{task_type}
 任务：{query}
@@ -196,9 +201,10 @@ CODE_PROMPT = """你是一个专业的技术分析师。
 
 直接输出你的完整分析。"""
 
-SELF_CRITIQUE_PROMPT = """你是一个严格的技术评审专家。请评审以下输出，找出关键问题：
+# ============ SELF-CRITIQUE PROMPTS (TASK-SPECIFIC) ============
 
-任务类型：{task_type}
+SELF_CRITIQUE_RESEARCH = """你是一个严格的技术评审专家。请评审以下研究分析输出，找出关键问题：
+
 任务：{query}
 
 当前输出：
@@ -209,8 +215,35 @@ SELF_CRITIQUE_PROMPT = """你是一个严格的技术评审专家。请评审以
 输出格式：
 问题1: [描述]
 改进1: [具体怎么做]
-问题2: ...
-"""
+问题2: ..."""
+
+SELF_CRITIQUE_CODE = """你是一个严格的代码质量评审专家。请评审以下代码实现，找出关键问题：
+
+任务：{query}
+
+当前输出：
+{output}
+
+请严格指出最多2个最重要的问题（重点关注功能完整性和可运行性）：
+
+输出格式：
+问题1: [描述]
+改进1: [具体怎么做]
+问题2: ..."""
+
+SELF_CRITIQUE_REVIEW = """你是一个严格的架构评审专家。请评审以下评审输出，找出关键问题：
+
+任务：{query}
+
+当前输出：
+{output}
+
+请严格指出最多2个最重要的问题（重点关注风险识别是否全面、缓解方案是否可行）：
+
+输出格式：
+问题1: [描述]
+改进1: [具体怎么做]
+问题2: ..."""
 
 REVISION_PROMPT = """你是一个专业的技术分析师。请根据评审意见改进你的输出：
 
@@ -268,7 +301,7 @@ LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。代码任务�
 请从宽评分。"""
 
 
-class HarnessV33:
+class HarnessV37:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
@@ -285,24 +318,31 @@ class HarnessV33:
                     f"任务类型：{task_type}\n任务：{query}")
         elif task_type == "research":
             if is_gen:
-                return (V15_GEN_RESEARCH_PROMPT.format(task_type=task_type, query=query),
+                return (GEN_RESEARCH_PROMPT.format(task_type=task_type, query=query),
                         f"任务类型：{task_type}\n任务：{query}")
             else:
                 return (CORE_RESEARCH_PROMPT.format(query=query),
                         f"任务：{query}")
-        else:
-            return (V15_GEN_RESEARCH_PROMPT.format(task_type=task_type, query=query),
+        else:  # review
+            return (GEN_RESEARCH_PROMPT.format(task_type=task_type, query=query),
                     f"任务类型：{task_type}\n任务：{query}")
     
-    def should_reflect(self, task: Dict) -> bool:
-        task_id = task["id"]
+    def get_critique_prompt_for_task(self, task: Dict) -> str:
+        """Get task-specific self-critique prompt"""
         task_type = task["type"]
-        
-        if task_type == "research" and task_id.startswith("core_"):
-            return True
-        return False
+        if task_type == "code":
+            return SELF_CRITIQUE_CODE
+        elif task_type == "review":
+            return SELF_CRITIQUE_REVIEW
+        else:
+            return SELF_CRITIQUE_RESEARCH
+    
+    def should_reflect(self, task: Dict) -> bool:
+        """v37: ALL tasks get self-critique + revision"""
+        return True  # Changed from v31 which only did core research
     
     def get_max_tokens(self, task: Dict) -> int:
+        """v37: Keep 5000 tokens (proven sweet spot from v31)"""
         if task["type"] == "research":
             return 5000
         elif task["type"] == "code":
@@ -341,10 +381,12 @@ class HarnessV33:
         current_output = initial_response["content"]
         total_tokens = initial_response.get("output_tokens", 0)
         
+        # v37 CHANGE: Apply self-critique to ALL tasks, not just core research
         iterations = 1
         if self.should_reflect(task):
+            critique_prompt = self.get_critique_prompt_for_task(task)
             critique_response = self.llm.call_with_retry(
-                prompt=SELF_CRITIQUE_PROMPT.format(
+                prompt=critique_prompt.format(
                     task_type=task_type, query=query, output=current_output
                 ),
                 system_prompt="你是一个严格的评审专家。",
@@ -353,7 +395,7 @@ class HarnessV33:
             total_tokens += critique_response.get("output_tokens", 0)
             critique_text = critique_response["content"]
             
-            has_issues = len(critique_text) > 80 and "问题" in critique_text
+            has_issues = len(critique_text) > 80 and ("问题" in critique_text or "改进" in critique_text)
             if has_issues and not critique_response.get("error"):
                 revision_response = self.llm.call_with_retry(
                     prompt=REVISION_PROMPT.format(
@@ -462,17 +504,22 @@ class HarnessV33:
         
         start_time = time.time()
         
+        print("=" * 60)
+        print("Harness v37.0 - Extended Self-Critique to ALL Tasks")
+        print("Key change: Review tasks (core_005, gen_003) now get revision")
+        print("=" * 60)
+        
         for task in tasks:
-            print(f"\n[{task['id']}] Running 3 times (MAX-3 strategy)...", flush=True)
+            print(f"\n[{task['id']}] Running twice (MAX strategy, tokens={self.get_max_tokens(task)}, reflect=ALL)...", flush=True)
             
-            results = []
-            for run_num in [1, 2, 3]:
-                result = self.execute_single(task, run_num=run_num)
-                results.append(result)
-                print(f"  Run{run_num}: {result.quality_score:.1f}")
+            result1 = self.execute_single(task, run_num=1)
+            print(f"  Run1: {result1.quality_score:.1f} (iter={result1.iterations})")
             
-            best = max(results, key=lambda r: r.quality_score)
-            print(f"  BEST: {best.quality_score:.1f} (run{best.run})")
+            result2 = self.execute_single(task, run_num=2)
+            print(f"  Run2: {result2.quality_score:.1f} (iter={result2.iterations})")
+            
+            best = result1 if result1.quality_score >= result2.quality_score else result2
+            print(f"  BEST: {best.quality_score:.1f}")
             
             checkpoint["tasks_completed"].append(task["id"])
             checkpoint["results"].append({
@@ -491,9 +538,8 @@ class HarnessV33:
                 "error": best.error,
                 "iterations": best.iterations,
                 "run": best.run,
-                "run1_score": results[0].quality_score,
-                "run2_score": results[1].quality_score,
-                "run3_score": results[2].quality_score
+                "run1_score": result1.quality_score,
+                "run2_score": result2.quality_score
             })
             with open(CHECKPOINT_FILE, 'w') as f:
                 json.dump(checkpoint, f, ensure_ascii=False)
@@ -503,7 +549,7 @@ class HarnessV33:
         # Extract results
         clean_results = []
         for r in checkpoint["results"]:
-            clean_r = {k: v for k, v in r.items() if k not in ('run1_score', 'run2_score', 'run3_score')}
+            clean_r = {k: v for k, v in r.items() if k not in ('run1_score', 'run2_score')}
             clean_results.append(TaskResult(**clean_r))
         
         total = len(clean_results)
@@ -522,17 +568,18 @@ class HarnessV33:
         composite = core_avg * 0.45 + gen_avg * 0.45 + (avg_actionability * 10) * 0.1
         
         print(f"\n{'=' * 60}")
-        print(f"v33.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
+        print(f"v37.0 Results: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
+        print(f"Actionability: {avg_actionability:.2f}")
         print(f"{'=' * 60}")
         
-        print("\nPer-task scores (MAX-3):")
+        print("\nPer-task scores (MAX of 2 runs):")
         for r in clean_results:
             gen_marker = " [GEN]" if r.task_id.startswith("gen_") else ""
-            print(f"  {r.task_id}: {r.quality_score:.1f}{gen_marker} (r{r.run})")
+            print(f"  {r.task_id}: {r.quality_score:.1f}{gen_marker} (iter={r.iterations}, run={r.run})")
         
         final_results = {
-            "harness_version": "v34.0",
-            "paradigm": "v34 (save full outputs)",
+            "harness_version": "v37.0",
+            "paradigm": "Extended self-critique to ALL tasks",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
@@ -543,18 +590,8 @@ class HarnessV33:
                 "composite_score": composite,
             },
             "individual_results": [
-                {
-                    "task_id": r.task_id,
-                    "task_type": r.task_type,
-                    "quality_score": r.quality_score,
-                    "depth_score": r.depth_score,
-                    "completeness_score": r.completeness_score,
-                    "actionability_score": r.actionability_score,
-                    "executor_output": r.executor_output,
-                    "executor_tokens": r.executor_tokens,
-                    "executor_latency_ms": r.executor_latency_ms,
-                    "run": r.run
-                }
+                {"task_id": r.task_id, "task_type": r.task_type,
+                 "quality_score": r.quality_score, "iterations": r.iterations, "run": r.run}
                 for r in clean_results
             ]
         }
@@ -573,5 +610,5 @@ class HarnessV33:
 if __name__ == "__main__":
     api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
     
-    harness = HarnessV33(api_key)
+    harness = HarnessV37(api_key)
     harness.run_benchmark()

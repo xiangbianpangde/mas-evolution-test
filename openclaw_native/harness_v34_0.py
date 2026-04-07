@@ -25,7 +25,7 @@ API_CONFIG = {
 }
 
 CHECKPOINT_FILE = "v33_0_checkpoint.json"
-RESULTS_FILE = "benchmark_results_v33_0_gen1.json"
+RESULTS_FILE = "benchmark_results_v34_0_gen1.json"
 
 @dataclass
 class TaskResult:
@@ -268,7 +268,7 @@ LENIENT_CODE_EVALUATOR = """你是一个代码质量评估专家。代码任务�
 请从宽评分。"""
 
 
-class HarnessV33:
+class HarnessV34:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
