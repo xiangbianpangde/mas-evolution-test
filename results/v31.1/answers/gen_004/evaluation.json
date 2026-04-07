@@ -1,0 +1,17 @@
+{
+  "task_id": "gen_004",
+  "task_type": "research",
+  "quality_score": 72,
+  "depth_score": 4,
+  "completeness_score": 4,
+  "actionability_score": 3,
+  "executor_tokens": 5900,
+  "evaluator_tokens": 900,
+  "executor_latency_ms": 121849.94149208069,
+  "evaluator_latency_ms": 27955.83415031433,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 1,
+  "run": 1,
+  "evaluation_reasoning": "报告在技术数据完整性和商业框架搭建上表现优秀(L4)，但行动指南粒度不足(L3)，距离L5独到见解和完整可执行方案仍有差距。建议补充：1)具体技术路线选择建议及理由；2)三年内关键里程碑及责任人；3)典型场景的盈亏平衡分析；4)监管审批的详细时间表和关键节点；5)竞争对手对标及差异化策略。"
+}

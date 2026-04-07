@@ -1,0 +1,17 @@
+{
+  "task_id": "gen_003",
+  "task_type": "review",
+  "quality_score": 78,
+  "depth_score": 4,
+  "completeness_score": 4,
+  "actionability_score": 4,
+  "executor_tokens": 3889,
+  "evaluator_tokens": 889,
+  "executor_latency_ms": 78728.27410697937,
+  "evaluator_latency_ms": 24515.602111816406,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 1,
+  "run": 1,
+  "evaluation_reasoning": "报告在深度上达到优秀水平，涵盖多种ZKP方案对比和真实攻击案例；完整性良好但测试章节不完整且P2缺乏具体硬件配置方案；可操作性较强，代码示例具体但缺少风险闭环验收标准和量化指标，整体处于L4优秀档位，距离L5卓越档位差距在于：缺少量化验收标准、测试覆盖不够完整、性能优化方案缺少具体硬件选型"
+}

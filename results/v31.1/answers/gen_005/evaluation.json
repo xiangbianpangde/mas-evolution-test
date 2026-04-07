@@ -1,0 +1,17 @@
+{
+  "task_id": "gen_005",
+  "task_type": "code",
+  "quality_score": 82,
+  "depth_score": 4,
+  "completeness_score": 4,
+  "actionability_score": 4,
+  "executor_tokens": 5685,
+  "evaluator_tokens": 685,
+  "executor_latency_ms": 89325.23727416992,
+  "evaluator_latency_ms": 19885.46085357666,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 1,
+  "run": 1,
+  "evaluation_reasoning": "L4级别。代码实现了完整的去中心化身份认证系统，包括DID创建/注册、VC发行/验证、VP呈现/验证的完整流程。采用W3C DID Core标准，数据结构规范（DIDDocument、VerifiableCredential符合规范）。代码可运行，结构清晰。主要扣分点：VerifiablePresentation被截断、使用模拟签名而非真实密码学库、无独立测试代码。"
+}
