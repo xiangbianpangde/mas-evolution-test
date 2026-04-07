@@ -1,12 +1,79 @@
-# AutoMAS Knowledge Base
+# 📚 AutoMAS Knowledge Base
 
-## 目录
-- [Known_Trends.md](Known_Trends.md) - 已验证的趋势和规律
-- [Benchmark_Tasks.md](Benchmark_Tasks.md) - 评测任务详情
-- [Prompt_Library.md](Prompt_Library.md) - Prompt 模板库
-- [Lessons_Learned.md](Lessons_Learned.md) - 失败教训总结
+> 人类视角：视觉层级 + 关联感知  
+> AI 视角：文件名搜索 + 内容语义
 
-## 用途
-- 快速查阅已验证的策略
-- 避免重复失败实验
-- 新版本参考依据
+---
+
+## 🗺️ 知识地图
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    HOW TO NAVIGATE                       │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│   想快速查找?  →  搜索文件名 (AI 优先)                   │
+│   想浏览结构?  →  看下面的视觉地图                        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+┌──────────────────┐    ┌──────────────────┐
+│   📊 benchmark    │    │    🧠 prompts     │
+│   评测任务        │    │   Prompt 模板    │
+│                  │    │                  │
+│  • Tasks.md      │    │  • Library.md    │
+└──────────────────┘    └──────────────────┘
+
+┌──────────────────┐    ┌──────────────────┐
+│   📈 trends       │    │    📝 lessons     │
+│   已验证趋势      │    │   失败教训       │
+│                  │    │                  │
+│  • Known_Trends  │    │  • Learned.md    │
+└──────────────────┘    └──────────────────┘
+
+┌──────────────────┐
+│   🔬 research    │
+│   网络研究       │
+│                  │
+│  • Harness_Eng   │
+└──────────────────┘
+```
+
+---
+
+## 📂 目录结构 (人类友好)
+
+```
+knowledge/
+├── 📊 benchmark/        - 评测任务详情 (15个标准任务)
+├── 🧠 prompts/         - Prompt 模板库
+├── 📈 trends/          - 已验证的有效策略
+├── 📝 lessons/        - 失败教训总结
+└── 🔬 research/       - 网络研究成果
+```
+
+---
+
+## 🎯 按目的查找
+
+| 目的 | 去哪里 |
+|------|--------|
+| 查看有哪些测试任务 | `benchmark/Tasks.md` |
+| 找 Prompt 模板 | `prompts/Library.md` |
+| 了解什么策略有效 | `trends/Known_Trends.md` |
+| 避免重复失败 | `lessons/Learned.md` |
+| 学习 Harness Engineering | `research/Harness_Engineering.md` |
+
+---
+
+## 🔑 核心发现 (快速摘要)
+
+### ✅ 有效策略
+- **Core research**: 需要自反射
+- **Token budget**: 5000 最佳
+- **评估器**: code 从宽，research 从严
+
+### ❌ 失败教训
+- **Gen research**: 禁止自反射 (破坏结构)
+- **Code (所有)**: 禁止自反射
+- **超长 prompt**: 上下文窗口是稀缺资源
