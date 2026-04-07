@@ -1,0 +1,17 @@
+{
+  "task_id": "core_002",
+  "task_type": "code",
+  "quality_score": 50,
+  "depth_score": 3,
+  "completeness_score": 3,
+  "actionability_score": 3,
+  "executor_tokens": 6024,
+  "evaluator_tokens": 1024,
+  "executor_latency_ms": 96706.14504814148,
+  "evaluator_latency_ms": 34881.19673728943,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 1,
+  "run": 1,
+  "evaluation_reasoning": ""
+}

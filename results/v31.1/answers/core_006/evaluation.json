@@ -1,0 +1,17 @@
+{
+  "task_id": "core_006",
+  "task_type": "research",
+  "quality_score": 50,
+  "depth_score": 3,
+  "completeness_score": 3,
+  "actionability_score": 3,
+  "executor_tokens": 11634,
+  "evaluator_tokens": 1024,
+  "executor_latency_ms": 246811.80334091187,
+  "evaluator_latency_ms": 30060.014247894287,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 2,
+  "run": 1,
+  "evaluation_reasoning": ""
+}

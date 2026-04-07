@@ -1,0 +1,17 @@
+{
+  "task_id": "core_001",
+  "task_type": "research",
+  "quality_score": 55,
+  "depth_score": 4,
+  "completeness_score": 3,
+  "actionability_score": 3,
+  "executor_tokens": 11863,
+  "evaluator_tokens": 961,
+  "executor_latency_ms": 269762.40396499634,
+  "evaluator_latency_ms": 37404.7269821167,
+  "is_suspicious": false,
+  "error": "",
+  "iterations": 2,
+  "run": 1,
+  "evaluation_reasoning": "技术内容扎实，公式推导正确，数据引用规范，代码示例清晰，达到L4水平的技术深度。但完整性(L3)不足：SSM方法未实质展开，分布式方法讨论不完整，缺少理论误差界分析。可操作性(L3)：有代码框架但缺少端到端实现指引和具体调参建议。距L5差距：缺乏独到见解（如原创性分析框架）、完整可复现的方案、深入的理论分析。如需提升：补充Mamba等SSM方法的详细分析，增加技术选型决策框架，提供可运行的完整代码示例。"
+}
