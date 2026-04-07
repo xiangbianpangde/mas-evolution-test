@@ -15,6 +15,7 @@
 │   想快速查找?  →  搜索文件名 (AI 优先)                   │
 │   想了解结构?  →  看下面的视觉地图                        │
 │   想学习主题?  →  按目录浏览                             │
+│   想积累新知?  →  去 learning/ 目录                      │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
 
@@ -40,12 +41,15 @@
 │  • Harness_Eng   │    │  • Human_Centric │
 └──────────────────┘    └──────────────────┘
 
-┌──────────────────┐
-│   📊 benchmark   │
-│   评测任务       │
-│                  │
-│  • Tasks.md     │
-└──────────────────┘
+┌──────────────────┐    ┌──────────────────┐
+│   📊 benchmark   │    │   📖 learning ⭐  │
+│   评测任务        │    │   持续学习       │
+│                   │    │                  │
+│  • Tasks.md      │    │  • experiments   │
+└──────────────────┘    │  • discoveries   │
+                        │  • patterns      │
+                        │  • sources       │
+                        └──────────────────┘
 ```
 
 ---
@@ -57,7 +61,7 @@ knowledge/
 ├── 🏗️ architecture/      - 系统架构与设计模式
 │   ├── README.md
 │   ├── Multi_Agent_Patterns.md      - 编排模式
-│   └── Harness_Engineering_Deep.md - 深度研究
+│   └── Harness_Engineering_Deep.md   - 深度研究
 ├── 🧠 prompts/           - Prompt 模板库
 │   ├── README.md
 │   └── Library.md
@@ -70,9 +74,19 @@ knowledge/
 ├── 🔬 research/          - 网络研究成果
 │   ├── README.md
 │   └── Harness_Engineering.md
-└── 🎨 design/            - 人机交互设计
+├── 🎨 design/            - 人机交互设计
+│   ├── README.md
+│   └── Human_Centric_Design.md
+└── 📖 learning/          - 持续学习库 ⭐
     ├── README.md
-    └── Human_Centric_Design.md
+    ├── experiments/       - 实验知识
+    │   └── README.md
+    ├── discoveries/      - 新发现
+    │   └── README.md
+    ├── patterns/         - 反复出现的模式
+    │   └── README.md
+    └── sources/          - 外部资源
+        └── README.md
 ```
 
 ---
@@ -88,6 +102,7 @@ knowledge/
 | 了解什么策略有效 | `trends/Known_Trends.md` |
 | 避免重复失败 | `lessons/Learned.md` |
 | 学习人机设计原则 | `design/Human_Centric_Design.md` |
+| **积累新知识** | `learning/` ⭐ |
 
 ---
 
@@ -112,3 +127,16 @@ knowledge/
 - **渐进式披露**: 先摘要后细节
 - **视觉分组**: 相关信息放一起
 - **及时反馈**: 操作后立即显示结果
+
+---
+
+## 📖 持续学习 (learning/)
+
+这是新增的专门用于**不断积累知识**的目录：
+
+- `experiments/` - 实验中获得的知识
+- `discoveries/` - 新发现和洞察
+- `patterns/` - 反复出现的模式
+- `sources/` - 有价值的外部资源
+
+**使用方式**: 每次实验或研究后，将有价值的发现添加到相应文件中。
