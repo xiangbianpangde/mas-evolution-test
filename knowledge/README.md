@@ -13,43 +13,66 @@
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │   想快速查找?  →  搜索文件名 (AI 优先)                   │
-│   想浏览结构?  →  看下面的视觉地图                        │
+│   想了解结构?  →  看下面的视觉地图                        │
+│   想学习主题?  →  按目录浏览                             │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
 
 ┌──────────────────┐    ┌──────────────────┐
-│   📊 benchmark    │    │    🧠 prompts     │
-│   评测任务        │    │   Prompt 模板    │
-│                  │    │                  │
-│  • Tasks.md      │    │  • Library.md    │
-└──────────────────┘    └──────────────────┘
+│   🏗️ architecture │    │   🧠 prompts     │
+│   系统架构        │    │   Prompt 模板    │
+│                   │    │                  │
+│  • Multi-Agent   │    │  • Library.md    │
+│  • Harness Deep  │    └──────────────────┘
+└──────────────────┘
 
 ┌──────────────────┐    ┌──────────────────┐
-│   📈 trends       │    │    📝 lessons     │
+│   📈 trends       │    │   📝 lessons     │
 │   已验证趋势      │    │   失败教训       │
-│                  │    │                  │
+│                   │    │                  │
 │  • Known_Trends  │    │  • Learned.md    │
 └──────────────────┘    └──────────────────┘
 
+┌──────────────────┐    ┌──────────────────┐
+│   🔬 research     │    │   🎨 design      │
+│   网络研究        │    │   人机设计       │
+│                   │    │                  │
+│  • Harness_Eng   │    │  • Human_Centric │
+└──────────────────┘    └──────────────────┘
+
 ┌──────────────────┐
-│   🔬 research    │
-│   网络研究       │
+│   📊 benchmark   │
+│   评测任务       │
 │                  │
-│  • Harness_Eng   │
+│  • Tasks.md     │
 └──────────────────┘
 ```
 
 ---
 
-## 📂 目录结构 (人类友好)
+## 📂 完整目录结构
 
 ```
 knowledge/
-├── 📊 benchmark/        - 评测任务详情 (15个标准任务)
-├── 🧠 prompts/         - Prompt 模板库
-├── 📈 trends/          - 已验证的有效策略
-├── 📝 lessons/        - 失败教训总结
-└── 🔬 research/       - 网络研究成果
+├── 🏗️ architecture/      - 系统架构与设计模式
+│   ├── README.md
+│   ├── Multi_Agent_Patterns.md      - 编排模式
+│   └── Harness_Engineering_Deep.md - 深度研究
+├── 🧠 prompts/           - Prompt 模板库
+│   ├── README.md
+│   └── Library.md
+├── 📈 trends/            - 已验证的有效策略
+│   ├── README.md
+│   └── Known_Trends.md
+├── 📝 lessons/           - 失败教训总结
+│   ├── README.md
+│   └── Learned.md
+├── 🔬 research/          - 网络研究成果
+│   ├── README.md
+│   └── Harness_Engineering.md
+└── 🎨 design/            - 人机交互设计
+    ├── README.md
+    └── Human_Centric_Design.md
 ```
 
 ---
@@ -58,11 +81,13 @@ knowledge/
 
 | 目的 | 去哪里 |
 |------|--------|
+| 了解 Multi-Agent 编排模式 | `architecture/Multi_Agent_Patterns.md` |
+| 学习 Harness Engineering | `architecture/Harness_Engineering_Deep.md` |
 | 查看有哪些测试任务 | `benchmark/Tasks.md` |
 | 找 Prompt 模板 | `prompts/Library.md` |
 | 了解什么策略有效 | `trends/Known_Trends.md` |
 | 避免重复失败 | `lessons/Learned.md` |
-| 学习 Harness Engineering | `research/Harness_Engineering.md` |
+| 学习人机设计原则 | `design/Human_Centric_Design.md` |
 
 ---
 
@@ -75,5 +100,15 @@ knowledge/
 
 ### ❌ 失败教训
 - **Gen research**: 禁止自反射 (破坏结构)
-- **Code (所有)**: 禁止自反射
-- **超长 prompt**: 上下文窗口是稀缺资源
+- **Python harness**: 非真实 API，作弊
+- **v5.0 Native**: 超时/解析问题
+
+### 🏗️ 架构模式
+- **Orchestrator-Worker**: Supervisor 分解 → Workers 执行
+- **Review Chain**: 高风险输出需要评审
+- **深度优先**: 一次一个功能
+
+### 🎨 设计原则
+- **渐进式披露**: 先摘要后细节
+- **视觉分组**: 相关信息放一起
+- **及时反馈**: 操作后立即显示结果
