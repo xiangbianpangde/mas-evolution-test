@@ -94,7 +94,7 @@ def run_harness(version, strategy):
             cmd,
             cwd=str(BASE_DIR),
             env=env,
-            timeout=86400,  # 24小时超时
+            timeout=14400,  # 4小时超时
             capture_output=True,
             text=True
         )
