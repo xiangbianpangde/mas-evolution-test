@@ -2,9 +2,34 @@
   "current_round": 0,
   "best_score": 76.22,
   "best_version": "v31_0",
-  "no_progress_rounds": 0,
+  "no_progress_rounds": 3,
   "target_score": 80.0,
   "max_rounds": 50,
-  "history": [],
+  "history": [
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "high_tokens_dual_reflect",
+      "score": 0,
+      "timestamp": "2026-04-08T10:09:49.050034",
+      "is_champion": false
+    },
+    {
+      "round": 1,
+      "version": "evo_002",
+      "strategy": "ultra_high_all_reflect",
+      "score": 0,
+      "timestamp": "2026-04-08T10:10:01.644718",
+      "is_champion": false
+    },
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "high_tokens_dual_reflect",
+      "score": 0,
+      "timestamp": "2026-04-08T10:11:23.447797",
+      "is_champion": false
+    }
+  ],
   "mode": "infinite"
 }

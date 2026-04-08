@@ -19,12 +19,12 @@ from dataclasses import dataclass
 from typing import Dict
 
 # ========== 策略配置 (会被 evolution engine 修改) ==========
-VERSION = "template"
-RESEARCH_TOKENS = 5000
-CODE_TOKENS = 5000
-REVIEW_TOKENS = 3000
+VERSION = "evo_002"
+RESEARCH_TOKENS = 7000
+CODE_TOKENS = 6000
+REVIEW_TOKENS = 4000
 MAX_RUNS = 2
-SELF_REFLECT = "core_only"  # none, core_only, all
+SELF_REFLECT = "all"  # none, core_only, all
 TEMPERATURE = 0.7
 # =========================================================
 
@@ -34,7 +34,7 @@ API_CONFIG = {
     "temperature": TEMPERATURE
 }
 
-BASE_DIR = Path(__file__).parent.parent.parent.parent
+BASE_DIR = Path(__file__).parent.parent.parent
 RESULTS_DIR = BASE_DIR / "results" / "evolution"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -126,7 +126,7 @@ class HarnessV31:
         self.tasks = self.load_tasks()
     
     def load_tasks(self):
-        tasks_file = BASE_DIR / "src" / "benchmark" / "tasks_v2.py"
+        tasks_file = BASE_DIR / "src" / "native" / "tasks_v2.py"
         import importlib.util
         spec = importlib.util.spec_from_file_location("tasks", tasks_file)
         module = importlib.util.module_from_spec(spec)
