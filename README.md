@@ -246,7 +246,7 @@ Edit `src/benchmark/tasks_v2.py`:
 
 ### Understand Scores
 
-- **Composite** = (Core × 0.5 + Gen × 0.5) × ActionabilityMultiplier
+- **Composite** = core_avg × 0.45 + gen_avg × 0.45 + actionability × 0.1
 - **Core** = Average of core_001 to core_010 (5 research + 5 code tasks)
 - **Gen** = Average of gen_001 to gen_005 (5 generalization tasks)
 - **Actionability** = L1-L5 scale multiplier (L4.13 ≈ 1.2×)
