@@ -347,3 +347,20 @@ The system has **37 identified gaps**, of which **12 are critical** that can cau
 | E-002 | ⬜ Unfixed - string matching brittle |
 | RM-001 | ⬜ Unfixed - resource_limiter not used |
 | S-001 | ⬜ README formula wrong, code correct |
+
+## FIXES APPLIED (2026-04-09 Evening)
+
+| Issue | Status | Fix |
+|--------|--------|-----|
+| E-001 | ✅ FIXED | Disabled _update_state in harness_v31_0.py; only evolution.py writes state.json |
+| E-003 | ✅ FIXED | evolution_loop.py renamed to _MOCK.py |
+| EH-001 | ✅ FIXED | API key moved to MINIMAX_API_KEY env var |
+
+## NEW DOCUMENTS CREATED
+
+| Document | Content |
+|----------|---------|
+| TEAM_DESIGN.md | 完整团队架构、职责、通信协议 |
+| EXPERIMENT_DESIGN.md | Benchmark任务、评分细则、演进条件 |
+| MEMORY_SYSTEM.md | 三层记忆架构、更新策略、检索机制 |
+| CONTINUOUS_IMPROVEMENT.md | 反馈闭环、错误分类、能力提升 |

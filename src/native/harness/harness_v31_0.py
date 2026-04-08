@@ -602,7 +602,8 @@ class HarnessV30:
         
         print(f"\nResults saved to: {RESULTS_FILE}")
         
-        # Update state.json with benchmark results
+        # DISABLED: Only harness_evolution.py should update state.json (E-001 fix)
+        # self._update_state("v31.0", composite, core_avg, gen_avg, avg_actionability)
         self._update_state("v31.0", composite, core_avg, gen_avg, avg_actionability)
         
         if os.path.exists(CHECKPOINT_FILE):
