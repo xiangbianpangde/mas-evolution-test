@@ -125,19 +125,19 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
         code
     )
     
-    # 5. 修改 RESULTS_FILE 路径
-    results_file = f"benchmark_results_{version}_gen1.json"
+    # 5. 修改 RESULTS_FILE 路径 - 使用完整路径
+    results_file = f"str(RESULTS_DIR / \"benchmark_results_{version}_gen1.json\")"
     code = re.sub(
         r'RESULTS_FILE = "[^"]*_gen1\.json"',
-        f'RESULTS_FILE = "{results_file}"',
+        f'RESULTS_FILE = {results_file}',
         code
     )
     
-    # 6. 修改 CHECKPOINT_FILE
-    checkpoint_file = f"{version}_checkpoint.json"
+    # 6. 修改 CHECKPOINT_FILE - 使用完整路径
+    checkpoint_file = f"str(RESULTS_DIR / \"{version}_checkpoint.json\")"
     code = re.sub(
         r'CHECKPOINT_FILE = "[^"]*\.json"',
-        f'CHECKPOINT_FILE = "{checkpoint_file}"',
+        f'CHECKPOINT_FILE = {checkpoint_file}',
         code
     )
     
