@@ -249,12 +249,19 @@ class HarnessV30:
         return pct
     
     def load_tasks(self):
+        # Load tasks from tasks_v2.py - need to get both CORE and GENERALIZATION
         tasks_file = BASE_DIR / "src" / "benchmark" / "tasks_v2.py"
         import importlib.util
         spec = importlib.util.spec_from_file_location("tasks", tasks_file)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        return module.TASKS
+        # tasks_v2.py uses DynamicBenchmarkSuite class with default include_generalization=True
+        suite = module.DynamicBenchmarkSuite(include_generalization=True)
+        tasks = list(suite.tasks)
+        # Add category field for scoring
+        for t in tasks:
+            t["category"] = "core" if t["id"].startswith("core_") else "gen"
+        return tasks
     
     def get_max_tokens(self, task: Dict) -> int:
         if task["type"] == "research":
