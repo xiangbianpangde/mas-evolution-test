@@ -1,68 +1,107 @@
-# AutoMAS - Harness Endless Evolution Engine
+# AutoMAS: Automated Multi-Agent System Harness Evolution
 
-Automated Multi-Agent System for benchmarking and evolving AI agent architectures.
+> Endless evolution engine for benchmarking and optimizing AI agent architectures.
 
-## Status
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Model: MiniMax-M2.7](https://img.shields.io/badge/Model-MiniMax--M2.7-blue)](https://minimax.io)
 
-| | |
-|---|---|
-| **Champion** | v31.0 (76.22) |
-| **Framework** | OpenClaw + MiniMax-M2.7 |
-| **Tasks** | 15 (10 Core + 5 Gen) |
-| **License** | MIT |
+## 🎯 What is AutoMAS?
 
-## Quick Start
+AutoMAS is an automated benchmarking and evolution system for AI agent architectures. It runs 15 standardized tasks (10 core + 5 generalization) against different harness configurations, measures performance, and evolves better strategies over time.
+
+## 📊 Current Champion
+
+| Version | Composite | Core | Gen | Status |
+|---------|----------|------|-----|--------|
+| **v31.0** | **76.22** | 79.2 | 81.0 | 🏆 Current Best |
+
+## 🚀 Quick Start
 
 ```bash
-# Set API key
-export MINIMAX_API_KEY="your-key"
+# 1. Set API key
+export MINIMAX_API_KEY="your-api-key"
 
-# Run evolution
+# 2. Run single evolution round
 python src/native/harness_evolution.py --round 1
+
+# 3. Run continuous evolution
+python src/native/harness_evolution.py --continuous
 ```
 
-## Benchmark Tasks
-
-| Category | Count | Description |
-|----------|-------|-------------|
-| Core | 10 | Research + Code (Transformer, RAG, etc.) |
-| Gen | 5 | Generalization (Quantum, ZKP, etc.) |
-
-## Architecture
+## 📁 Project Structure
 
 ```
-src/
-├── native/
-│   ├── harness_evolution.py  # Evolution engine
-│   ├── harness/              # Harness versions
-│   ├── self_verifier.py      # Self-verification
-│   └── strategy_registry.py   # Strategy registry
-└── benchmark/
-    └── tasks_v2.py          # Task definitions
-
-knowledge/     # Team & experiment docs
-experiments/    # Experiment tracking
-results/        # Benchmark results
+.
+├── src/
+│   ├── native/
+│   │   ├── harness_evolution.py    # Evolution engine
+│   │   ├── self_verifier.py         # Self-verification
+│   │   ├── strategy_registry.py      # Strategy registry
+│   │   └── harness/                # Harness versions
+│   └── benchmark/
+│       └── tasks_v2.py             # 15 benchmark tasks
+├── knowledge/                        # System documentation
+├── experiments/                      # Experiment tracking
+├── results/
+│   ├── benchmarks/                  # Benchmark results
+│   ├── checkpoints/                 # Checkpoint files
+│   └── evolution/                   # Evolution state
+└── memory/                          # Session memory
 ```
 
-## Evolution Strategy
+## 🔬 Benchmark Tasks
 
-| Strategy | Tokens | Runs | Temp | Score |
-|----------|--------|------|------|-------|
-| v31.0 🏆 | 5000/5000 | 2 | 0.7 | **76.22** |
-| v33 | 5000/5000 | 3 | 0.5 | 73.44 |
-| v32 | 6000/5500 | 2 | 0.7 | 72.22 |
+### Core Tasks (10)
+Research and code tasks covering:
+- Transformer attention optimization
+- Distributed cache systems
+- RAG retrieval enhancement
+- Microservice rate limiting
+- Multimodal RAG
+- Vector database optimization
+- Graph database queries
+- Real-time data streaming
+- Knowledge graph construction
+- Security authentication
 
-## Documentation
+### Generalization Tasks (5)
+Harder tasks testing generalization:
+- Quantum computing
+- Federated learning
+- Zero-knowledge proofs
+- Neural architecture search
+- Edge deployment
 
-| Doc | Purpose |
-|-----|---------|
-| `knowledge/ARCHITECTURE.md` | System architecture |
-| `knowledge/TEAM_DESIGN.md` | Agent team design |
-| `knowledge/EXPERIMENT_DESIGN.md` | Benchmark design |
-| `knowledge/LESSONS.md` | Lessons learned |
-| `knowledge/HARNESS_KNOWLEDGE.md` | Industry best practices |
+## 📈 Evolution Strategies
 
-## License
+| Strategy | Tokens | Runs | Temp | Reflect | Score |
+|----------|--------|------|------|---------|-------|
+| v31.0 🏆 | 5000/5000 | 2 | 0.7 | core_only | **76.22** |
+| v33 | 5000/5000 | 3 | 0.5 | none | 73.44 |
+| v32 | 6000/5500 | 2 | 0.7 | core_only | 72.22 |
 
-MIT
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [ARCHITECTURE.md](knowledge/ARCHITECTURE.md) | System architecture overview |
+| [TEAM_DESIGN.md](knowledge/TEAM_DESIGN.md) | Multi-agent team design |
+| [EXPERIMENT_DESIGN.md](knowledge/EXPERIMENT_DESIGN.md) | Benchmark design |
+| [LESSONS.md](knowledge/LESSONS.md) | Lessons learned |
+| [HARNESS_KNOWLEDGE.md](knowledge/HARNESS_KNOWLEDGE.md) | Industry best practices |
+
+## 🔒 Anti-Fraud Mechanisms
+
+- **Self-verification**: Each task output is validated before acceptance
+- **Triple verification**: File existence + content + cross-validation
+- **Resource limits**: CPU, memory, disk space enforced
+- **API tracking**: All API calls logged
+
+## 📝 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+**AutoMAS** is maintained by the Genesis Team.
