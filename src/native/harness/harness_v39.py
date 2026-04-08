@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v39.0 - 2-Pass Self-Reflection - MAX + Even Larger Tokens
+OpenClaw Native Harness v39.0 - 2-Pass Self-Reflection
 
-v29.0: Core=67.1, Gen=74.4, Composite=67.01 (CHAMPION)
-v29 proved MAX strategy (run twice, take best) significantly reduces API variance.
+v31.0: Core=79.2, Gen=81.0, Composite=76.22 - CHAMPION
+v39 Strategy: 2-pass self-reflection (up to 3 iterations) for research tasks.
+Instead of just 1 critique+revision, do 2 cycles for deeper refinement.
 
-v31.0 Strategy:
-1. Keep v29's MAX strategy (proven to work)
-2. Increase max_tokens for research tasks: 2500→4000
-3. Keep all other settings same as v29
-
-Hypothesis: Research tasks need more context to produce better outputs.
-Target: Beat v29's 67.01
+Key changes from v31:
+1. 2-pass self-reflection for research tasks (not just 1 pass)
+2. Increased critique tokens: 1000→1500 for deeper analysis
+3. All other settings same as v31.0 (5000 tokens, MAX-2, selective reflection)
 """
 
 import json
@@ -323,7 +321,7 @@ class HarnessV39:
         
         iterations = 1
         if self.should_reflect(task):
-            # PASS 1: First critique and revision
+            # PASS 1: First critique + revision
             critique_response = self.llm.call_with_retry(
                 prompt=SELF_CRITIQUE_PROMPT.format(
                     task_type=task_type, query=query, output=current_output
@@ -349,7 +347,7 @@ class HarnessV39:
                     current_output = revision_response["content"]
                     iterations = 2
                     
-                    # PASS 2: Second critique and revision on refined output
+                    # PASS 2: Second critique + final revision
                     critique_response_2 = self.llm.call_with_retry(
                         prompt=SELF_CRITIQUE_PROMPT.format(
                             task_type=task_type, query=query, output=current_output
@@ -528,8 +526,7 @@ class HarnessV39:
         composite = core_avg * 0.45 + gen_avg * 0.45 + (avg_actionability * 10) * 0.1
         
         print(f"\n{'=' * 60}")
-        print(f"v39.0 Strategy: 2-pass self-reflection for research tasks
-v31.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
+        print(f"v39.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
         print(f"{'=' * 60}")
         
         print("\nPer-task scores (MAX):")
@@ -539,7 +536,7 @@ v31.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
         
         final_results = {
             "harness_version": "v31.0",
-            "paradigm": "v31 (v30 + larger tokens)",
+            "paradigm": "v39 (2-pass reflection)",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": elapsed,
             "summary": {
@@ -571,5 +568,5 @@ v31.0: Core={core_avg:.2f} Gen={gen_avg:.2f} Composite={composite:.2f}")
 if __name__ == "__main__":
     api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
     
-    harness = HarnessV30(api_key)
+    harness = HarnessV39(api_key)
     harness.run_benchmark()
