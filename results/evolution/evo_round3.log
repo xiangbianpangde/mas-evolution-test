@@ -1,0 +1,17 @@
+Running harness: evo_003
+Strategy: v34_800tokens
+Disk usage: 10.3%
+API call count: 0
+Generated: /root/.openclaw/workspace/mas_repo/src/native/harness/harness_evo_003.py
+CPU limit set: 300s
+Memory limit set: 512MB
+Process limit set: 64
+File size limit set: 50MB
+All resource limits applied
+
+Results file not found: /root/.openclaw/workspace/mas_repo/results/evolution/benchmark_results_evo_003_gen1.json
+
+Round 3 complete:
+  Version: evo_003
+  Score: 0.00
+  Current best: v31_0 (76.22)

@@ -427,6 +427,9 @@ def generate_harness(version: str, strategy: dict) -> str:
     }
     for old, new in replacements.items():
         code = code.replace(old, new)
+    # Fix double-brace escaping for Python dict/literal syntax
+    code = code.replace("{{", "{")
+    code = code.replace("}}", "}")
     return code
 
 def run_harness(version: str, strategy: dict):

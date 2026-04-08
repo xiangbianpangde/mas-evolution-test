@@ -35,6 +35,16 @@ if ! ps aux | grep -E "(harness_v|harness_evo)" | grep -v grep | grep -q .; then
 fi
 ```
 
+## D1. API Key Check (CRITICAL - Must Check!)
+```bash
+# MUST check before triggering evolution
+if [ -z "$MINIMAX_API_KEY" ]; then
+    echo "ERROR: MINIMAX_API_KEY not set - evolution cannot run"
+    # DO NOT trigger evolution if key is missing
+    exit 1
+fi
+```
+
 ## E. Resources
 - Disk: Check `df -h /root` - should have >5GB free
 - Memory: `free -h` - should have >1GB available

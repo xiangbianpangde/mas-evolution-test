@@ -17,5 +17,21 @@
     "score": 51.74,
     "timestamp": "2026-04-09T01:38:42.189830",
     "is_champion": false
+  },
+  {
+    "round": 1,
+    "version": "evo_002",
+    "strategy": "v33_1000tokens_max3",
+    "score": 0,
+    "timestamp": "2026-04-09T01:39:41.288840",
+    "is_champion": false
+  },
+  {
+    "round": 2,
+    "version": "evo_003",
+    "strategy": "v34_800tokens",
+    "score": 0,
+    "timestamp": "2026-04-09T01:40:35.774350",
+    "is_champion": false
   }
 ]
