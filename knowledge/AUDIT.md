@@ -331,3 +331,19 @@ The system has **37 identified gaps**, of which **12 are critical** that can cau
 ---
 
 *Audit completed by Deep Auditor Agent — 2026-04-09*
+
+## FIXES APPLIED (2026-04-09)
+
+| Issue | Status | Fix |
+|--------|--------|-----|
+| E-003 | ✅ FIXED | evolution_loop.py renamed to evolution_loop_MOCK.py |
+| EH-001 | ✅ FIXED | API key moved to MINIMAX_API_KEY env var |
+
+## REMAINING CRITICAL ISSUES
+
+| Issue | Status |
+|--------|--------|
+| E-001 | ⬜ Unfixed - dual state.json paths |
+| E-002 | ⬜ Unfixed - string matching brittle |
+| RM-001 | ⬜ Unfixed - resource_limiter not used |
+| S-001 | ⬜ README formula wrong, code correct |
