@@ -50,12 +50,14 @@ def save_state(state):
 def get_next_strategy(state):
     round_num = state["current_round"]
     
+    # 注意：API 对复杂中文查询 + 高 max_tokens 有限制问题
+    # 使用 1000 tokens 避免挂起
     strategies = [
-        {"name": "v32_6000tokens", "research_tokens": 6000, "code_tokens": 5500, "max_runs": 2, "temperature": 0.7},
-        {"name": "v33_7000tokens", "research_tokens": 7000, "code_tokens": 6000, "max_runs": 2, "temperature": 0.7},
-        {"name": "v34_5000max3", "research_tokens": 5000, "code_tokens": 5000, "max_runs": 3, "temperature": 0.5},
-        {"name": "v35_8000tokens", "research_tokens": 8000, "code_tokens": 7000, "max_runs": 1, "temperature": 0.9},
-        {"name": "v36_5500tokens", "research_tokens": 5500, "code_tokens": 5000, "max_runs": 2, "temperature": 0.7},
+        {"name": "v32_1000tokens", "research_tokens": 1000, "code_tokens": 1000, "max_runs": 2, "temperature": 0.7},
+        {"name": "v33_1000tokens_max3", "research_tokens": 1000, "code_tokens": 1000, "max_runs": 3, "temperature": 0.5},
+        {"name": "v34_800tokens", "research_tokens": 800, "code_tokens": 800, "max_runs": 2, "temperature": 0.7},
+        {"name": "v35_1200tokens", "research_tokens": 1200, "code_tokens": 1000, "max_runs": 2, "temperature": 0.9},
+        {"name": "v36_1000tokens_temp0.3", "research_tokens": 1000, "code_tokens": 1000, "max_runs": 2, "temperature": 0.3},
     ]
     
     idx = round_num % len(strategies)
