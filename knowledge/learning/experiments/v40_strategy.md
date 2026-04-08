@@ -1,59 +1,43 @@
 # v40 策略设计
 
-## v39 vs v31 对比分析
+## v38 中间结果分析
 
-v39 改进了自我反思深度（2轮 vs 1轮），但代价是：
-- 每次 research 任务最多 3 次 LLM 调用（初始 + 2次反思）
-- Token 消耗增加约 50%
-- 如果第一轮已经很好，第二轮反思可能是浪费
-
-## v40 候选策略
-
-### 候选 A: Adaptive Reflection（自适应反思）
-只在第一轮输出质量低于阈值时才触发反思
-- 如果 Run1 质量 >= 80，不反思（直接进入 MAX 对比）
-- 如果 Run1 质量 < 80，触发 2 轮反思
-- 优点：避免浪费，对于简单任务直接给出高质量
-- 缺点：增加了判断逻辑
-
-### 候选 B: Different Temperature for Different Runs（分温度策略）
-MAX-2 已经取最优。但可以探索：
-- Run1: temperature=0.3（确定性）
-- Run2: temperature=0.9（多样性）
-- 两者取最优
-- 优点：覆盖不同的输出空间
-
-### 候选 C: Extended Review Tokens（延长 Review）
-v31.0 弱项：core_005=65 (review), core_010=58 (review)
-当前 review tokens: 3000
-v40 探索: 4000-5000 tokens for review tasks
-
-### 候选 D: Task-Specific Evaluator Prompts（任务专用评估 prompt）
-每个任务类型用不同的 evaluator prompt
-- Research: 强调深度、技术准确性、可执行性
-- Code: 强调正确性、可运行性、代码质量
-- Review: 强调风险识别、影响分析、可操作性
-
-## 推荐 v40 策略
-
-选择 **候选 C（延长 Review Tokens）+ 候选 D（任务专用评估）**
-
-理由：
-- v38 正在测试增强 review prompts（候选 D 的一部分）
-- 如果 v38 不如 v31，说明 prompt 改进方向不对
-- v40 应该尝试增加 review tokens 到 4000
-
-## 实施计划
-
-```python
-# get_max_tokens 改动
-def get_max_tokens(self, task: Dict) -> int:
-    if task["type"] == "research":
-        return 5000  # 不变
-    elif task["type"] == "code":
-        return 5000  # 不变
-    else:  # review
-        return 4500  # 从 3000 提高到 4500
+### 已完成任务 (BEST scores)
+```
+core_001: 0.0   (API failure)
+core_002: 0.0   (API failure)
+core_003: 58.0  (弱于 v31.0 的 85)
+core_004: 72.0  (v31.0: 72)
+core_005: 87.0  (v31.0: 78, 提升!)
+core_006: 68.0  (弱于 v31.0 的 75)
+core_007: 65.0  (弱于 v31.0 的 82)
+core_008: 78.0  (v31.0: 95, 显著弱)
+core_009: 82.0  (v31.0: 85)
+core_010: 50.0  (v31.0: 58, 弱)
+gen_001:  85.0  (v31.0: 95)
+gen_002:  82.0  (v31.0: 95)
+gen_003:  🔄
 ```
 
-等待 v38 结果后再决定是否实施。
+### 关键发现
+
+1. **v38 review 增强对 core_005 有提升** (87 vs 78, +9)
+2. **gen 任务整体弱于 v31.0** (可能因为增强 review prompts 改变了整体行为)
+3. **core_001/002 完全失败** - API 问题，不反映真实能力
+4. **core_008 从 95 降到 78** - 最大退步
+
+## v40 策略: Back to v31.0 + Temperature 探索
+
+### 策略选择理由
+v38 的 enhanced review prompts 效果不稳定（有的提升有的下降）。最安全的选择是回到 v31.0 的经过验证的策略，然后探索 temperature 变化。
+
+### v40 策略
+1. **复制 v31.0 全部设置** (5000 tokens, MAX-2, 选择性自评审)
+2. **仅改变 temperature**: 0.7 → 0.5 (更确定性输出)
+3. **假设**: 更低的 temperature 减少随机性，提高稳定性
+
+### 预期
+- 如果 v40 > v31.0 (76.22): temperature 0.5 更好
+- 如果 v40 < v31.0: 确认 0.7 是最优
+
+### 等待 v38 完全完成后再决定是否实施
