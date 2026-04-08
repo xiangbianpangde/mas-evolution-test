@@ -364,3 +364,22 @@ The system has **37 identified gaps**, of which **12 are critical** that can cau
 | EXPERIMENT_DESIGN.md | Benchmark任务、评分细则、演进条件 |
 | MEMORY_SYSTEM.md | 三层记忆架构、更新策略、检索机制 |
 | CONTINUOUS_IMPROVEMENT.md | 反馈闭环、错误分类、能力提升 |
+
+## FIXES v6.0 APPLIED (2026-04-09)
+
+| Issue | Status | Fix |
+|-------|--------|-----|
+| E-002 | ✅ FIXED | Jinja2 template replaces brittle string matching |
+| RM-001 | ✅ FIXED | resource_limiter imported and used |
+| A-001 | ✅ FIXED | API call tracking added |
+| RM-002 | ✅ FIXED | Disk space check before run |
+| File Lock | ✅ ADDED | Prevents concurrent execution |
+| resource_limiter.py | ✅ CREATED | New module for resource limits |
+
+## REMAINING ISSUES
+
+| Issue | Status |
+|-------|--------|
+| S-001 | ⬜ README formula needs update |
+| T-001 | ⬜ Multiple result locations |
+| other | ⬜ Lower priority |
