@@ -148,8 +148,28 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
     
     code = code.replace(old_init, new_init)
     
-    # 5. 修改运行次数引用
-    code = re.sub(r'for run in range\(1, MAX_RUNS \+ 1\):', f'for run in range(1, self.max_runs + 1):', code)
+    # 5. 修改运行次数引用 - v31_0 使用硬编码的双运行模式，需要替换为循环
+    # 查找并替换硬编码的双运行模式
+    old_run_pattern = '''            result1 = self.execute_single(task, run_num=1)
+            print(f"  Run1: {result1.quality_score:.1f}")
+            
+            result2 = self.execute_single(task, run_num=2)
+            print(f"  Run2: {result2.quality_score:.1f}")
+            
+            best = result1 if result1.quality_score >= result2.quality_score else result2
+            print(f"  BEST: {best.quality_score:.1f}")'''
+    
+    new_run_pattern = f'''            # 使用 self.max_runs ({max_runs}) 进行多次运行，选择最佳结果
+            results = []
+            for run_i in range(1, self.max_runs + 1):
+                result = self.execute_single(task, run_num=run_i)
+                print(f"  Run{{run_i}}: {{result.quality_score:.1f}}")
+                results.append(result)
+            
+            best = max(results, key=lambda r: r.quality_score)
+            print(f"  BEST: {{best.quality_score:.1f}}")'''
+    
+    code = code.replace(old_run_pattern, new_run_pattern)
     
     # 6. 修改 temperature
     temp = strategy.get("temperature", 0.7)

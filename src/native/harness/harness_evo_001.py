@@ -447,13 +447,14 @@ class HarnessV30:
         for task in tasks:
             print(f"\n[{task['id']}] Running twice (MAX strategy, tokens={self.get_max_tokens(task)})...", flush=True)
             
-            result1 = self.execute_single(task, run_num=1)
-            print(f"  Run1: {result1.quality_score:.1f}")
+            # 使用 self.max_runs (2) 进行多次运行，选择最佳结果
+            results = []
+            for run_i in range(1, self.max_runs + 1):
+                result = self.execute_single(task, run_num=run_i)
+                print(f"  Run{run_i}: {result.quality_score:.1f}")
+                results.append(result)
             
-            result2 = self.execute_single(task, run_num=2)
-            print(f"  Run2: {result2.quality_score:.1f}")
-            
-            best = result1 if result1.quality_score >= result2.quality_score else result2
+            best = max(results, key=lambda r: r.quality_score)
             print(f"  BEST: {best.quality_score:.1f}")
             
             checkpoint["tasks_completed"].append(task["id"])

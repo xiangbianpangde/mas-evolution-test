@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OpenClaw Native Harness v31.0 - MAX + Even Larger Tokens
+OpenClaw Native Harness v40.0 - FAST mode (MAX-1, 3000 tokens)
 
 v29.0: Core=67.1, Gen=74.4, Composite=67.01 (CHAMPION)
 v29 proved MAX strategy (run twice, take best) significantly reduces API variance.
