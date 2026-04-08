@@ -17,10 +17,6 @@ Target: Beat v29's 67.01
 import json
 import time
 import os
-from pathlib import Path
-
-RESULTS_DIR = Path(__file__).parent.parent.parent / "results" / "evolution"
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 from dataclasses import dataclass
 from typing import Dict
 
@@ -29,8 +25,8 @@ API_CONFIG = {
     "model": "MiniMax-M2.7"
 }
 
-CHECKPOINT_FILE = str(RESULTS_DIR / "evo_002_checkpoint.json")
-RESULTS_FILE = str(RESULTS_DIR / "benchmark_results_evo_002_gen1.json")
+CHECKPOINT_FILE = "v31_0_checkpoint.json"
+RESULTS_FILE = "benchmark_results_v31_0_gen1.json"
 
 @dataclass
 class TaskResult:
@@ -83,7 +79,6 @@ class RealLLMCaller:
             "model": API_CONFIG["model"],
             "max_tokens": max_tokens,
             "system": system_prompt or "You are a helpful AI assistant.",
-            "temperature": 0.5,
             "messages": [{"role": "user", "content": prompt}]
         }
         data = json.dumps(payload).encode('utf-8')
@@ -278,7 +273,6 @@ class HarnessV30:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
-        self.max_runs = 3
     
     def get_prompt_for_task(self, task: Dict) -> tuple:
         task_id = task["id"]
@@ -310,11 +304,11 @@ class HarnessV30:
         return False
     
     def get_max_tokens(self, task: Dict) -> int:
-        """v31 Evolved: Strategy=v33_1000tokens_max3"""
+        """v30: Increase tokens for research tasks"""
         if task["type"] == "research":
-            return 1000
+            return 5000  # Increased from 4000
         elif task["type"] == "code":
-            return 1000
+            return 5000  # Increased from 4000
         else:
             return 3000
     

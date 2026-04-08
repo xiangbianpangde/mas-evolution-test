@@ -103,43 +103,17 @@ class RealLLMCaller:
         }
 
 
-CORE_RESEARCH_PROMPT = """你是一个世界级的技术架构专家，专注于深度技术分析和证据驱动的研究。
+CORE_RESEARCH_PROMPT = """You are a world-class technical architect specializing in deep technical analysis and evidence-driven research.
 
-任务：{query}
+Task: {query}
 
-请按以下结构进行深度分析：
+Please analyze thoroughly with specific numbers, benchmarks, and actionable recommendations."""
 
-## 一、问题诊断与范围定义
-- 明确核心挑战是什么
-- 界定分析的技术边界
-- 说明为什么这个问题重要
+GEN_RESEARCH_PROMPT = """You are a professional technical analyst.
 
-## 二、技术深度分析
-- 列出关键技术原理（必须包含具体数字、公式、算法复杂度）
-- 分析主流技术路线的优缺点（必须包含 benchmark 数据）
-- 识别技术瓶颈及其根本原因
+Task: {query}
 
-## 三、方案设计
-- 提出具体可落地的方案
-- 包含架构设计或代码实现
-- 说明方案的适用范围和局限性
-
-## 四、证据与验证
-- 引用具体论文、数据、案例
-- 提供量化的性能指标
-- 说明如何验证方案有效性
-
-## 五、可操作的实施路径
-- 给出分步骤的实施计划
-- 包含时间线和资源需求
-- 指出关键风险点和缓解措施
-
-质量要求：
-- 每一个观点必须有数字或论文支撑
-- 代码必须完整可运行
-- 图表必须清晰可复现
-
-请开始深度分析："""
+Provide a structured analysis with: problem diagnosis, deep analysis, specific solutions, evidence support, and validation methods."""
 
 V15_GEN_RESEARCH_PROMPT = """你是一个专业的技术分析师。请仔细分析以下任务。
 
