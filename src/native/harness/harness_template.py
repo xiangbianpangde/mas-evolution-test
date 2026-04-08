@@ -324,6 +324,11 @@ Improved Response:"""
                 if best_result is None or result.quality_score > best_result.quality_score:
                     best_result = result
             
+            # Truncate long outputs to save space (keep first 5000 chars)
+            output = best_result.executor_output
+            if len(output) > 5000:
+                output = output[:5000] + f"\n... [truncated {len(output)-5000} chars]"
+            
             results.append({
                 "task_id": task_id,
                 "task_type": task_type,
@@ -337,7 +342,8 @@ Improved Response:"""
                 "is_suspicious": best_result.is_suspicious,
                 "error": best_result.error,
                 "run": best_result.run,
-                "iterations": best_result.iterations
+                "iterations": best_result.iterations,
+                "executor_output": output
             })
             
             print(f" -> Final={best_result.quality_score}")

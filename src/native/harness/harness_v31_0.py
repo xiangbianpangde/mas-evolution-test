@@ -545,7 +545,8 @@ class HarnessV30:
             },
             "individual_results": [
                 {"task_id": r.task_id, "task_type": r.task_type,
-                 "quality_score": r.quality_score, "run": r.run}
+                 "quality_score": r.quality_score, "run": r.run,
+                 "executor_output": r.executor_output[:5000] + ("..." if len(r.executor_output) > 5000 else "") if r.executor_output else ""}
                 for r in clean_results
             ]
         }
