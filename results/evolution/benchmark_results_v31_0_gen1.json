@@ -1,0 +1,105 @@
+{
+  "harness_version": "v31.0",
+  "paradigm": "v31 (v30 + larger tokens)",
+  "timestamp": "2026-04-08T09:54:50",
+  "elapsed_seconds": 5088.064545869827,
+  "summary": {
+    "total_tasks": 15,
+    "core_avg_score": 76.6,
+    "gen_avg_score": 78.8,
+    "avg_actionability_level": 3.8,
+    "composite_score": 73.73
+  },
+  "individual_results": [
+    {
+      "task_id": "core_001",
+      "task_type": "research",
+      "quality_score": 88,
+      "run": 2
+    },
+    {
+      "task_id": "core_002",
+      "task_type": "code",
+      "quality_score": 48,
+      "run": 1
+    },
+    {
+      "task_id": "core_003",
+      "task_type": "research",
+      "quality_score": 85,
+      "run": 2
+    },
+    {
+      "task_id": "core_004",
+      "task_type": "code",
+      "quality_score": 72,
+      "run": 1
+    },
+    {
+      "task_id": "core_005",
+      "task_type": "review",
+      "quality_score": 78,
+      "run": 1
+    },
+    {
+      "task_id": "core_006",
+      "task_type": "research",
+      "quality_score": 75,
+      "run": 1
+    },
+    {
+      "task_id": "core_007",
+      "task_type": "code",
+      "quality_score": 82,
+      "run": 2
+    },
+    {
+      "task_id": "core_008",
+      "task_type": "research",
+      "quality_score": 95,
+      "run": 2
+    },
+    {
+      "task_id": "core_009",
+      "task_type": "code",
+      "quality_score": 85,
+      "run": 2
+    },
+    {
+      "task_id": "core_010",
+      "task_type": "review",
+      "quality_score": 58,
+      "run": 2
+    },
+    {
+      "task_id": "gen_001",
+      "task_type": "research",
+      "quality_score": 95,
+      "run": 2
+    },
+    {
+      "task_id": "gen_002",
+      "task_type": "code",
+      "quality_score": 95,
+      "run": 2
+    },
+    {
+      "task_id": "gen_003",
+      "task_type": "review",
+      "quality_score": 76,
+      "run": 1
+    },
+    {
+      "task_id": "gen_004",
+      "task_type": "research",
+      "quality_score": 50,
+      "run": 1
+    },
+    {
+      "task_id": "gen_005",
+      "task_type": "code",
+      "quality_score": 78,
+      "run": 2
+    }
+  ]
+}

@@ -2,9 +2,5 @@
   "current_round": 0,
   "best_score": 76.22,
   "best_version": "v31_0",
-  "no_progress_rounds": 0,
-  "target_score": 80.0,
-  "max_rounds": 50,
-  "history": [],
   "mode": "infinite"
 }

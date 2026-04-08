@@ -19,9 +19,9 @@ from dataclasses import dataclass
 from typing import Dict
 
 # ========== 策略配置 (会被 evolution engine 修改) ==========
-VERSION = "evo_001"
-RESEARCH_TOKENS = 6000
-CODE_TOKENS = 5500
+VERSION = "template"
+RESEARCH_TOKENS = 5000
+CODE_TOKENS = 5000
 REVIEW_TOKENS = 3000
 MAX_RUNS = 2
 SELF_REFLECT = "core_only"  # none, core_only, all
@@ -117,8 +117,9 @@ class RealLLMCaller:
         }
 
 class HarnessV31:
-    def __init__(self):
-        api_key = os.environ.get("MINIMAX_API_KEY", "")
+    def __init__(self, api_key: str = None):
+        if api_key is None:
+            api_key = os.environ.get("MINIMAX_API_KEY", "")
         if not api_key:
             raise ValueError("MINIMAX_API_KEY not set")
         self.llm = RealLLMCaller(api_key)
@@ -405,8 +406,26 @@ Improved Response:"""
         print(f"  总耗时: {elapsed:.1f}秒")
         print(f"{'='*60}")
 
+def get_api_key():
+    """获取 API key - 支持多种方式"""
+    # 1. 环境变量
+    key = os.environ.get("MINIMAX_API_KEY", "")
+    if key:
+        return key
+    # 2. 环境变量 (alternative name)
+    key = os.environ.get("API_KEY", "")
+    if key:
+        return key
+    # 3. 从配置文件读取
+    key_file = Path.home() / ".openclaw" / "secrets" / "minimax_api_key.txt"
+    if key_file.exists():
+        return key_file.read_text().strip()
+    # 4. 默认值 (仅用于兼容旧代码)
+    return "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
+
 def main():
-    harness = HarnessV31()
+    api_key = get_api_key()
+    harness = HarnessV31(api_key)
     harness.run()
 
 if __name__ == "__main__":
