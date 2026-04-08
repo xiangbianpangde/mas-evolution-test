@@ -603,8 +603,6 @@ class HarnessV30:
         print(f"\nResults saved to: {RESULTS_FILE}")
         
         # DISABLED: Only harness_evolution.py should update state.json (E-001 fix)
-        # self._update_state("v31.0", composite, core_avg, gen_avg, avg_actionability)
-        self._update_state("v31.0", composite, core_avg, gen_avg, avg_actionability)
         
         if os.path.exists(CHECKPOINT_FILE):
             os.remove(CHECKPOINT_FILE)
@@ -614,8 +612,7 @@ class HarnessV30:
 
 if __name__ == "__main__":
     api_key = os.environ.get("MINIMAX_API_KEY", "")
-        if not self.api_key:
-            raise ValueError("MINIMAX_API_KEY environment variable not set")
-    
+    if not api_key:
+        raise ValueError("MINIMAX_API_KEY environment variable not set")
     harness = HarnessV30(api_key)
     harness.run_benchmark()
