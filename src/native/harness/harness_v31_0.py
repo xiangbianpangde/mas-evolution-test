@@ -500,15 +500,14 @@ class HarnessV30:
         for task in tasks:
             print(f"\n[{task['id']}] Running twice (MAX strategy, tokens={self.get_max_tokens(task)})...", flush=True)
             
-            result1 = self.execute_single(task, run_num=1)
-            print(f"  Run1: {result1.quality_score:.1f}")
-            
-            result2 = self.execute_single(task, run_num=2)
-            print(f"  Run2: {result2.quality_score:.1f}")
-            
-            best = result1 if result1.quality_score >= result2.quality_score else result2
-            print(f"  BEST: {best.quality_score:.1f}")
-            
+            # 使用 self.max_runs 进行多次运行，取最优结果
+            results = []
+            for run_i in range(1, self.max_runs + 1):
+                result = self.execute_single(task, run_num=run_i)
+                print(f"  Run{run_i}: {result.quality_score:.1f}")
+                results.append(result)
+
+            best = max(results, key=lambda r: r.quality_score)
             checkpoint["tasks_completed"].append(task["id"])
             checkpoint["results"].append({
                 "task_id": best.task_id,
@@ -526,8 +525,8 @@ class HarnessV30:
                 "error": best.error,
                 "iterations": best.iterations,
                 "run": best.run,
-                "run1_score": result1.quality_score,
-                "run2_score": result2.quality_score
+                "run1_score": results[0].quality_score if len(results) > 0 else 0,
+                "run2_score": results[1].quality_score if len(results) > 1 else 0
             })
             with open(CHECKPOINT_FILE, 'w') as f:
                 json.dump(checkpoint, f, ensure_ascii=False)
