@@ -474,8 +474,8 @@ class HarnessV30:
                 "error": best.error,
                 "iterations": best.iterations,
                 "run": best.run,
-                "run1_score": result1.quality_score,
-                "run2_score": result2.quality_score
+                "run1_score": results[0].quality_score if len(results) > 0 else 0,
+                "run2_score": results[1].quality_score if len(results) > 1 else 0
             })
             with open(CHECKPOINT_FILE, 'w') as f:
                 json.dump(checkpoint, f, ensure_ascii=False)

@@ -1,0 +1,5 @@
+# Anomaly Log
+# Format: [timestamp] [severity] [category] message
+# Severity: INFO | WARNING | ERROR | CRITICAL
+# Generated: 2026-04-08T23:38:00+08:00
+
