@@ -1,9 +1,18 @@
 {
   "current_round": 0,
-  "best_score": 76.22,
-  "best_version": "v31_0",
+  "best_score": 0,
+  "best_version": "",
   "no_progress_rounds": 0,
-  "history": [],
-  "mode": "infinite",
-  "genesis_started": "2026-04-08T13:54:00+08:00"
+  "history": [
+    {
+      "round": 0,
+      "version": "v38",
+      "strategy": "Enhanced review prompts (manual run)",
+      "score": 72.16,
+      "timestamp": "2026-04-08T18:00:00",
+      "is_champion": false,
+      "note": "Below v31.0 (76.22), core tasks weak"
+    }
+  ],
+  "mode": "infinite"
 }
