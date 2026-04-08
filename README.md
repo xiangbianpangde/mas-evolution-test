@@ -213,3 +213,93 @@ AutoMAS (Automated Multi-Agent System) is an **autonomous** benchmarking and evo
 ---
 
 *Last updated: 2026-04-07*
+
+---
+
+## 🔬 演进状态板 (Evolution Status)
+
+> 最后更新: 2026-04-08 14:54 CST | 模式: INFINITE | 目标: 100.0
+
+### 当前冠军
+| 版本 | Composite | Core | Gen | 状态 |
+|------|-----------|------|-----|------|
+| **v31.0** | **76.22** | **79.2** | **81.0** | 🏆 CHAMPION |
+| v38 | TBD | TBD | TBD | 🔄 评测中 |
+| v39 | TBD | TBD | TBD | ⏳ 待评测 |
+
+### 关键 Bug 修复 (2026-04-08)
+- ❌ `get_next_strategy()`: 1000 tokens → ✅ 5000 tokens (已修复)
+- ❌ RESULTS_DIR: 3 parents → ✅ 4 parents (已修复)
+
+### 演进拓扑图
+
+```mermaid
+flowchart TD
+    subgraph Base["🐇 v31.0 基准 (5000 tokens, MAX-2, 选择性自评审)"]
+        v31[v31.0: 76.22]
+    end
+    
+    subgraph Variants["📋 变体版本"]
+        v37[v37.0: 69.07<br/>扩展自评审到全部任务 → 失败]
+        v38[v38.0: 🔄评测中<br/>增强 review prompts]
+        v39[v39.0: ⏳待评测<br/>2轮自我反思]
+    end
+    
+    subgraph EvoEngine["⚙️ 演进引擎"]
+        strategy["策略池<br/>5策略×5000tokens基准"]
+        gen["harness_evo_*.py"]
+        eval["评测+记分"]
+    end
+    
+    v31 --> |复制| v38
+    v31 --> |复制| v39
+    v31 --> |模板| EvoEngine
+    EvoEngine --> |生成| gen
+    gen --> |运行| eval
+    eval --> |结果| strategy
+    strategy --> |下一轮| gen
+```
+
+### 迭代日志 (Changelog)
+
+| 日期 | 事件 | RCA/洞见 |
+|------|------|----------|
+| 2026-04-08 14:50 | **关键 Bug 修复**: 演进引擎使用 1000 tokens 策略（应该是 5000） | evo_001 得 51.74 而非预期的 73+，根因：策略生成器注释说"避免挂起用 1000 tokens" |
+| 2026-04-08 14:50 | **RESULTS_DIR 路径错误** | 用了 3 层 parent 指向 src/ 而非 4 层指向 repo 根 |
+| 2026-04-08 14:42 | v38 创建: 增强 review prompts | v31.0 review 任务较弱 (core_005=65, core_010=58) |
+| 2026-04-08 14:54 | v39 创建: 2轮自我反思 | research 任务深度可能需要多轮反思才能充分 |
+| 2026-04-07 22:01 | v31.0 冠军: 76.22 | 5000 tokens 是临界点，Gen 从 68.6→81.0 |
+
+### 核心源码快照
+
+**演进引擎策略池 (harness_evolution.py)**:
+```python
+strategies = [
+    {"name": "v32_v31_clone", "research_tokens": 5000, "code_tokens": 5000, ...},
+    {"name": "v33_6000tokens", "research_tokens": 6000, "code_tokens": 6000, ...},
+    {"name": "v34_5000tokens_temp0.3", "temperature": 0.3, ...},
+    {"name": "v35_5000tokens_temp0.9", "temperature": 0.9, ...},
+    {"name": "v36_review3500", "review_tokens": 3500, ...},  # 探索 review 任务上限
+]
+```
+
+**v39 2轮自我反思**:
+```python
+# PASS 1: First critique and revision
+critique_response = self.llm.call_with_retry(..., max_tokens=1500)
+if has_issues:
+    revision_response = self.llm.call_with_retry(...)
+    current_output = revision_response["content"]
+    iterations = 2
+    
+    # PASS 2: Second critique and revision
+    critique_response_2 = self.llm.call_with_retry(..., max_tokens=1500)
+    if has_issues_2:
+        revision_response_2 = self.llm.call_with_retry(...)
+        current_output = revision_response_2["content"]
+        iterations = 3
+```
+
+---
+
+*AutoMAS 演进引擎 v5.0 | GitHub: https://github.com/xiangbianpangde/mas-evolution-test*
