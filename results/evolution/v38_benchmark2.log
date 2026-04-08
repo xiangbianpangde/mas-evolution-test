@@ -1,7 +1,0 @@
-============================================================
-Harness v38.0 - Enhanced Review Prompts
-Key change: Better structured prompts for review tasks
-============================================================
-
-[core_001] Running twice (MAX strategy, tokens=5000)...
-  [Error: HTTP Error 500: Internal Server Error, retry 1/3] 

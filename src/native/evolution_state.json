@@ -1,14 +1,8 @@
 {
+  "note": "DEPRECATED - Use results/evolution/state.json instead",
   "version": "infinite",
   "current_round": 0,
   "best_score": 76.22,
   "best_version": "v31_0",
-  "no_progress_rounds": 0,
-  "target_score": 999.0,
-  "max_rounds": 10000,
-  "status": "idle",
-  "mode": "infinite",
-  "started_at": null,
-  "last_run_at": null,
-  "history": []
+  "mode": "infinite"
 }

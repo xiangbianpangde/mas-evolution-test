@@ -1,2 +1,0 @@
-usage: harness_evolution.py [-h] [--round ROUND] [--continuous]
-harness_evolution.py: error: unrecognized arguments: --resume
