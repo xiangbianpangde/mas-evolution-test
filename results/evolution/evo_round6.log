@@ -1,0 +1,22 @@
+Running harness: evo_006
+Strategy: v32_1000tokens
+Disk usage: 10.3%
+API call count: 0
+Generated: /root/.openclaw/workspace/mas_repo/src/native/harness/harness_evo_006.py
+CPU limit set: 300s
+Memory limit set: 512MB
+Process limit set: 64
+File size limit set: 50MB
+All resource limits applied
+Disk usage: 10.3%
+[1/17] core_001... Run1... Score=56 Run2... Score=60 -> Final=60
+[2/17] core_002... Run1... Score=55 Run2... Score=0 -> Final=55
+[3/17] core_003... Run1... Score=6 Run2... Score=58 -> Final=58
+[4/17] core_004... Run1... Score=49 Run2... Process timed out after 300s
+
+Results file not found: /root/.openclaw/workspace/mas_repo/results/evolution/benchmark_results_evo_006_gen1.json
+
+Round 6 complete:
+  Version: evo_006
+  Score: 0.00
+  Current best: v31_0 (76.22)

@@ -138,14 +138,14 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 CHECKPOINT_FILE = str(RESULTS_DIR / "{version}_checkpoint.json")
 RESULTS_FILE = str(RESULTS_DIR / "benchmark_results_{version}_gen1.json")
 
-# Import and apply resource limits
-try:
-    import sys
-    sys.path.insert(0, str(BASE_DIR / "src" / "native"))
-    import resource_limiter
-    resource_limiter.apply_all()
-except:
-    pass
+# Note: Resource limits disabled - they cause premature termination
+# import sys
+# sys.path.insert(0, str(BASE_DIR / "src" / "native"))
+# try:
+#     import resource_limiter
+#     resource_limiter.apply_all()
+# except:
+#     pass
 
 @dataclass
 class TaskResult:

@@ -49,5 +49,13 @@
     "score": 0,
     "timestamp": "2026-04-09T01:45:52.635367",
     "is_champion": false
+  },
+  {
+    "round": 5,
+    "version": "evo_006",
+    "strategy": "v32_1000tokens",
+    "score": 0,
+    "timestamp": "2026-04-09T01:51:48.804542",
+    "is_champion": false
   }
 ]
