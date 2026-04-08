@@ -1,9 +1,9 @@
 {
-  "current_round": 0,
+  "current_round": 1,
   "best_score": 76.22,
   "best_version": "v31_0",
   "best_source": "benchmark",
-  "no_progress_rounds": 0,
+  "no_progress_rounds": 1,
   "mode": "infinite",
   "target_score": 100.0,
   "max_rounds": 10000,
@@ -19,13 +19,21 @@
     {
       "round": 0,
       "version": "v31_0",
-      "strategy": "5000 tokens + 选择性自反射 (MAX策略)",
+      "strategy": "5000 tokens + \u9009\u62e9\u6027\u81ea\u53cd\u5c04 (MAX\u7b56\u7565)",
       "score": 76.22,
       "core_score": 79.2,
       "gen_score": 81.0,
       "timestamp": "2026-04-04T00:00:00",
       "is_champion": true,
-      "note": "真冠军 - 标准 tasks_v2.py 基准测试"
+      "note": "\u771f\u51a0\u519b - \u6807\u51c6 tasks_v2.py \u57fa\u51c6\u6d4b\u8bd5"
+    },
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "v32_1000tokens",
+      "score": 51.74,
+      "timestamp": "2026-04-09T01:38:42.189830",
+      "is_champion": false
     }
   ]
 }

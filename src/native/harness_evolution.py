@@ -450,6 +450,16 @@ def run_harness(version: str, strategy: dict):
             f.write(code)
         print(f"Generated: {version_harness}")
         
+        # Delete old results and checkpoint files to force fresh run
+        results_file = RESULTS_DIR / f"benchmark_results_{version}_gen1.json"
+        checkpoint_file = RESULTS_DIR / f"{version}_checkpoint.json"
+        if results_file.exists():
+            results_file.unlink()
+            print(f"Deleted old results: {results_file}")
+        if checkpoint_file.exists():
+            checkpoint_file.unlink()
+            print(f"Deleted old checkpoint: {checkpoint_file}")
+        
         cmd = [sys.executable, str(version_harness)]
         env = os.environ.copy()
         env["PYTHONPATH"] = str(BASE_DIR)
