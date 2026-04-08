@@ -1,149 +1,144 @@
-# 📚 AutoMAS Knowledge Base
+# 📚 AutoMAS 知识库索引
 
-> 人类视角：视觉层级 + 关联感知  
-> AI 视角：文件名搜索 + 内容语义
-
----
-
-## 🗺️ 知识地图
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    HOW TO NAVIGATE                       │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   想快速查找?  →  搜索文件名 (AI 优先)                   │
-│   想了解结构?  →  看下面的视觉地图                        │
-│   想学习主题?  →  按目录浏览                             │
-│   想引用原文?  →  去 sources/ 目录                       │
-│   想看精炼模式? →  去 patterns/ 目录                     │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-
-┌──────────────────┐    ┌──────────────────┐
-│   📖 sources     │    │   📝 patterns    │
-│   外部资源原文    │    │   模式库         │
-│                   │    │                  │
-│  • OpenAI       │    │  • 14 patterns   │
-│  • Anthropic    │    │  • 来源索引       │
-│  • Martin Fowler│    └──────────────────┘
-│  • Google Cloud  │
-└──────────────────┘
-
-┌──────────────────┐    ┌──────────────────┐
-│   📚 reference   │    │   📈 trends      │
-│   参考资料       │    │   已验证策略      │
-│                   │    │                  │
-│  • Deep Research │    │  • Known Trends  │
-└──────────────────┘    └──────────────────┘
-
-┌──────────────────┐    ┌──────────────────┐
-│   📝 lessons     │    │   🧠 prompts    │
-│   失败教训       │    │   Prompt模板    │
-│                   │    │                  │
-│  • Learned.md    │    │  • Library.md   │
-└──────────────────┘    └──────────────────┘
-
-┌──────────────────┐    ┌──────────────────┐
-│   📊 benchmark   │    │   🎨 design     │
-│   评测任务       │    │   人机设计       │
-│                   │    │                  │
-│  • Tasks.md      │    │  • Human_Centric│
-└──────────────────┘    └──────────────────┘
-```
+> 入口 · 导航 · 快速定位
 
 ---
 
-## 📂 完整目录结构
+## 🎯 快速入口
+
+| 我想... | 去哪里 |
+|---------|--------|
+| 🔍 了解项目是什么 | [`TREE.md`](TREE.md) · 顶层总览 |
+| 🗺️ 找到具体文件位置 | [`TREE.md`](TREE.md) · 目录树 |
+| 📐 理解系统架构 | [`ARCHITECTURE.md`](ARCHITECTURE.md) · 架构图 |
+| 🚀 快速上手 | [`QUICKSTART.md`](QUICKSTART.md) · 5分钟指南 |
+| 🏆 了解冠军版本 | [`src/native/harness/harness_v31_0.py`](src/native/harness/harness_v31_0.py) |
+| 📊 查看评测结果 | [`results/`](results/) |
+
+---
+
+## 📂 知识库结构图
 
 ```
 knowledge/
-├── README.md              # 本文件
 │
-├── 📖 sources/           # 外部资源原文归档 ⭐ 第一手
-│   ├── README.md
+├── 🧭 导航文件
+│   ├── README.md          ← 📍 你在这里 · 索引入口
+│   ├── TREE.md            ← 完整目录树可视化
+│   ├── ARCHITECTURE.md    ← 系统架构图
+│   └── QUICKSTART.md      ← 快速上手指南
+│
+├── 📖 sources/            ← ⭐ 第一手 · 外部资源原文
 │   ├── OpenAI_Harness_Engineering.md
 │   ├── Anthropic_Effective_Harnesses.md
 │   ├── Martin_Fowler_Harness_Engineering.md
 │   └── Google_Cloud_Agent_Patterns.md
 │
-├── 📝 patterns/          # 模式库 ⭐ 精华提炼
-│   ├── README.md
-│   └── patterns_index.md
-│
-├── 📚 reference/          # 参考资料（二手整理）
-│   ├── README.md
+├── 📚 reference/          ← 第二手 · 综合参考资料
 │   ├── Harness_Engineering_Deep.md
 │   └── Multi_Agent_Patterns.md
 │
-├── 📊 benchmark/          # 评测任务定义
-│   ├── README.md
-│   └── Tasks.md
+├── 📝 patterns/           ← 精华提炼 · 模式库
+│   └── patterns_index.md
 │
-├── 📈 trends/            # 已验证的有效策略
-│   ├── README.md
+├── 📊 benchmark/          ← 评测任务说明
+│   └── Benchmark_Tasks.md
+│
+├── 📈 trends/             ← 已验证有效策略
 │   └── Known_Trends.md
 │
-├── 📝 lessons/            # 失败教训总结
-│   ├── README.md
-│   └── Learned.md
+├── 📝 lessons/            ← 失败教训总结
+│   └── Lessons_Learned.md
 │
-├── 🧠 prompts/            # Prompt 模板库
-│   ├── README.md
-│   └── Library.md
+├── 🧠 prompts/             ← Prompt 模板库
+│   └── Prompt_Library.md
 │
-└── 🎨 design/             # 人机交互设计
-    ├── README.md
-    └── Human_Centric_Design.md
+├── 🎨 design/              ← 人机交互设计
+│   └── Human_Centric_Design.md
+│
+└── 📚 learning/            ← 学习与发现
+    ├── discoveries/
+    ├── experiments/
+    │   ├── v38_analysis.md
+    │   ├── v40_strategy.md
+    │   └── v41_adaptive_reflection.md
+    └── patterns/
 ```
 
 ---
 
-## 🎯 按目的查找
+## 🔑 按目的查找
 
-| 目的 | 去哪里 |
-|------|--------|
-| 引用原文原文 | `sources/` ⭐ |
-| 查找模式 | `patterns/` |
-| 综合研究 | `reference/` |
-| 了解测试任务 | `benchmark/Tasks.md` |
-| 找 Prompt 模板 | `prompts/Library.md` |
-| 了解什么策略有效 | `trends/Known_Trends.md` |
-| 避免重复失败 | `lessons/Learned.md` |
-| 学习人机设计原则 | `design/Human_Centric_Design.md` |
-
----
-
-## 📐 目录职责定义
-
-| 目录 | 职责 | 内容性质 | 更新频率 |
-|------|------|---------|---------|
-| `sources/` | 外部资源归档 | 第一手原文 | 偶尔新增 |
-| `patterns/` | 模式提炼 | 从sources提取 | 逐步完善 |
-| `reference/` | 综合整理 | 第二手综合 | 偶尔更新 |
-| `trends/` | 验证有效策略 | 来自实验 | 实验后更新 |
-| `lessons/` | 失败教训 | 来自实验 | 实验后更新 |
-| `prompts/` | Prompt模板 | 模板 | 偶尔调整 |
+| 目的 | 推荐文件 |
+|------|----------|
+| **第一次接触项目** | `QUICKSTART.md` + `TREE.md` |
+| **理解系统架构** | `ARCHITECTURE.md` |
+| **找到源码文件** | `TREE.md` → `src/` |
+| **了解评测任务** | `benchmark/Benchmark_Tasks.md` |
+| **查看有效策略** | `trends/Known_Trends.md` |
+| **避免重复失败** | `lessons/Lessons_Learned.md` |
+| **找 Prompt 模板** | `prompts/Prompt_Library.md` |
+| **学习外部资源** | `sources/` 目录 |
+| **引用架构模式** | `reference/Multi_Agent_Patterns.md` |
+| **了解演进历史** | `papers/` 目录 |
 
 ---
 
-## 🔑 核心发现 (快速摘要)
+## 🏆 核心发现速查
 
 ### ✅ 有效策略
-- **Core research**: 需要自反射
-- **Token budget**: 5000 最佳
-- **评估器**: code 从宽，research 从严
+| 发现 | 详情 |
+|------|------|
+| **Token 临界点** | 5000 tokens 突破 Gen 能力 (68.6→81.0) |
+| **MAX 策略** | 运行 2 次取最优，可提升 13+ 分 |
+| **Research 自反射** | 有利，提升深度 |
+| **Code 禁止自反射** | 必须！自反射会破坏代码结构 |
 
 ### ❌ 失败教训
-- **Gen research**: 禁止自反射 (破坏结构)
-- **Python harness**: 非真实 API，作弊
-- **MAX-3**: 3次运行反而增加方差
+| 教训 | 详情 |
+|------|------|
+| **Gen code 自反射** | gen_002 从 65→15，灾难性失败 |
+| **MAX-3** | 3次运行反而增加方差，diminishing returns |
+| **扩展自评审到全部** | v37: 76.22→69.07，失败 |
 
-### 🏗️ 架构模式
-- **Review & Critique**: Generator → Critic → 迭代
-- **Depth-first**: 一次一个功能
-- **Keep Quality Left**: 尽早发现问题
+### 📊 评分标准
+| 维度 | L4 (良好) 标准 |
+|------|----------------|
+| Depth | 3-4层分析深度 |
+| Completeness | 覆盖 80%+ 维度 |
+| Actionability | 步骤清晰可直接执行 |
 
 ---
 
-*最后更新: 2026-04-07*
+## 📊 版本排行榜
+
+| 版本 | Composite | Core | Gen | 备注 |
+|------|-----------|------|-----|------|
+| **v31.0** | **76.22** | **79.2** | **81.0** | 🏆 冠军 |
+| v38 | 72.16 | - | - | 低于冠军 |
+| v37 | 69.07 | - | - | 失败 |
+| v33 | 73.44 | 79.4 | 75.2 | - |
+| v30 | 67.19 | 73.0 | 68.6 | 前冠军 |
+
+---
+
+## 🔗 相关链接
+
+- **GitHub**: https://github.com/xiangbianpangde/mas-evolution-test
+- **源码**: [`src/`](src/)
+- **评测结果**: [`results/`](results/)
+- **论文**: [`papers/`](papers/)
+- **文档**: [`docs/`](docs/)
+
+---
+
+## 📝 更新日志
+
+| 日期 | 更新内容 |
+|------|----------|
+| 2026-04-08 | 新增 TREE.md, ARCHITECTURE.md, QUICKSTART.md |
+| 2026-04-07 | 初始化知识库 |
+
+---
+
+*最后更新: 2026-04-08*
