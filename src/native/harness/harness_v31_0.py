@@ -612,7 +612,9 @@ class HarnessV30:
 
 
 if __name__ == "__main__":
-    api_key = "sk-cp-ZNEhSAB4-p-nraTwKzWoeLCpFPE-wY8If5v_1qxUvnW4_h0ryAunuH9_Vn-SItYx-D1AGFdRhD_6fn_9LhkpWG2yy6kUeRZBEjq8aFCUpruT5aFlM-Y5KDc"
+    api_key = os.environ.get("MINIMAX_API_KEY", "")
+        if not self.api_key:
+            raise ValueError("MINIMAX_API_KEY environment variable not set")
     
     harness = HarnessV30(api_key)
     harness.run_benchmark()
