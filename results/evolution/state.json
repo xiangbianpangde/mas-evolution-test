@@ -4,5 +4,7 @@
   "best_version": "v31_0",
   "no_progress_rounds": 0,
   "history": [],
-  "mode": "infinite"
+  "mode": "infinite",
+  "genesis_started": "2026-04-08T13:54:00+08:00",
+  "bug_fixed": "PATH bug fixed + CORE_RESEARCH_PROMPT shortened to avoid API 500 errors"
 }

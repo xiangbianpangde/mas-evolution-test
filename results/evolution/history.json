@@ -2,17 +2,9 @@
   {
     "round": 0,
     "version": "evo_001",
-    "strategy": "v32_6000tokens",
+    "strategy": "v32_1000tokens",
     "score": 0,
-    "timestamp": "2026-04-08T10:20:07.144379",
-    "is_champion": false
-  },
-  {
-    "round": 0,
-    "version": "evo_001",
-    "strategy": "v32_6000tokens",
-    "score": 0,
-    "timestamp": "2026-04-08T10:20:16.786774",
+    "timestamp": "2026-04-08T13:46:50.318013",
     "is_champion": false
   }
 ]

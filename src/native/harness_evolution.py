@@ -48,16 +48,33 @@ def save_state(state):
         json.dump(state, f, indent=2)
 
 def get_next_strategy(state):
+    """策略生成：基于已知最优 v31.0 (5000 tokens) 进行有方向性探索。
+    
+    已知事实：
+    - 5000 tokens 是最优（v31.0 验证）
+    - 选择性自评审（仅 core research）有效
+    - MAX-2 策略最优（v31.0）
+    
+    探索方向（不在已验证区间内搜索）：
+    """
     round_num = state["current_round"]
     
-    # 注意：API 对复杂中文查询 + 高 max_tokens 有限制问题
-    # 使用 1000 tokens 避免挂起
+    # 策略：以 v31.0 (5000 tokens) 为中心，向外探索未验证方向
     strategies = [
-        {"name": "v32_1000tokens", "research_tokens": 1000, "code_tokens": 1000, "max_runs": 2, "temperature": 0.7},
-        {"name": "v33_1000tokens_max3", "research_tokens": 1000, "code_tokens": 1000, "max_runs": 3, "temperature": 0.5},
-        {"name": "v34_800tokens", "research_tokens": 800, "code_tokens": 800, "max_runs": 2, "temperature": 0.7},
-        {"name": "v35_1200tokens", "research_tokens": 1200, "code_tokens": 1000, "max_runs": 2, "temperature": 0.9},
-        {"name": "v36_1000tokens_temp0.3", "research_tokens": 1000, "code_tokens": 1000, "max_runs": 2, "temperature": 0.3},
+        # 基线：完全复制 v31.0（验证可复现性）
+        {"name": "v32_v31_clone", "research_tokens": 5000, "code_tokens": 5000, "max_runs": 2, "temperature": 0.7},
+        
+        # 方向1：增加 token 上限（探索更长上下文是否有用）
+        {"name": "v33_6000tokens", "research_tokens": 6000, "code_tokens": 6000, "max_runs": 2, "temperature": 0.7},
+        
+        # 方向2：降低 temperature（更确定性输出）
+        {"name": "v34_5000tokens_temp0.3", "research_tokens": 5000, "code_tokens": 5000, "max_runs": 2, "temperature": 0.3},
+        
+        # 方向3：提高 temperature（更多样化输出）  
+        {"name": "v35_5000tokens_temp0.9", "research_tokens": 5000, "code_tokens": 5000, "max_runs": 2, "temperature": 0.9},
+        
+        # 方向4：延长 review tokens（review 任务可能需要更多上下文）
+        {"name": "v36_review3500", "research_tokens": 5000, "code_tokens": 5000, "review_tokens": 3500, "max_runs": 2, "temperature": 0.7},
     ]
     
     idx = round_num % len(strategies)
@@ -71,7 +88,7 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
         # 在 import os 之后插入 RESULTS_DIR
         code = code.replace(
             "import os",
-            "import os\nfrom pathlib import Path\n\nRESULTS_DIR = Path(__file__).parent.parent.parent / \"results\" / \"evolution\"\nRESULTS_DIR.mkdir(parents=True, exist_ok=True)"
+            "import os\nfrom pathlib import Path\n\nRESULTS_DIR = Path(__file__).parent.parent.parent.parent / \"results\" / \"evolution\"\nRESULTS_DIR.mkdir(parents=True, exist_ok=True)"
         )
     
     # 1. 修改 RESULTS_FILE - 使用 RESULTS_DIR
@@ -91,8 +108,9 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
     )
     
     # 3. 修改 max_tokens 返回值
-    research_tokens = strategy.get("research_tokens", 6000)
-    code_tokens = strategy.get("code_tokens", 5500)
+    research_tokens = strategy.get("research_tokens", 5000)
+    code_tokens = strategy.get("code_tokens", 5000)
+    review_tokens = strategy.get("review_tokens", 3000)
     
     old_func = '''    def get_max_tokens(self, task: Dict) -> int:
         """v30: Increase tokens for research tasks"""
@@ -110,7 +128,7 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
         elif task["type"] == "code":
             return {code_tokens}
         else:
-            return 3000'''
+            return {review_tokens}'''
     
     code = code.replace(old_func, new_func)
     
