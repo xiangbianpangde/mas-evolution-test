@@ -18,6 +18,9 @@ import json
 import time
 import os
 from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results" / "evolution"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 from dataclasses import dataclass
 from typing import Dict
 
@@ -26,11 +29,8 @@ API_CONFIG = {
     "model": "MiniMax-M2.7"
 }
 
-RESULTS_DIR = Path(__file__).parent.parent.parent / "results" / "evolution"
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-
-CHECKPOINT_FILE = "evo_001_checkpoint.json"
-RESULTS_FILE = "benchmark_results_evo_001_gen1.json"
+CHECKPOINT_FILE = str(RESULTS_DIR / "evo_001_checkpoint.json")
+RESULTS_FILE = str(RESULTS_DIR / "benchmark_results_evo_001_gen1.json")
 
 @dataclass
 class TaskResult:
@@ -310,7 +310,7 @@ class HarnessV30:
         return False
     
     def get_max_tokens(self, task: Dict) -> int:
-        """v31 Evolved: Strategy-based tokens"""
+        """v31 Evolved: Strategy=v32_6000tokens"""
         if task["type"] == "research":
             return 6000
         elif task["type"] == "code":

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-AutoMAS Evolution Engine - 进化引擎 v4.0
+AutoMAS Evolution Engine - 进化引擎 v5.0
 
 使用 v31_0 作为基础模板，通过策略参数修改关键配置
+修复: RESULTS_DIR 必须在 CHECKPOINT_FILE/RESULTS_FILE 之前定义
 """
 
 import json
@@ -63,11 +64,34 @@ def get_next_strategy(state):
 def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
     """将策略参数应用到 harness 代码"""
     
-    # 1. 修改 max_tokens 返回值
+    # 0. 首先添加 RESULTS_DIR 定义（如果不存在）
+    if "RESULTS_DIR" not in code:
+        # 在 import os 之后插入 RESULTS_DIR
+        code = code.replace(
+            "import os",
+            "import os\nfrom pathlib import Path\n\nRESULTS_DIR = Path(__file__).parent.parent.parent / \"results\" / \"evolution\"\nRESULTS_DIR.mkdir(parents=True, exist_ok=True)"
+        )
+    
+    # 1. 修改 RESULTS_FILE - 使用 RESULTS_DIR
+    results_file = f"str(RESULTS_DIR / \"benchmark_results_{version}_gen1.json\")"
+    code = re.sub(
+        r'RESULTS_FILE = "[^"]*"',
+        f'RESULTS_FILE = {results_file}',
+        code
+    )
+    
+    # 2. 修改 CHECKPOINT_FILE - 使用 RESULTS_DIR
+    checkpoint_file = f"str(RESULTS_DIR / \"{version}_checkpoint.json\")"
+    code = re.sub(
+        r'CHECKPOINT_FILE = "[^"]*"',
+        f'CHECKPOINT_FILE = {checkpoint_file}',
+        code
+    )
+    
+    # 3. 修改 max_tokens 返回值
     research_tokens = strategy.get("research_tokens", 6000)
     code_tokens = strategy.get("code_tokens", 5500)
     
-    # 替换 get_max_tokens 函数
     old_func = '''    def get_max_tokens(self, task: Dict) -> int:
         """v30: Increase tokens for research tasks"""
         if task["type"] == "research":
@@ -78,7 +102,7 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
             return 3000'''
     
     new_func = f'''    def get_max_tokens(self, task: Dict) -> int:
-        """v31 Evolved: Strategy-based tokens"""
+        """v31 Evolved: Strategy={strategy['name']}"""
         if task["type"] == "research":
             return {research_tokens}
         elif task["type"] == "code":
@@ -88,10 +112,9 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
     
     code = code.replace(old_func, new_func)
     
-    # 2. 修改 MAX_RUNS（如果定义了）
+    # 4. 修改 max_runs
     max_runs = strategy.get("max_runs", 2)
     
-    # 在初始化时设置实例变量
     old_init = '''class HarnessV30:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
@@ -105,56 +128,17 @@ def apply_strategy_to_code(code: str, strategy: dict, version: str) -> str:
     
     code = code.replace(old_init, new_init)
     
-    # 3. 修改 execute_single 中的运行次数
-    old_run_pattern = r'for run in range\(1, MAX_RUNS \+ 1\):'
-    code = re.sub(old_run_pattern, f'for run in range(1, self.max_runs + 1):', code)
+    # 5. 修改运行次数引用
+    code = re.sub(r'for run in range\(1, MAX_RUNS \+ 1\):', f'for run in range(1, self.max_runs + 1):', code)
     
-    # 4. 修改 temperature
+    # 6. 修改 temperature
     temp = strategy.get("temperature", 0.7)
-    # 在 API payload 中添加 temperature
-    code = re.sub(
-        r'"max_tokens": max_tokens',
-        f'"max_tokens": max_tokens',
-        code
-    )
-    
     # 在 messages 之后添加 temperature
     code = re.sub(
-        r'"messages": \[{"role": "user", "content": prompt\}\]',
+        r'"messages": \[{"role": "user", "content": prompt\}]',
         f'"temperature": {temp},\n            "messages": [{{"role": "user", "content": prompt}}]',
         code
     )
-    
-    # 5. 修改 RESULTS_FILE 路径 - 使用完整路径
-    results_file = f"str(RESULTS_DIR / \"benchmark_results_{version}_gen1.json\")"
-    code = re.sub(
-        r'RESULTS_FILE = "[^"]*_gen1\.json"',
-        f'RESULTS_FILE = {results_file}',
-        code
-    )
-    
-    # 6. 修改 CHECKPOINT_FILE - 使用完整路径
-    checkpoint_file = f"str(RESULTS_DIR / \"{version}_checkpoint.json\")"
-    code = re.sub(
-        r'CHECKPOINT_FILE = "[^"]*\.json"',
-        f'CHECKPOINT_FILE = {checkpoint_file}',
-        code
-    )
-    
-    # 7. 确保 RESULTS_DIR 存在并使用正确路径
-    if "RESULTS_DIR" not in code:
-        code = code.replace(
-            "import os",
-            "import os\nfrom pathlib import Path"
-        )
-        code = code.replace(
-            "CHECKPOINT_FILE = ",
-            "RESULTS_DIR = Path(__file__).parent.parent.parent / \"results\" / \"evolution\"\nRESULTS_DIR.mkdir(parents=True, exist_ok=True)\n\nCHECKPOINT_FILE = "
-        )
-        code = code.replace(
-            'CHECKPOINT_FILE = f"{version}_checkpoint.json"',
-            f'CHECKPOINT_FILE = str(RESULTS_DIR / "{checkpoint_file}")'
-        )
     
     return code
 
@@ -257,7 +241,7 @@ def should_stop(state):
     return False
 
 def main():
-    parser = argparse.ArgumentParser(description="AutoMAS 进化引擎 v4.0")
+    parser = argparse.ArgumentParser(description="AutoMAS 进化引擎 v5.0")
     parser.add_argument("--round", type=int, help="指定轮次")
     parser.add_argument("--continuous", action="store_true", help="持续运行")
     
