@@ -18,19 +18,22 @@ import json
 import time
 import os
 from pathlib import Path
-
-RESULTS_DIR = Path(__file__).parent.parent.parent.parent / "results" / "evolution"
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import Dict
+
+# Use same directory structure as harness_template.py
+BASE_DIR = Path(__file__).parent.parent.parent.parent
+RESULTS_DIR = BASE_DIR / "results" / "evolution"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 API_CONFIG = {
     "base_url": "https://api.minimaxi.com/anthropic",
     "model": "MiniMax-M2.7"
 }
 
-CHECKPOINT_FILE = str(RESULTS_DIR / "evo_001_checkpoint.json")
-RESULTS_FILE = str(RESULTS_DIR / "benchmark_results_evo_001_gen1.json")
+CHECKPOINT_FILE = str(RESULTS_DIR / "v31_0_checkpoint.json")
+RESULTS_FILE = str(RESULTS_DIR / "benchmark_results_v31_0_gen1.json")
+STATE_FILE = str(RESULTS_DIR / "state.json")
 
 @dataclass
 class TaskResult:
@@ -403,6 +406,58 @@ class HarnessV30:
             run=run_num
         )
     
+    def _update_state(self, version: str, composite: float, core_avg: float, gen_avg: float, avg_actionability: float):
+        """Update state.json with benchmark results after harness completion."""
+        state_file = STATE_FILE
+        
+        # Load existing state or create new
+        if os.path.exists(state_file):
+            try:
+                with open(state_file, 'r') as f:
+                    state = json.load(f)
+            except (json.JSONDecodeError, IOError):
+                state = {"current_round": 0, "best_score": 0, "best_version": "", "no_progress_rounds": 0, "history": [], "mode": "infinite"}
+        else:
+            state = {"current_round": 0, "best_score": 0, "best_version": "", "no_progress_rounds": 0, "history": [], "mode": "infinite"}
+        
+        # Determine if this is a champion
+        is_champion = composite > state.get("best_score", 0)
+        
+        if is_champion:
+            state["best_score"] = composite
+            state["best_version"] = version
+            state["no_progress_rounds"] = 0
+        else:
+            state["no_progress_rounds"] = state.get("no_progress_rounds", 0) + 1
+        
+        # Increment round
+        state["current_round"] = state.get("current_round", 0) + 1
+        
+        # Add to history
+        history_entry = {
+            "round": state["current_round"],
+            "version": version,
+            "strategy": f"v31 (max_tokens=5000, MAX strategy, self-critique for core research)",
+            "score": composite,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "is_champion": is_champion,
+            "core_avg": core_avg,
+            "gen_avg": gen_avg,
+            "avg_actionability": avg_actionability
+        }
+        state["history"] = state.get("history", [])
+        state["history"].append(history_entry)
+        
+        # Keep only last 20 history entries
+        if len(state["history"]) > 20:
+            state["history"] = state["history"][-20:]
+        
+        # Save state
+        with open(state_file, 'w') as f:
+            json.dump(state, f, ensure_ascii=False, indent=2)
+        
+        print(f"\n[SSTATE] Updated {state_file} - Round {state['current_round']}, Champion={is_champion} (score={composite:.2f})")
+    
     def run_benchmark(self) -> Dict:
         tasks = [
             {"id": "core_001", "type": "research", "difficulty": 8,
@@ -525,9 +580,23 @@ class HarnessV30:
                 "composite_score": composite,
             },
             "individual_results": [
-                {"task_id": r.task_id, "task_type": r.task_type,
-                 "quality_score": r.quality_score, "run": r.run,
-                 "executor_output": r.executor_output[:5000] + ("..." if len(r.executor_output) > 5000 else "") if r.executor_output else ""}
+                {
+                    "task_id": r.task_id,
+                    "task_type": r.task_type,
+                    "quality_score": r.quality_score,
+                    "depth_score": r.depth_score,
+                    "completeness_score": r.completeness_score,
+                    "actionability_score": r.actionability_score,
+                    "executor_tokens": r.executor_tokens,
+                    "evaluator_tokens": r.evaluator_tokens,
+                    "executor_latency_ms": r.executor_latency_ms,
+                    "evaluator_latency_ms": r.evaluator_latency_ms,
+                    "iterations": r.iterations,
+                    "run": r.run,
+                    "error": r.error,
+                    "is_suspicious": r.is_suspicious,
+                    "executor_output": r.executor_output[:5000] + ("..." if len(r.executor_output) > 5000 else "") if r.executor_output else ""
+                }
                 for r in clean_results
             ]
         }
@@ -536,6 +605,9 @@ class HarnessV30:
             json.dump(final_results, f, ensure_ascii=False, indent=2)
         
         print(f"\nResults saved to: {RESULTS_FILE}")
+        
+        # Update state.json with benchmark results
+        self._update_state("v31.0", composite, core_avg, gen_avg, avg_actionability)
         
         if os.path.exists(CHECKPOINT_FILE):
             os.remove(CHECKPOINT_FILE)

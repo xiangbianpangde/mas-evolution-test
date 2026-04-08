@@ -1,0 +1,23 @@
+运行 harness: evo_002
+策略: v33_6000tokens
+生成 harness: /root/.openclaw/workspace/mas_repo/src/native/harness/harness_evo_002.py
+
+[core_001] Running twice (MAX strategy, tokens=6000)...
+  Run1: 50.0
+  Run2: 50.0
+  BEST: 50.0
+
+STDERR: Traceback (most recent call last):
+  File "/root/.openclaw/workspace/mas_repo/src/native/harness/harness_evo_002.py", line 550, in <module>
+    harness.run_benchmark()
+  File "/root/.openclaw/workspace/mas_repo/src/native/harness/harness_evo_002.py", line 477, in run_benchmark
+    "run1_score": result1.quality_score,
+                  ^^^^^^^
+NameError: name 'result1' is not defined. Did you mean: 'results'?
+
+结果文件不存在: /root/.openclaw/workspace/mas_repo/results/evolution/benchmark_results_evo_002_gen1.json
+
+轮次 2 完成:
+  版本: evo_002
+  分数: 0.00
+  当前最佳:  (0.00)

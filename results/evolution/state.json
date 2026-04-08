@@ -2,7 +2,7 @@
   "current_round": 0,
   "best_score": 0,
   "best_version": "",
-  "no_progress_rounds": 0,
+  "no_progress_rounds": 2,
   "history": [
     {
       "round": 0,
@@ -12,6 +12,22 @@
       "timestamp": "2026-04-08T18:00:00",
       "is_champion": false,
       "note": "Below v31.0 (76.22), core tasks weak"
+    },
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "v32_v31_clone",
+      "score": 0,
+      "timestamp": "2026-04-08T22:36:58.839430",
+      "is_champion": false
+    },
+    {
+      "round": 1,
+      "version": "evo_002",
+      "strategy": "v33_6000tokens",
+      "score": 0,
+      "timestamp": "2026-04-08T22:49:09.189138",
+      "is_champion": false
     }
   ],
   "mode": "infinite"

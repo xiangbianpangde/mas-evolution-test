@@ -19,7 +19,7 @@ import time
 import os
 from pathlib import Path
 
-RESULTS_DIR = Path(__file__).parent.parent.parent / "results" / "evolution"
+RESULTS_DIR = Path(__file__).parent.parent.parent.parent / "results" / "evolution"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 from dataclasses import dataclass
 from typing import Dict
@@ -83,7 +83,7 @@ class RealLLMCaller:
             "model": API_CONFIG["model"],
             "max_tokens": max_tokens,
             "system": system_prompt or "You are a helpful AI assistant.",
-            "temperature": 0.5,
+            "temperature": 0.7,
             "messages": [{"role": "user", "content": prompt}]
         }
         data = json.dumps(payload).encode('utf-8')
@@ -108,43 +108,17 @@ class RealLLMCaller:
         }
 
 
-CORE_RESEARCH_PROMPT = """你是一个世界级的技术架构专家，专注于深度技术分析和证据驱动的研究。
+CORE_RESEARCH_PROMPT = """You are a world-class technical architect specializing in deep technical analysis and evidence-driven research.
 
-任务：{query}
+Task: {query}
 
-请按以下结构进行深度分析：
+Please analyze thoroughly with specific numbers, benchmarks, and actionable recommendations."""
 
-## 一、问题诊断与范围定义
-- 明确核心挑战是什么
-- 界定分析的技术边界
-- 说明为什么这个问题重要
+GEN_RESEARCH_PROMPT = """You are a professional technical analyst.
 
-## 二、技术深度分析
-- 列出关键技术原理（必须包含具体数字、公式、算法复杂度）
-- 分析主流技术路线的优缺点（必须包含 benchmark 数据）
-- 识别技术瓶颈及其根本原因
+Task: {query}
 
-## 三、方案设计
-- 提出具体可落地的方案
-- 包含架构设计或代码实现
-- 说明方案的适用范围和局限性
-
-## 四、证据与验证
-- 引用具体论文、数据、案例
-- 提供量化的性能指标
-- 说明如何验证方案有效性
-
-## 五、可操作的实施路径
-- 给出分步骤的实施计划
-- 包含时间线和资源需求
-- 指出关键风险点和缓解措施
-
-质量要求：
-- 每一个观点必须有数字或论文支撑
-- 代码必须完整可运行
-- 图表必须清晰可复现
-
-请开始深度分析："""
+Provide a structured analysis with: problem diagnosis, deep analysis, specific solutions, evidence support, and validation methods."""
 
 V15_GEN_RESEARCH_PROMPT = """你是一个专业的技术分析师。请仔细分析以下任务。
 
@@ -278,7 +252,7 @@ class HarnessV30:
     def __init__(self, api_key: str):
         self.llm = RealLLMCaller(api_key)
         self.api_key = api_key
-        self.max_runs = 3
+        self.max_runs = 2
     
     def get_prompt_for_task(self, task: Dict) -> tuple:
         task_id = task["id"]
@@ -310,11 +284,11 @@ class HarnessV30:
         return False
     
     def get_max_tokens(self, task: Dict) -> int:
-        """v31 Evolved: Strategy=v33_1000tokens_max3"""
+        """v31 Evolved: Strategy=v33_6000tokens"""
         if task["type"] == "research":
-            return 1000
+            return 6000
         elif task["type"] == "code":
-            return 1000
+            return 6000
         else:
             return 3000
     
@@ -473,13 +447,14 @@ class HarnessV30:
         for task in tasks:
             print(f"\n[{task['id']}] Running twice (MAX strategy, tokens={self.get_max_tokens(task)})...", flush=True)
             
-            result1 = self.execute_single(task, run_num=1)
-            print(f"  Run1: {result1.quality_score:.1f}")
+            # 使用 self.max_runs (2) 进行多次运行，选择最佳结果
+            results = []
+            for run_i in range(1, self.max_runs + 1):
+                result = self.execute_single(task, run_num=run_i)
+                print(f"  Run{run_i}: {result.quality_score:.1f}")
+                results.append(result)
             
-            result2 = self.execute_single(task, run_num=2)
-            print(f"  Run2: {result2.quality_score:.1f}")
-            
-            best = result1 if result1.quality_score >= result2.quality_score else result2
+            best = max(results, key=lambda r: r.quality_score)
             print(f"  BEST: {best.quality_score:.1f}")
             
             checkpoint["tasks_completed"].append(task["id"])

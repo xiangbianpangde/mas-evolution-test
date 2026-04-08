@@ -1,10 +1,27 @@
 [
   {
     "round": 0,
+    "version": "v38",
+    "strategy": "Enhanced review prompts (manual run)",
+    "score": 72.16,
+    "timestamp": "2026-04-08T18:00:00",
+    "is_champion": false,
+    "note": "Below v31.0 (76.22), core tasks weak"
+  },
+  {
+    "round": 0,
     "version": "evo_001",
-    "strategy": "v32_1000tokens",
+    "strategy": "v32_v31_clone",
     "score": 0,
-    "timestamp": "2026-04-08T13:46:50.318013",
+    "timestamp": "2026-04-08T22:36:58.839430",
+    "is_champion": false
+  },
+  {
+    "round": 1,
+    "version": "evo_002",
+    "strategy": "v33_6000tokens",
+    "score": 0,
+    "timestamp": "2026-04-08T22:49:09.189138",
     "is_champion": false
   }
 ]
