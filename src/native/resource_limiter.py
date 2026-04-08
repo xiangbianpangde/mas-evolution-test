@@ -1,94 +1,107 @@
+#!/usr/bin/env python3
 """
-Resource Limiter - CPU & Memory constraints for experiment sandbox.
-Prevents runaway processes from consuming host resources.
+Resource Limiter - 资源限制模块
+
+在所有 harness 启动前调用 apply_all() 来限制资源使用
 """
-import os
-import sys
+
 import resource
 import signal
-import time
-from typing import Optional, Tuple
+import sys
+import os
 
-# ── Configuration ────────────────────────────────────────────────────────────
-DEFAULT_CPU_LIMIT_SEC   = 300   # Max CPU seconds per experiment
-DEFAULT_MEM_LIMIT_BYTES = 512 * 1024 * 1024  # 512 MB
-DEFAULT_PROC_LIMIT      = 64    # Max child processes
+# 默认限制
+DEFAULT_CPU_TIME = 300  # 5分钟 CPU 时间
+DEFAULT_MEM_LIMIT = 512 * 1024 * 1024  # 512MB
+DEFAULT_FILE_LIMIT = 50 * 1024 * 1024  # 50MB
 
-# ── CPU Limit ─────────────────────────────────────────────────────────────────
-def set_cpu_limit(seconds: int = DEFAULT_CPU_LIMIT_SEC) -> None:
-    """Limit max CPU time (both user + sys) for the current process tree."""
-    def _handler(signum, frame):
-        raise SystemExit(f"[RESOURCE] CPU time limit ({seconds}s) exceeded")
-    signal.signal(signal.SIGXCPU, _handler)
-    # Soft limit → SIGXCPU; hard limit → SIGKILL
-    resource.setrlimit(resource.RLIMIT_CPU, (seconds, seconds))
-
-# ── Memory Limit ──────────────────────────────────────────────────────────────
-def set_mem_limit(bytes_limit: int = DEFAULT_MEM_LIMIT_BYTES) -> None:
-    """Cap addressable virtual memory (RSS will be smaller due to overcommit)."""
-    # Set both AS (address space) and DATA segments
-    for rl_type in (resource.RLIMIT_AS, resource.RLIMIT_DATA):
-        resource.setrlimit(rl_type, (bytes_limit, bytes_limit))
-
-# ── Process Count Limit ───────────────────────────────────────────────────────
-def set_proc_limit(n: int = DEFAULT_PROC_LIMIT) -> None:
-    """Restrict number of concurrent child processes."""
-    resource.setrlimit(resource.RLIMIT_NPROC, (n, n))
-
-# ── File Size Limit ───────────────────────────────────────────────────────────
-def set_file_limit(bytes_limit: int = 50 * 1024 * 1024) -> None:
-    """Prevent writing files larger than limit."""
-    resource.setrlimit(resource.RLIMIT_FSIZE, (bytes_limit, bytes_limit))
-
-# ── Wall Clock Timeout ────────────────────────────────────────────────────────
 class WallClockGuard:
-    """SIGKILL after N seconds elapsed (not CPU time)."""
-    def __init__(self, seconds: int):
-        self.seconds = seconds
-        self._timer = None
+    """墙上时钟超时保护"""
+    def __init__(self, timeout_seconds):
+        self.timeout = timeout_seconds
+        self.start_time = None
+    
+    def start(self):
+        self.start_time = os.times().elapsed
+    
+    def check(self):
+        if self.start_time is None:
+            return True
+        elapsed = os.times().elapsed - self.start_time
+        if elapsed > self.timeout:
+            print(f"Wall clock timeout: {elapsed:.1f}s > {self.timeout}s")
+            return False
+        return True
+    
+    def remaining(self):
+        if self.start_time is None:
+            return self.timeout
+        return max(0, self.timeout - (os.times().elapsed - self.start_time))
 
-    def start(self) -> None:
-        def _fire():
-            print(f"[RESOURCE] Wall clock limit ({self.seconds}s) exceeded — killing process", file=sys.stderr)
-            os.kill(os.getpid(), signal.SIGKILL)
-        import threading
-        self._timer = threading.Timer(self.seconds, _fire)
-        self._timer.daemon = True
-        self._timer.start()
+_guard = None
 
-    def cancel(self) -> None:
-        if self._timer:
-            self._timer.cancel()
+def timeout_handler(signum, frame):
+    """超时信号处理"""
+    print(f"Process timed out after {DEFAULT_CPU_TIME}s")
+    sys.exit(1)
 
-# ── Composite Apply ───────────────────────────────────────────────────────────
-def apply_all(
-    cpu_sec: int = DEFAULT_CPU_LIMIT_SEC,
-    mem_bytes: int = DEFAULT_MEM_LIMIT_BYTES,
-    proc_n: int = DEFAULT_PROC_LIMIT,
-    wall_sec: Optional[int] = None,
-) -> Optional[WallClockGuard]:
-    """Apply all resource limits. Returns WallClockGuard if wall_sec set."""
-    set_cpu_limit(cpu_sec)
-    set_mem_limit(mem_bytes)
-    set_proc_limit(proc_n)
+def set_cpu_limit(seconds=DEFAULT_CPU_TIME):
+    """设置 CPU 时间限制"""
+    try:
+        resource.setrlimit(resource.RLIMIT_CPU, (seconds, seconds))
+        print(f"CPU limit set: {seconds}s")
+    except Exception as e:
+        print(f"Failed to set CPU limit: {e}")
+
+def set_mem_limit(bytes_limit=DEFAULT_MEM_LIMIT):
+    """设置内存限制"""
+    try:
+        resource.setrlimit(resource.RLIMIT_AS, (bytes_limit, bytes_limit))
+        print(f"Memory limit set: {bytes_limit // (1024*1024)}MB")
+    except Exception as e:
+        print(f"Failed to set memory limit: {e}")
+
+def set_proc_limit(max_procs=64):
+    """设置子进程数限制"""
+    try:
+        resource.setrlimit(resource.RLIMIT_NPROC, (max_procs, max_procs))
+        print(f"Process limit set: {max_procs}")
+    except Exception as e:
+        print(f"Failed to set process limit: {e}")
+
+def set_file_limit(bytes_limit=DEFAULT_FILE_LIMIT):
+    """设置文件写入限制"""
+    try:
+        resource.setrlimit(resource.RLIMIT_FSIZE, (bytes_limit, bytes_limit))
+        print(f"File size limit set: {bytes_limit // (1024*1024)}MB")
+    except Exception as e:
+        print(f"Failed to set file limit: {e}")
+
+def apply_all():
+    """应用所有资源限制"""
+    set_cpu_limit()
+    set_mem_limit()
+    set_proc_limit()
     set_file_limit()
-    guard = WallClockGuard(wall_sec) if wall_sec else None
-    if guard:
-        guard.start()
-    return guard
+    
+    # 设置 SIGALRM 用于超时检测
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(DEFAULT_CPU_TIME)
+    
+    print("All resource limits applied")
 
-# ── Query Current Usage ───────────────────────────────────────────────────────
-def get_usage() -> Tuple[int, int, int]:
-    """Return (ru_utime_ms, ru_stime_ms, max_rss_kb) for current process."""
+def get_usage():
+    """获取当前资源使用"""
     usage = resource.getrusage(resource.RUSAGE_SELF)
-    return (
-        int(usage.ru_utime * 1000),
-        int(usage.ru_stime * 1000),
-        usage.ru_maxrss,
-    )
+    return {
+        "utime": usage.ru_utime,
+        "stime": usage.ru_stime,
+        "maxrss": usage.ru_maxrss,
+        "nvcsw": usage.ru_nvcsw,
+        "nivcsw": usage.ru_nivcsw
+    }
 
 if __name__ == "__main__":
-    print(f"PID={os.getpid()}, applying limits...")
-    apply_all(wall_sec=10)
-    print("Limits applied. Try: python3 -c 'x=1' (should work)")
-    print(f"Usage so far: {get_usage()}")
+    print("Testing resource limiter...")
+    apply_all()
+    print(f"Current usage: {get_usage()}")

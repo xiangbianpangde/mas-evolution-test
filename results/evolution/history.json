@@ -39,5 +39,13 @@
     "score": 0,
     "timestamp": "2026-04-08T23:30:50.101570",
     "is_champion": false
+  },
+  {
+    "round": 0,
+    "version": "evo_001",
+    "strategy": "v32_v31_clone",
+    "score": 51.74,
+    "timestamp": "2026-04-09T00:43:08.770824",
+    "is_champion": true
   }
 ]
