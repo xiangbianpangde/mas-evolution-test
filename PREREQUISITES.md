@@ -22,8 +22,9 @@
 | 7 | disk space > 5GB | ✅ 69GB | 当前剩余空间 |
 | 8 | memory > 1GB | ✅ 6.5GB | 当前可用内存 |
 | 9 | `results/benchmarks/` 有历史基准数据 | ✅ | 用于对比 |
-| 10 | Git 仓库状态 clean | ⚠️ | 需提交当前修改 |
+| 10 | Git 仓库状态 clean | ✅ | 已提交所有修改 |
 | 11 | 无过期锁文件 | ✅ | 已清理 harness.lock |
+| 12 | crontab 自动触发 | ✅ | 每 10 分钟检查一次 |
 
 ---
 
@@ -131,13 +132,14 @@ cat results/evolution/api_calls.json
 ```
 Best Score:  v31_0 = 76.22
 Current Round: 1
-Mode: infinite (需手动触发)
+Mode: infinite (自动触发)
 Stop Condition: 100.0 或 10000 轮
 
-API Key: ❌ 未设置
+API Key: ❌ 未设置 ⬅️ 这是唯一阻碍
 Disk Space: ✅ 69GB 充足
 Memory: ✅ 6.5GB 充足
-Git Status: ⚠️ 有未提交修改
+Git Status: ✅ Clean
+Crontab: ✅ 每 10 分钟自动检查
 ```
 
 ---

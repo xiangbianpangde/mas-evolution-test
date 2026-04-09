@@ -3,7 +3,7 @@
   "best_score": 76.22,
   "best_version": "v31_0",
   "best_source": "benchmark",
-  "no_progress_rounds": 2,
+  "no_progress_rounds": 4,
   "mode": "infinite",
   "target_score": 100.0,
   "max_rounds": 10000,
@@ -49,6 +49,22 @@
       "strategy": "v32_1000tokens",
       "score": 0,
       "timestamp": "2026-04-09T14:48:43.859810",
+      "is_champion": false
+    },
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "v32_1000tokens",
+      "score": 0,
+      "timestamp": "2026-04-09T14:49:42.169792",
+      "is_champion": false
+    },
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "v32_1000tokens",
+      "score": 0,
+      "timestamp": "2026-04-09T14:50:20.652196",
       "is_champion": false
     }
   ]
