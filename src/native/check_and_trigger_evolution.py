@@ -88,6 +88,11 @@ def main():
         sys.exit(0)
     
     try:
+        # 检查 API Key 是否设置 (关键！)
+        if not os.environ.get("MINIMAX_API_KEY"):
+            print("ERROR: MINIMAX_API_KEY not set - evolution cannot run")
+            sys.exit(1)
+        
         # 检查是否有 harness 运行
         if is_harness_running():
             print("Harness is running, skipping trigger")
