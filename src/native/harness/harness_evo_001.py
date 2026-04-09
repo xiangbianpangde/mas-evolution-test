@@ -10,6 +10,7 @@ Temperature: 0.7
 import json
 import time
 import os
+import shutil
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Dict
@@ -22,11 +23,11 @@ MAX_RUNS = 2
 SELF_REFLECT = "core_only"
 TEMPERATURE = 0.7
 
-API_CONFIG = {{
+API_CONFIG = {
     "base_url": "https://api.minimaxi.com/anthropic",
     "model": "MiniMax-M2.7",
     "temperature": TEMPERATURE
-}}
+}
 
 BASE_DIR = Path(__file__).parent.parent.parent.parent
 RESULTS_DIR = BASE_DIR / "results" / "evolution"
@@ -35,14 +36,14 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 CHECKPOINT_FILE = str(RESULTS_DIR / "evo_001_checkpoint.json")
 RESULTS_FILE = str(RESULTS_DIR / "benchmark_results_evo_001_gen1.json")
 
-# Import and apply resource limits
-try:
-    import sys
-    sys.path.insert(0, str(BASE_DIR / "src" / "native"))
-    import resource_limiter
-    resource_limiter.apply_all()
-except:
-    pass
+# Note: Resource limits disabled - they cause premature termination
+# import sys
+# sys.path.insert(0, str(BASE_DIR / "src" / "native"))
+# try:
+#     import resource_limiter
+#     resource_limiter.apply_all()
+# except:
+#     pass
 
 @dataclass
 class TaskResult:
@@ -66,7 +67,7 @@ class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 180, max_retries: int = 3) -> Dict:
+    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 60, max_retries: int = 3) -> Dict:
         for attempt in range(max_retries + 1):
             try:
                 result = self._make_request(prompt, system_prompt, max_tokens, timeout)
@@ -74,7 +75,7 @@ class RealLLMCaller:
                     # Track API call
                     api_file = RESULTS_DIR / "api_calls.json"
                     try:
-                        data = {{}}
+                        data = {}
                         if api_file.exists():
                             with open(api_file) as f:
                                 data = json.load(f)
@@ -92,44 +93,59 @@ class RealLLMCaller:
                     print(f"  [Error: {e}, retry {attempt+1}/{max_retries}]", end=" ", flush=True)
                     time.sleep(2 ** attempt)
                 else:
-                    return {{"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": str(e)}}
-        return {{"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries exceeded"}}
+                    return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": str(e)}
+        return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries exceeded"}
     
     def _make_request(self, prompt: str, system_prompt: str, max_tokens: int, timeout: int) -> Dict:
-        import urllib.request
+        import subprocess
         start = time.time()
-        headers = {{
-            "Authorization": f"Bearer {{self.api_key}}",
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
             "anthropic-version": "2023-06-01"
-        }}
-        payload = {{
+        }
+        payload = {
             "model": API_CONFIG["model"],
             "max_tokens": max_tokens,
             "temperature": API_CONFIG.get("temperature", 0.7),
             "system": system_prompt or "You are a helpful AI assistant.",
-            "messages": [{{"role": "user", "content": prompt}}]
-        }}
-        data = json.dumps(payload).encode('utf-8')
-        req = urllib.request.Request(
-            f"{{API_CONFIG['base_url']}}/v1/messages",
-            data=data, headers=headers, method='POST'
-        )
-        with urllib.request.urlopen(req, timeout=timeout) as response:
-            result = json.loads(response.read().decode('utf-8'))
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        data = json.dumps(payload)
+        curl_cmd = [
+            "curl", "-s", "--max-time", str(timeout),
+            "-X", "POST",
+            f"{API_CONFIG['base_url']}/v1/messages",
+            "-H", f"Authorization: Bearer {self.api_key}",
+            "-H", "Content-Type: application/json",
+            "-H", "anthropic-version: 2023-06-01",
+            "-d", data
+        ]
+        try:
+            result = subprocess.run(curl_cmd, capture_output=True, text=True, timeout=timeout + 10)
+            if result.returncode != 0:
+                return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": f"Curl error: {result.stderr}"}
+            response_text = result.stdout
+            if not response_text:
+                return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Empty response"}
+            result_json = json.loads(response_text)
+        except subprocess.TimeoutExpired:
+            return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Request timeout"}
+        except json.JSONDecodeError as e:
+            return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": f"JSON decode error: {e}"}
         latency = (time.time() - start) * 1000
         content = ""
-        for item in result.get("content", []):
+        for item in result_json.get("content", []):
             if item.get("type") == "text":
                 content = item.get("text", "")
                 break
-        return {{
+        return {
             "content": content,
             "latency_ms": latency,
-            "input_tokens": result.get("usage", {{}}).get("input_tokens", 0),
-            "output_tokens": result.get("usage", {{}}).get("output_tokens", 0),
+            "input_tokens": result_json.get("usage", {}).get("input_tokens", 0),
+            "output_tokens": result_json.get("usage", {}).get("output_tokens", 0),
             "error": None
-        }}
+        }
 
 class HarnessV30:
     def __init__(self, api_key: str):
@@ -143,16 +159,23 @@ class HarnessV30:
         stat = shutil.disk_usage(BASE_DIR)
         pct = stat.used / stat.total * 100
         if pct > 90:
-            raise Exception(f"Disk space critical: {{pct:.1f}}%")
+            raise Exception(f"Disk space critical: {pct:.1f}%")
         return pct
     
     def load_tasks(self):
+        # Load tasks from tasks_v2.py - need to get both CORE and GENERALIZATION
         tasks_file = BASE_DIR / "src" / "benchmark" / "tasks_v2.py"
         import importlib.util
         spec = importlib.util.spec_from_file_location("tasks", tasks_file)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        return module.TASKS
+        # tasks_v2.py uses DynamicBenchmarkSuite class with default include_generalization=True
+        suite = module.DynamicBenchmarkSuite(include_generalization=True)
+        tasks = list(suite.tasks)
+        # Add category field for scoring
+        for t in tasks:
+            t["category"] = "core" if t["id"].startswith("core_") else "gen"
+        return tasks
     
     def get_max_tokens(self, task: Dict) -> int:
         if task["type"] == "research":
@@ -178,14 +201,14 @@ class HarnessV30:
         executor_start = time.time()
         max_tokens = self.get_max_tokens(task)
         
-        system_prompt = f"You are an expert AI assistant. Query: {{query}}"
+        system_prompt = f"You are an expert AI assistant. Query: {query}"
         prompt = query
         
         initial_response = self.llm.call_with_retry(prompt=prompt, system_prompt=system_prompt, max_tokens=max_tokens)
         
         if initial_response.get("error"):
             return TaskResult(
-                task_id=task_id, task_type=task_type, executor_output=f"Error: {{initial_response['error']}}",
+                task_id=task_id, task_type=task_type, executor_output=f"Error: {initial_response['error']}",
                 quality_score=0, depth_score=0, completeness_score=0, actionability_score=0,
                 executor_tokens=0, evaluator_tokens=0, executor_latency_ms=0, evaluator_latency_ms=0,
                 error=initial_response["error"], run=run_num
@@ -196,7 +219,7 @@ class HarnessV30:
         executor_latency = initial_response["latency_ms"]
         
         if self.should_self_reflect(task):
-            reflect_prompt = f"Review and improve: {{query}}\n\n{{executor_output}}"
+            reflect_prompt = f"Review and improve: {query}\n\n{executor_output}"
             reflect_response = self.llm.call_with_retry(prompt=reflect_prompt, system_prompt=system_prompt, max_tokens=max_tokens)
             if not reflect_response.get("error"):
                 executor_output = reflect_response["content"]
@@ -219,25 +242,25 @@ class HarnessV30:
         results = []
         for i, task in enumerate(self.tasks):
             task_id = task["id"]
-            print(f"[{{i+1}}/{{len(self.tasks)}}] {{task_id}}...", end=" ", flush=True)
+            print(f"[{i+1}/{len(self.tasks)}] {task_id}...", end=" ", flush=True)
             
-            checkpoint = {{"current_task": i, "task_id": task_id, "results": results}}
+            checkpoint = {"current_task": i, "task_id": task_id, "results": results}
             with open(CHECKPOINT_FILE, 'w') as f:
                 json.dump(checkpoint, f)
             
             task_results = []
             for run in range(1, self.max_runs + 1):
-                print(f"Run{{run}}...", end=" ", flush=True)
+                print(f"Run{run}...", end=" ", flush=True)
                 result = self.execute_single(task, run)
-                print(f"Score={{result.quality_score}}", end=" ", flush=True)
+                print(f"Score={result.quality_score}", end=" ", flush=True)
                 task_results.append(result)
             
             best = max(task_results, key=lambda r: r.quality_score)
             output = best.executor_output
             if len(output) > 5000:
-                output = output[:5000] + f"... [truncated {{len(output)-5000}} chars]"
+                output = output[:5000] + f"... [truncated {len(output)-5000} chars]"
             
-            results.append({{
+            results.append({
                 "task_id": task_id,
                 "task_type": task["type"],
                 "category": task.get("category", "unknown"),
@@ -250,8 +273,8 @@ class HarnessV30:
                 "executor_output": output,
                 "run": best.run,
                 "error": best.error
-            }})
-            print(f"-> Final={{best.quality_score}}")
+            })
+            print(f"-> Final={best.quality_score}")
         
         return results
     
@@ -263,33 +286,33 @@ class HarnessV30:
         all_action = [r["actionability_score"] for r in results]
         avg_action = sum(all_action) / len(all_action) if all_action else 0
         composite = core_avg * 0.45 + gen_avg * 0.45 + avg_action * 10 * 0.1
-        return {{
+        return {
             "total_tasks": len(results),
             "core_avg_score": round(core_avg, 2),
             "gen_avg_score": round(gen_avg, 2),
             "avg_actionability_level": round(avg_action, 1),
             "composite_score": round(composite, 2)
-        }}
+        }
     
     def save_results(self, results: list, summary: dict):
-        output = {{
+        output = {
             "harness_version": VERSION,
-            "paradigm": f"v31 tokens={{RESEARCH_TOKENS}}/{{CODE_TOKENS}}",
+            "paradigm": f"v31 tokens={RESEARCH_TOKENS}/{CODE_TOKENS}",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "elapsed_seconds": 0,
             "summary": summary,
             "individual_results": results
-        }}
+        }
         with open(RESULTS_FILE, 'w', encoding="utf-8") as f:
             json.dump(output, f, indent=2, ensure_ascii=False)
-        print(f"Results saved to: {{RESULTS_FILE}}")
+        print(f"Results saved to: {RESULTS_FILE}")
         if Path(CHECKPOINT_FILE).exists():
             Path(CHECKPOINT_FILE).unlink()
     
     def run(self):
         # Check disk space
         disk_pct = self.check_disk_space()
-        print(f"Disk usage: {{disk_pct:.1f}}%")
+        print(f"Disk usage: {disk_pct:.1f}%")
         
         start = time.time()
         if Path(CHECKPOINT_FILE).exists():

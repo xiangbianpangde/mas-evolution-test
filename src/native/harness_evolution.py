@@ -169,7 +169,7 @@ class RealLLMCaller:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 180, max_retries: int = 3) -> Dict:
+    def call_with_retry(self, prompt: str, system_prompt: str = "", max_tokens: int = 2048, timeout: int = 60, max_retries: int = 3) -> Dict:
         for attempt in range(max_retries + 1):
             try:
                 result = self._make_request(prompt, system_prompt, max_tokens, timeout)
@@ -199,40 +199,55 @@ class RealLLMCaller:
         return {{"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Max retries exceeded"}}
     
     def _make_request(self, prompt: str, system_prompt: str, max_tokens: int, timeout: int) -> Dict:
-        import urllib.request
+        import subprocess
         start = time.time()
-        headers = {{
-            "Authorization": f"Bearer {{self.api_key}}",
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
             "anthropic-version": "2023-06-01"
-        }}
-        payload = {{
+        }
+        payload = {
             "model": API_CONFIG["model"],
             "max_tokens": max_tokens,
             "temperature": API_CONFIG.get("temperature", 0.7),
             "system": system_prompt or "You are a helpful AI assistant.",
-            "messages": [{{"role": "user", "content": prompt}}]
-        }}
-        data = json.dumps(payload).encode('utf-8')
-        req = urllib.request.Request(
-            f"{{API_CONFIG['base_url']}}/v1/messages",
-            data=data, headers=headers, method='POST'
-        )
-        with urllib.request.urlopen(req, timeout=timeout) as response:
-            result = json.loads(response.read().decode('utf-8'))
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        data = json.dumps(payload)
+        curl_cmd = [
+            "curl", "-s", "--max-time", str(timeout),
+            "-X", "POST",
+            f"{API_CONFIG['base_url']}/v1/messages",
+            "-H", f"Authorization: Bearer {self.api_key}",
+            "-H", "Content-Type: application/json",
+            "-H", "anthropic-version: 2023-06-01",
+            "-d", data
+        ]
+        try:
+            result = subprocess.run(curl_cmd, capture_output=True, text=True, timeout=timeout + 10)
+            if result.returncode != 0:
+                return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": f"Curl error: {result.stderr}"}
+            response_text = result.stdout
+            if not response_text:
+                return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Empty response"}
+            result_json = json.loads(response_text)
+        except subprocess.TimeoutExpired:
+            return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": "Request timeout"}
+        except json.JSONDecodeError as e:
+            return {"content": "", "latency_ms": 0, "input_tokens": 0, "output_tokens": 0, "error": f"JSON decode error: {e}"}
         latency = (time.time() - start) * 1000
         content = ""
-        for item in result.get("content", []):
+        for item in result_json.get("content", []):
             if item.get("type") == "text":
                 content = item.get("text", "")
                 break
-        return {{
+        return {
             "content": content,
             "latency_ms": latency,
-            "input_tokens": result.get("usage", {{}}).get("input_tokens", 0),
-            "output_tokens": result.get("usage", {{}}).get("output_tokens", 0),
+            "input_tokens": result_json.get("usage", {}).get("input_tokens", 0),
+            "output_tokens": result_json.get("usage", {}).get("output_tokens", 0),
             "error": None
-        }}
+        }
 
 class HarnessV30:
     def __init__(self, api_key: str):

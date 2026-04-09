@@ -13,15 +13,17 @@
 | 3 | `src/benchmark/tasks_v2.py` 存在 | ✅ | 15 个基准测试任务 |
 | 4 | `src/native/resource_limiter.py` 存在 | ✅ | 资源限制模块 |
 | 5 | `src/native/harness/harness_v31_0.py` 存在 | ✅ | 参考 harness |
+| 6 | `src/native/harness_evolution.py` 存在 | ✅ | 进化主脚本 |
 
 ### 🟡 重要项 (Should-Have)
 
 | # | 前置条件 | 当前状态 | 说明 |
 |---|---------|---------|------|
-| 6 | disk space > 5GB | ✅ | 需检查当前剩余空间 |
-| 7 | memory > 1GB | ✅ | 需检查当前可用内存 |
-| 8 | `results/benchmarks/` 有历史基准数据 | ✅ | 用于对比 |
-| 9 | Git 仓库状态 clean | ⚠️ | 需确认无未提交更改 |
+| 7 | disk space > 5GB | ✅ 69GB | 当前剩余空间 |
+| 8 | memory > 1GB | ✅ 6.5GB | 当前可用内存 |
+| 9 | `results/benchmarks/` 有历史基准数据 | ✅ | 用于对比 |
+| 10 | Git 仓库状态 clean | ⚠️ | 需提交当前修改 |
+| 11 | 无过期锁文件 | ✅ | 已清理 harness.lock |
 
 ---
 
@@ -60,15 +62,15 @@ mas_repo/
 │   ├── native/
 │   │   ├── harness_evolution.py      ✅ 必须
 │   │   ├── check_and_trigger_evolution.py  ✅ 必须
-│   │   ├── resource_limiter.py      ✅ 必须
-│   │   ├── self_verifier.py         ✅ 必须
+│   │   ├── resource_limiter.py       ✅ 必须
+│   │   ├── self_verifier.py          ✅ 必须
 │   │   └── harness/
 │   │       └── harness_v31_0.py     ✅ 参考基线
 │   └── benchmark/
 │       └── tasks_v2.py              ✅ 必须 (15任务)
 ├── results/
 │   ├── evolution/
-│   │   └── state.json               ✅ 必须
+│   │   └── state.json               ✅ 必须 (唯一权威)
 │   └── benchmarks/
 │       └── benchmark_results_v31_0_gen1.json  ✅ 历史冠军
 └── knowledge/                       ✅ 文档
@@ -128,13 +130,14 @@ cat results/evolution/api_calls.json
 
 ```
 Best Score:  v31_0 = 76.22
-Current Round: 0
+Current Round: 1
 Mode: infinite (需手动触发)
 Stop Condition: 100.0 或 10000 轮
 
 API Key: ❌ 未设置
-Disk Space: ✅ 充足
-Memory: ✅ 充足
+Disk Space: ✅ 69GB 充足
+Memory: ✅ 6.5GB 充足
+Git Status: ⚠️ 有未提交修改
 ```
 
 ---
@@ -145,11 +148,11 @@ Memory: ✅ 充足
 
 ```json
 {
-  "current_round": 0,
+  "current_round": 1,
   "best_score": 76.22,
   "best_version": "v31_0",
   "best_source": "benchmark",
-  "no_progress_rounds": 0,
+  "no_progress_rounds": 1,
   "mode": "infinite",
   "target_score": 100.0,
   "max_rounds": 10000,
@@ -160,10 +163,48 @@ Memory: ✅ 充足
     "gen": 81.0,
     "source": "results/benchmarks/benchmark_results_v31_0_gen1.json"
   },
-  "history": []
+  "history": [
+    {
+      "round": 0,
+      "version": "v31_0",
+      "strategy": "5000 tokens + 选择性反射 (MAX策略)",
+      "score": 76.22,
+      "core_score": 79.2,
+      "gen_score": 81.0,
+      "timestamp": "2026-04-04T00:00:00",
+      "is_champion": true,
+      "note": "真冠军 - 标准 tasks_v2.py 基准测试"
+    },
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "v32_1000tokens",
+      "score": 51.74,
+      "timestamp": "2026-04-09T01:38:42.189830",
+      "is_champion": false
+    },
+    {
+      "round": 0,
+      "version": "evo_001",
+      "strategy": "v32_1000tokens",
+      "score": 0,
+      "timestamp": "2026-04-09T03:46:39.957159",
+      "is_champion": false
+    }
+  ]
 }
 ```
 
 ---
 
-*最后更新: 2026-04-09 01:46*
+## 🧹 清理记录
+
+### 2026-04-09 清理
+1. 删除孤立的 `evo_001_checkpoint.json` - 该文件与历史记录不匹配
+2. 删除过期的 `harness.lock` - 无进程运行时不应存在
+3. 删除无效的 `benchmark_results_evo_001_gen1.json` - 重复/无效数据
+4. 删除测试日志 `evo_round_new.log` - 临时文件
+
+---
+
+*最后更新: 2026-04-09 14:50*

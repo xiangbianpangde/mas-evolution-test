@@ -1,10 +1,18 @@
 Running harness: evo_001
 Strategy: v32_1000tokens
 Disk usage: 10.3%
-API call count: 0
+API call count: 143
 Generated: /root/.openclaw/workspace/mas_repo/src/native/harness/harness_evo_001.py
+ Run1... Score=65 Run2... Score=53 -> Final=65
+[2/17] core_002... Run1... Score=61 Run2...   [Retry 1/3] Score=48 -> Final=61
+[3/17] core_003... Run1... Score=56 Run2... Score=10 -> Final=56
+[4/17] core_004... Run1... Score=60 Run2... Score=38 -> Final=60
+[5/17] core_005... Run1... Score=100 Run2...   [Retry 1/3]   [Retry 2/3]   [Retry 3/3] Score=100 -> Final=100
+[6/17] core_006... Run1... Score=54 Run2...   [Retry 1/3]   [Retry 2/3]   [Retry 3/3] Score=37 -> Final=54
+[7/17] core_007... Run1... 
+Results file not found: /root/.openclaw/workspace/mas_repo/results/evolution/benchmark_results_evo_001_gen1.json
 
 Round 1 complete:
   Version: evo_001
-  Score: 51.74
+  Score: 0.00
   Current best: v31_0 (76.22)
